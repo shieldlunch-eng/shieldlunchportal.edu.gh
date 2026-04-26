@@ -267,7 +267,7 @@
         <label>Your Full Name</label>
         <input type="text" id="studentName" placeholder="e.g. Ama Owusu"/>
       </div>
-      <div class="section-label">Select Your Department</div>
+      <div class="section-label">Select Your Section</div>
       <div class="dept-grid">
         <div class="dept-card" id="dept-early" onclick="pickDept('early')">
           <div class="dept-icon">&#x1F331;</div>
@@ -296,9 +296,9 @@
         </div>
       </div>
       <div class="field">
-        <label>Select Your Class</label>
+        <label>Select Your Class/Department</label>
         <select id="studentClass" disabled>
-          <option value="">— Select department first —</option>
+          <option value="">— Select section first —</option>
         </select>
       </div>
       <div class="section-label">Choose Your Lunch</div>
@@ -476,7 +476,7 @@ function pickDept(dept) {
   document.getElementById("dept-"+dept).classList.add("selected");
   const sel=document.getElementById("studentClass");
   sel.disabled=false;
-  sel.innerHTML=`<option value="">— Select class —</option>`+deptClasses[dept].map(c=>`<option value="${c}">${c}</option>`).join("");
+  sel.innerHTML=`<option value="">— Select class/department —</option>`+deptClasses[dept].map(c=>`<option value="${c}">${c}</option>`).join("");
   checkReady();
 }
 function pickMeal(i) {
