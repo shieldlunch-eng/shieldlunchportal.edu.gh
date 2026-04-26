@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shield International School – Lunch Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red:#C0202E; --red-dark:#8B0000; --red-light:#F9E8E9;
+      --blue:#1A3A6B; --blue-mid:#2255A0; --blue-light:#E8EEF8;
+      --off-white:#F8F7F5; --text:#1a1a2e; --muted:#6B7280; --border:#E2E5EE;
+      --green:#0D7A55; --green-light:#E6F5EF;
+      --shadow:0 4px 24px rgba(26,58,107,0.10); --shadow-lg:0 8px 40px rgba(26,58,107,0.16);
+    }
+    body { font-family:'DM Sans',sans-serif; background:var(--off-white); color:var(--text); min-height:100vh; }
+
+    /* HEADER */
+    .site-header { background:linear-gradient(135deg,var(--blue) 0%,var(--blue-mid) 60%,var(--red-dark) 100%); color:#fff; position:relative; overflow:hidden; }
+    .site-header::before { content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+    .header-inner { display:flex; align-items:center; gap:20px; padding:20px 28px; position:relative; z-index:1; }
+    .school-logo { width:70px; height:70px; object-fit:contain; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3)); flex-shrink:0; }
+    .school-info h1 { font-family:'Playfair Display',serif; font-size:clamp(17px,3.5vw,25px); font-weight:900; letter-spacing:0.04em; text-shadow:0 2px 8px rgba(0,0,0,0.25); }
+    .school-info p { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; opacity:0.75; margin-top:2px; }
+    .header-right { margin-left:auto; display:flex; align-items:center; gap:10px; flex-shrink:0; }
+    .day-pill { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); border-radius:50px; padding:6px 14px; font-size:12px; white-space:nowrap; }
+    .admin-btn { background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.3); border-radius:50px; padding:6px 16px; font-size:12px; color:#fff; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
+    .admin-btn:hover { background:rgba(255,255,255,0.22); }
+    .stripe { height:5px; background:linear-gradient(90deg,var(--red) 0%,var(--red-dark) 50%,var(--blue) 100%); }
+
+    /* CAROUSEL */
+    .carousel-wrap { position:relative; overflow:hidden; height:200px; background:var(--blue); }
+    .carousel-track { display:flex; height:100%; transition:transform 0.6s cubic-bezier(.77,0,.18,1); }
+    .carousel-slide { min-width:100%; height:100%; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; }
+    .slide-content { text-align:center; color:#fff; text-shadow:0 2px 12px rgba(0,0,0,0.55); padding:0 24px; }
+    .slide-icon { font-size:40px; margin-bottom:6px; }
+    .slide-content h2 { font-family:'Playfair Display',serif; font-size:clamp(15px,4vw,24px); font-weight:700; }
+    .slide-content p { font-size:12px; opacity:0.88; margin-top:4px; }
+    .carousel-dots { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); display:flex; gap:7px; z-index:5; }
+    .cdot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.4); border:none; cursor:pointer; transition:all 0.3s; padding:0; }
+    .cdot.active { background:#fff; transform:scale(1.2); }
+    .carr-arrow { position:absolute; top:50%; transform:translateY(-50%); z-index:5; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.3); color:#fff; width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:15px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+    .carr-arrow:hover { background:rgba(255,255,255,0.32); }
+    .carr-arrow.left { left:12px; } .carr-arrow.right { right:12px; }
+
+    /* MODAL */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(10,20,50,0.65); z-index:100; align-items:center; justify-content:center; }
+    .modal-overlay.open { display:flex; }
+    .modal { background:#fff; border-radius:20px; padding:32px 28px; width:90%; max-width:340px; box-shadow:var(--shadow-lg); position:relative; animation:slideUp 0.3s ease; }
+    @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .modal h3 { font-family:'Playfair Display',serif; font-size:20px; color:var(--blue); margin-bottom:6px; }
+    .modal > p { font-size:13px; color:var(--muted); margin-bottom:20px; }
+    .modal-field { margin-bottom:14px; }
+    .modal-field label { display:block; font-size:11px; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; }
+    .modal-field input { width:100%; padding:10px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; font-family:'DM Sans',sans-serif; outline:none; }
+    .modal-field input:focus { border-color:var(--blue-mid); }
+    .login-btn { width:100%; padding:12px; background:linear-gradient(135deg,var(--blue),var(--blue-mid)); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+    .modal-close { position:absolute; top:14px; right:16px; background:none; border:none; font-size:22px; cursor:pointer; color:var(--muted); }
+    .login-err { color:var(--red); font-size:12px; margin-top:10px; text-align:center; display:none; }
+
+    /* MAIN */
+    .main { max-width:700px; margin:0 auto; padding:22px 16px 40px; }
+
+    /* ADMIN PANEL */
+    .admin-panel { display:none; background:#fff; border-radius:20px; box-shadow:var(--shadow); margin-bottom:20px; overflow:hidden; }
+    .ap-header { background:linear-gradient(135deg,var(--blue),var(--blue-mid)); padding:14px 20px; display:flex; justify-content:space-between; align-items:center; }
+    .ap-header h3 { color:#fff; font-family:'Playfair Display',serif; font-size:15px; }
+    .close-ap { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; border-radius:50px; padding:4px 14px; font-size:12px; cursor:pointer; font-family:'DM Sans',sans-serif; }
+    .ap-body { padding:20px; }
+    .ap-tabs { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+    .ap-tab { padding:6px 16px; border-radius:50px; border:1.5px solid var(--border); background:none; font-size:12px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; color:var(--muted); transition:all 0.2s; }
+    .ap-tab.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+    .ap-section { display:none; } .ap-section.active { display:block; }
+    .admin-row { display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+    .admin-row input { flex:1; padding:8px 12px; border:1.5px solid var(--border); border-radius:8px; font-size:13px; font-family:'DM Sans',sans-serif; }
+    .rm-btn { background:none; border:none; color:#ccc; font-size:20px; cursor:pointer; padding:0 4px; line-height:1; }
+    .rm-btn:hover { color:var(--red); }
+    .add-row-btn { width:100%; padding:7px; border:1.5px dashed var(--border); border-radius:8px; background:none; font-size:12px; color:var(--muted); cursor:pointer; font-family:'DM Sans',sans-serif; margin-top:4px; }
+    .add-row-btn:hover { border-color:var(--blue-mid); color:var(--blue-mid); }
+    .save-btn { margin-top:12px; width:100%; padding:11px; background:linear-gradient(135deg,var(--blue),var(--blue-mid)); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+
+    /* FORM */
+    .form-card { background:#fff; border-radius:20px; box-shadow:var(--shadow); overflow:hidden; }
+    .form-header { background:linear-gradient(135deg,var(--red-dark),var(--red)); padding:18px 24px; }
+    .form-header h2 { color:#fff; font-family:'Playfair Display',serif; font-size:18px; }
+    .form-header p { color:rgba(255,255,255,0.8); font-size:12px; margin-top:3px; }
+    .form-body { padding:24px; }
+    .field { margin-bottom:16px; }
+    .field label { display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--blue); margin-bottom:7px; }
+    .field input, .field select { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; font-family:'DM Sans',sans-serif; outline:none; background:#fff; }
+    .field input:focus, .field select:focus { border-color:var(--blue-mid); }
+    .field select:disabled { opacity:0.45; cursor:not-allowed; }
+
+    /* DEPARTMENTS */
+    .section-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--blue); margin-bottom:12px; }
+    .dept-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:20px; }
+    .dept-card { width:170px; border:2px solid var(--border); border-radius:14px; padding:14px 10px; cursor:pointer; transition:all 0.2s; text-align:center; background:#fafafa; }
+    .dept-card { width:170px; border:2px solid var(--border); border-radius:14px; padding:14px 10px; cursor:pointer; transition:all 0.2s; text-align:center; background:#fafafa; }
+    .dept-card:hover { border-color:var(--blue-mid); background:var(--blue-light); transform:translateY(-2px); }
+    .dept-card.selected { border-color:var(--blue); background:var(--blue-light); transform:translateY(-2px); box-shadow:0 4px 16px rgba(26,58,107,0.13); }
+    .dept-card.selected .dept-name { color:var(--blue); }
+    .dept-icon { font-size:26px; margin-bottom:5px; }
+    .dept-name { font-size:12px; font-weight:700; color:var(--text); line-height:1.3; }
+    .dept-range { font-size:10px; color:var(--muted); margin-top:2px; }
+
+    /* MEALS */
+    .meal-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-bottom:20px; }
+    .meal-card { width:160px; border:2px solid var(--border); border-radius:14px; padding:14px 10px; cursor:pointer; transition:all 0.2s; text-align:center; background:#fafafa; }
+    .meal-card { width:160px; border:2px solid var(--border); border-radius:14px; padding:14px 10px; cursor:pointer; transition:all 0.2s; text-align:center; background:#fafafa; }
+    .meal-card:hover { border-color:var(--blue-mid); background:var(--blue-light); transform:translateY(-2px); }
+    .meal-card.selected { border-color:var(--red); background:var(--red-light); transform:translateY(-2px); box-shadow:0 4px 16px rgba(192,32,46,0.15); }
+    .meal-card.selected .meal-name { color:var(--red-dark); }
+    .meal-icon { font-size:26px; margin-bottom:5px; }
+    .meal-name { font-size:12px; font-weight:600; color:var(--text); line-height:1.3; }
+
+    .submit-btn { width:100%; padding:14px; background:linear-gradient(135deg,var(--red-dark),var(--red)); color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:0.04em; transition:all 0.2s; box-shadow:0 4px 16px rgba(192,32,46,0.3); }
+    .submit-btn:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 6px 24px rgba(192,32,46,0.35); }
+    .submit-btn:disabled { background:linear-gradient(135deg,#ccc,#bbb); box-shadow:none; cursor:not-allowed; }
+
+    /* SUCCESS */
+    .success-card { display:none; background:#fff; border-radius:20px; box-shadow:var(--shadow); padding:40px 24px; text-align:center; }
+    .success-icon { font-size:52px; margin-bottom:12px; }
+    .success-badge { display:inline-flex; align-items:center; gap:6px; background:var(--green-light); color:var(--green); border-radius:50px; padding:5px 14px; font-size:12px; font-weight:600; margin-bottom:14px; }
+    .success-card h3 { font-family:'Playfair Display',serif; font-size:22px; color:var(--blue); margin-bottom:6px; }
+    .success-card > p { font-size:14px; color:var(--muted); }
+    .success-detail { background:var(--blue-light); border-radius:12px; padding:14px 18px; margin:16px 0; text-align:left; }
+    .srow { display:flex; justify-content:space-between; font-size:13px; padding:3px 0; }
+    .srow span:first-child { color:var(--muted); }
+    .srow span:last-child { font-weight:600; color:var(--blue); }
+    .new-order-btn { padding:12px 28px; background:var(--blue); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; margin-top:4px; }
+
+    /* ERROR */
+    .err-banner { display:none; background:#FFF0F0; border:1.5px solid #F5C0C3; border-radius:10px; padding:10px 14px; font-size:13px; color:var(--red-dark); margin-bottom:14px; }
+
+    /* LOG */
+    .log-wrap { margin-top:20px; background:#fff; border-radius:20px; box-shadow:var(--shadow); overflow:hidden; }
+    .log-hbar { background:linear-gradient(135deg,var(--blue),var(--blue-mid)); padding:14px 20px; display:flex; justify-content:space-between; align-items:center; }
+    .log-hbar span { color:#fff; font-size:14px; font-weight:600; }
+    .log-clear { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; border-radius:50px; padding:3px 12px; font-size:11px; cursor:pointer; font-family:'DM Sans',sans-serif; }
+    .log-cols { display:grid; grid-template-columns:1.1fr 0.8fr 0.9fr 1.2fr 52px; gap:6px; padding:8px 18px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); border-bottom:1px solid var(--border); }
+    .log-row { display:grid; grid-template-columns:1.1fr 0.8fr 0.9fr 1.2fr 52px; gap:6px; padding:9px 18px; font-size:12px; border-bottom:1px solid #f3f4f6; align-items:center; }
+    .log-row:last-child { border-bottom:none; }
+    .lname { font-weight:600; } .ldept { color:var(--blue); font-size:11px; font-weight:600; } .lcls,.lmeal { color:var(--muted); } .ltime { color:var(--muted); font-size:10px; text-align:right; }
+
+    .site-footer { text-align:center; padding:20px; font-size:11px; color:var(--muted); border-top:1px solid var(--border); margin-top:8px; }
+
+    @media(max-width:520px) {
+      .header-inner { padding:14px 16px; gap:12px; }
+      .school-logo { width:52px; height:52px; }
+      .dept-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:20px; }
+      .log-cols, .log-row { grid-template-columns:1fr 1fr; }
+      .log-cols span:nth-child(n+3), .log-row .lcls, .log-row .lmeal, .log-row .ltime { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ADMIN LOGIN MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    <h3>&#x1F6E1; Admin Access</h3>
+    <p>Enter your credentials to manage the lunch menu.</p>
+    <div class="modal-field"><label>Username</label><input type="text" id="loginUser" placeholder="Username"/></div>
+    <div class="modal-field"><label>Password</label><input type="password" id="loginPass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="login-err" id="loginErr">Incorrect username or password.</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="site-header">
+  <div class="header-inner">
+    <img class="school-logo" src="images/favicon.webp"/>   
+	<div class="school-info">
+      <h1>SHIELD INTERNATIONAL SCHOOL</h1>
+      <p>Daily Lunch Selection Portal</p>
+    </div>
+    <div class="header-right">
+      <div class="day-pill" id="dayLabel"></div>
+      <button class="admin-btn" onclick="openModal()">&#x2699; Admin</button>
+    </div>
+  </div>
+</div>
+<div class="stripe"></div>
+
+<!-- CAROUSEL -->
+<div class="carousel-wrap">
+  <div class="carousel-track" id="carouselTrack">
+    <div class="carousel-slide" style="background:linear-gradient(135deg,#1A3A6B,#2255A0)">
+      <div class="slide-content"><div class="slide-icon">&#x1F37D;&#xFE0F;</div><h2>Welcome to Today's Lunch!</h2><p>Choose your department, class and meal below</p></div>
+    </div>
+    <div class="carousel-slide" style="background:linear-gradient(135deg,#7B0000,#C0202E)">
+      <div class="slide-content"><div class="slide-icon">&#x2B50;</div><h2>Eat Well, Learn Well</h2><p>A healthy lunch fuels a brilliant mind</p></div>
+    </div>
+    <div class="carousel-slide" style="background:linear-gradient(135deg,#0D5C3A,#1D9E75)">
+      <div class="slide-content"><div class="slide-icon">&#x1F957;</div><h2>Fresh &amp; Nutritious Every Day</h2><p>Our kitchen prepares wholesome meals with care</p></div>
+    </div>
+    <div class="carousel-slide" style="background:linear-gradient(135deg,#3D2B00,#B8860B)">
+      <div class="slide-content"><div class="slide-icon">&#x1F3EB;</div><h2>Shield International School</h2><p>Excellence in education, excellence in every meal</p></div>
+    </div>
+  </div>
+  <button class="carr-arrow left" onclick="moveCarousel(-1)">&#8249;</button>
+  <button class="carr-arrow right" onclick="moveCarousel(1)">&#8250;</button>
+  <div class="carousel-dots" id="carouselDots"></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ADMIN PANEL -->
+  <div class="admin-panel" id="adminPanel">
+    <div class="ap-header">
+      <h3>&#x1F6E1;&#xFE0F; Admin Panel &mdash; Manage Today&rsquo;s Menu</h3>
+      <button class="close-ap" onclick="closeAdminPanel()">Close</button>
+    </div>
+    <div class="ap-body">
+      <div class="ap-tabs">
+        <button class="ap-tab active" onclick="switchTab('meals')">Meals</button>
+        <button class="ap-tab" onclick="switchTab('early')">Early Years</button>
+        <button class="ap-tab" onclick="switchTab('junior')">Junior School</button>
+        <button class="ap-tab" onclick="switchTab('middle')">Middle School</button>
+        <button class="ap-tab" onclick="switchTab('upper')">Upper Secondary</button>
+        <button class="ap-tab" onclick="switchTab('staff')">Staff</button>
+      </div>
+      <div class="ap-section active" id="tab-meals"><div id="mealList"></div><button class="add-row-btn" onclick="addMeal()">+ Add meal</button></div>
+      <div class="ap-section" id="tab-early"><div id="cl-early"></div><button class="add-row-btn" onclick="addCls('early')">+ Add class</button></div>
+      <div class="ap-section" id="tab-junior"><div id="cl-junior"></div><button class="add-row-btn" onclick="addCls('junior')">+ Add class</button></div>
+      <div class="ap-section" id="tab-middle"><div id="cl-middle"></div><button class="add-row-btn" onclick="addCls('middle')">+ Add class</button></div>
+      <div class="ap-section" id="tab-upper"><div id="cl-upper"></div><button class="add-row-btn" onclick="addCls('upper')">+ Add class</button></div>
+      <div class="ap-section" id="tab-staff"><div id="cl-staff"></div><button class="add-row-btn" onclick="addCls('staff')">+ Add group</button></div>
+      <div style="display:flex;gap:10px;margin-top:12px;">
+        <button class="save-btn" style="flex:1;" onclick="saveAdmin()">&#x1F4BE; Save Changes</button>
+        <button onclick="resetToDefaults()" style="padding:11px 16px;background:none;border:1.5px solid var(--border);border-radius:10px;font-size:13px;color:var(--muted);cursor:pointer;font-family:DM Sans,sans-serif;white-space:nowrap;">Reset defaults</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERROR BANNER -->
+  <div class="err-banner" id="errBanner">&#x26A0;&#xFE0F; Could not reach Google Sheets. Please check your connection and try again.</div>
+
+  <!-- ORDER FORM -->
+  <div class="form-card" id="formCard">
+    <div class="form-header">
+      <h2>Place Your Lunch Order</h2>
+      <p>Select your department and class, then choose your meal</p>
+    </div>
+    <div class="form-body">
+      <div class="field">
+        <label>Your Full Name</label>
+        <input type="text" id="studentName" placeholder="e.g. Ama Owusu"/>
+      </div>
+      <div class="section-label">Select Your Department</div>
+      <div class="dept-grid">
+        <div class="dept-card" id="dept-early" onclick="pickDept('early')">
+          <div class="dept-icon">&#x1F331;</div>
+          <div class="dept-name">Early Years</div>
+          <div class="dept-range">Nursery &ndash; Year 2</div>
+        </div>
+        <div class="dept-card" id="dept-junior" onclick="pickDept('junior')">
+          <div class="dept-icon">&#x1F4D6;</div>
+          <div class="dept-name">Junior School</div>
+          <div class="dept-range">Year 3 &ndash; Year 6</div>
+        </div>
+        <div class="dept-card" id="dept-middle" onclick="pickDept('middle')">
+          <div class="dept-icon">&#x1F4DA;</div>
+          <div class="dept-name">Middle School</div>
+          <div class="dept-range">Year 7 &ndash; Year 9</div>
+        </div>
+        <div class="dept-card" id="dept-upper" onclick="pickDept('upper')">
+          <div class="dept-icon">&#x1F393;</div>
+          <div class="dept-name">Upper Secondary</div>
+          <div class="dept-range">Year 10 &ndash; Year 13</div>
+        </div>
+        <div class="dept-card" id="dept-staff" onclick="pickDept('staff')">
+          <div class="dept-icon">&#x1F454;</div>
+          <div class="dept-name">Staff</div>
+          <div class="dept-range">All Teaching &amp; Support Staff</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Select Your Class</label>
+        <select id="studentClass" disabled>
+          <option value="">— Select department first —</option>
+        </select>
+      </div>
+      <div class="section-label">Choose Your Lunch</div>
+      <div class="meal-grid" id="mealGrid"></div>
+      <button class="submit-btn" id="submitBtn" onclick="submitOrder()" disabled>Submit My Order</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-card" id="successCard">
+    <div class="success-icon">&#x1F389;</div>
+    <div class="success-badge">&#x2713; Saved to Google Sheets</div>
+    <h3 id="successTitle">Order Submitted!</h3>
+    <p id="successSub"></p>
+    <div class="success-detail" id="successDetail"></div>
+    <button class="new-order-btn" onclick="resetForm()">Submit Another Order</button>
+  </div>
+
+  <!-- LOG -->
+  <div class="log-wrap" id="logWrap" style="display:none;">
+    <div class="log-hbar">
+      <span>Today's Orders</span>
+      <button class="log-clear" onclick="clearLog()">Clear all</button>
+    </div>
+    <div class="log-cols"><span>Name</span><span>Dept</span><span>Class</span><span>Meal</span><span>Time</span></div>
+    <div id="logList"></div>
+  </div>
+</div>
+
+<div class="site-footer">&copy; 2026 Shield International School &middot; Lunch Portal &middot; Powered by Google Sheets</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySSugpXUnw7QH9PdSBAWgxUXWw3eulfhF0dgsUKoPhsoUJyPi8ZfPfWSOCfEKMeINsmQ/exec";
+const ICONS = ["\u{1F372}","\u{1F35B}","\u{1F957}","\u{1F371}","\u{1F35D}","\u{1F959}","\u{1F35C}","\u{1F32E}","\u{1F958}","\u{1F35A}"];
+const DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const ADMIN_USER = "admin", ADMIN_PASS = "Silver11.";
+const DEPT_LABELS = { early:"Early Years", junior:"Junior School", middle:"Middle School", upper:"Upper Secondary", staff:"Staff" };
+
+const DEFAULT_MEALS = [{name:"Jollof rice & chicken"},{name:"Fried rice & fish"},{name:"Vegetable soup & fufu"}];
+const DEFAULT_CLASSES = {
+  early:  ["Tiny Tot Peacocks ","Toddler Parrots","Foundation Pigeons","Foundation Robins","Reception Flamingo","Reception Patridge","Year 1 Marigold","Year 1 Pansy","Year 2 Daisy","Year 2 Hibiscus"],
+  junior: ["Year 3 Iris","Year 3 Lotus","Year 3 Tulip","Year Begonia","Year 4 Hyacinth","Year 4 Oleander","Year 5 Dahlia","Year 5 Lily","Year 5 Zinnia","Year 6 Aster","Year 6 Cloves","Year 6 Olives"],
+  middle: ["Form 1 Onyx ","Form 1 Sage","Form 1 Sepia","Form 2 Coral","Form 2 Emerald","Form 2 Jadeite","Form 3 Ivory","Form 3 Magenta","Form 3 Maroon"],
+  upper:  ["Form 4 Chalcedony","Form 4 Hazel","Form 4 Turquoise","Form 5 Jasper","Form 5 Teal","Lower Sixth","Upper-Sixth"],
+  staff:  ["Administration","Janitor","Management","Support Staff","Security","Teaching Staff"],
+};
+
+let meals = JSON.parse(JSON.stringify(DEFAULT_MEALS));
+let deptClasses = JSON.parse(JSON.stringify(DEFAULT_CLASSES));
+let selectedMeal = null, selectedDept = null, orders = [];
+let carIdx = 0, carTotal = 4, carTimer;
+
+function resetToDefaults() {
+  if(!confirm("Reset all meals and classes to defaults? This cannot be undone.")) return;
+  meals = JSON.parse(JSON.stringify(DEFAULT_MEALS));
+  deptClasses = JSON.parse(JSON.stringify(DEFAULT_CLASSES));
+  fetch(SCRIPT_URL, {
+    method:"POST", mode:"no-cors",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ type:"menu", config:{ meals, deptClasses } })
+  }).catch(()=>{});
+  renderAdminAll(); renderMeals();
+  showSaveBanner();
+}
+
+function showLoader(visible) {
+  let el = document.getElementById("menuLoader");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "menuLoader";
+    el.style.cssText = "text-align:center;padding:32px;font-size:13px;color:var(--muted);";
+    el.innerHTML = "<div style=\"font-size:28px;margin-bottom:8px;\">&#x23F3;</div>Loading today\'s menu&hellip;";
+    document.getElementById("mealGrid").replaceWith(el);
+  }
+  el.style.display = visible ? "block" : "none";
+}
+
+async function fetchMenu() {
+  try {
+    const res = await fetch(SCRIPT_URL + "?t=" + Date.now());
+    const data = await res.json();
+    if (data.meals && data.meals.length) meals = data.meals;
+    if (data.deptClasses) deptClasses = data.deptClasses;
+  } catch(e) {
+    // fallback to defaults silently
+  }
+}
+
+async function init() {
+  const now = new Date();
+  document.getElementById("dayLabel").textContent = DAYS[now.getDay()] + " \u00B7 " + now.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  buildDots(); startAuto();
+  showLoader(true);
+  await fetchMenu();
+  showLoader(false);
+  // Rebuild mealGrid after loader swap
+  const grid = document.createElement("div");
+  grid.className = "meal-grid";
+  grid.id = "mealGrid";
+  document.getElementById("menuLoader").replaceWith(grid);
+  renderMeals(); renderAdminAll();
+}
+
+function buildDots() {
+  document.getElementById("carouselDots").innerHTML = Array.from({length:carTotal},(_,i)=>`<button class="cdot${i===0?' active':''}" onclick="goTo(${i})"></button>`).join("");
+}
+function goTo(i) { carIdx=i; document.getElementById("carouselTrack").style.transform=`translateX(-${i*100}%)`; document.querySelectorAll(".cdot").forEach((d,j)=>d.classList.toggle("active",j===i)); }
+function moveCarousel(dir) { goTo((carIdx+dir+carTotal)%carTotal); resetAuto(); }
+function startAuto() { carTimer=setInterval(()=>moveCarousel(1),4500); }
+function resetAuto() { clearInterval(carTimer); startAuto(); }
+
+function openModal() { document.getElementById("modalOverlay").classList.add("open"); setTimeout(()=>document.getElementById("loginUser").focus(),100); }
+function closeModal() { document.getElementById("modalOverlay").classList.remove("open"); document.getElementById("loginErr").style.display="none"; document.getElementById("loginUser").value=""; document.getElementById("loginPass").value=""; }
+function doLogin() {
+  if(document.getElementById("loginUser").value.trim()===ADMIN_USER && document.getElementById("loginPass").value===ADMIN_PASS) {
+    closeModal(); document.getElementById("adminPanel").style.display="block"; window.scrollTo({top:0,behavior:"smooth"});
+  } else { document.getElementById("loginErr").style.display="block"; }
+}
+function closeAdminPanel() { document.getElementById("adminPanel").style.display="none"; }
+
+function switchTab(id) {
+  const tabs=["meals","early","junior","middle","upper"];
+  document.querySelectorAll(".ap-tab").forEach((t,i)=>t.classList.toggle("active",tabs[i]===id));
+  document.querySelectorAll(".ap-section").forEach(s=>s.classList.remove("active"));
+  document.getElementById("tab-"+id).classList.add("active");
+}
+
+function renderAdminAll() {
+  document.getElementById("mealList").innerHTML = meals.map((m,i)=>`<div class="admin-row"><input type="text" value="${m.name}" id="mi${i}"/><button class="rm-btn" onclick="removeMeal(${i})">&#x2715;</button></div>`).join("");
+  ["early","junior","middle","upper","staff"].forEach(dept=>{
+    document.getElementById("cl-"+dept).innerHTML = deptClasses[dept].map((c,i)=>`<div class="admin-row"><input type="text" value="${c}" id="dc-${dept}-${i}"/><button class="rm-btn" onclick="removeCls('${dept}',${i})">&#x2715;</button></div>`).join("");
+  });
+}
+function addMeal() { meals.push({name:""}); renderAdminAll(); document.getElementById("mi"+(meals.length-1)).focus(); }
+function removeMeal(i) { meals.splice(i,1); renderAdminAll(); }
+function addCls(dept) { deptClasses[dept].push(""); renderAdminAll(); const inp=document.querySelectorAll(`#cl-${dept} input`); inp[inp.length-1].focus(); }
+function removeCls(dept,i) { deptClasses[dept].splice(i,1); renderAdminAll(); }
+function saveAdmin() {
+  meals = Array.from(document.querySelectorAll("#mealList input")).map(el=>({name:el.value.trim()})).filter(m=>m.name);
+  ["early","junior","middle","upper","staff"].forEach(dept=>{
+    deptClasses[dept] = Array.from(document.querySelectorAll(`#cl-${dept} input`)).map(el=>el.value.trim()).filter(Boolean);
+  });
+  // Save menu config to Google Sheets
+  fetch(SCRIPT_URL, {
+    method:"POST", mode:"no-cors",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ type:"menu", config:{ meals, deptClasses } })
+  }).catch(()=>{});
+  showSaveBanner();
+  renderMeals(); document.getElementById("adminPanel").style.display="none";
+  selectedMeal=null; selectedDept=null; checkReady();
+}
+
+function showSaveBanner() {
+  let banner = document.getElementById("saveBanner");
+  if(!banner) {
+    banner = document.createElement("div");
+    banner.id = "saveBanner";
+    banner.style.cssText = "position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#0D7A55;color:#fff;padding:10px 24px;border-radius:50px;font-size:13px;font-weight:600;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,0.2);transition:opacity 0.4s;font-family:DM Sans,sans-serif;";
+    document.body.appendChild(banner);
+  }
+  banner.textContent = "✓ Menu saved — changes are now live!";
+  banner.style.opacity = "1";
+  setTimeout(()=>{ banner.style.opacity="0"; }, 3000);
+}
+
+function renderMeals() {
+  const g=document.getElementById("mealGrid");
+  if(!meals.length){g.innerHTML='<div style="text-align:center;padding:20px;color:#6B7280;font-size:13px;">No meals set. Ask admin to update the menu.</div>';return;}
+  g.innerHTML=meals.map((m,i)=>`<div class="meal-card" id="mc${i}" onclick="pickMeal(${i})"><div class="meal-icon">${ICONS[i%ICONS.length]}</div><div class="meal-name">${m.name}</div></div>`).join("");
+}
+function pickDept(dept) {
+  selectedDept=dept; selectedMeal=null;
+  document.querySelectorAll(".dept-card").forEach(c=>c.classList.remove("selected"));
+  document.getElementById("dept-"+dept).classList.add("selected");
+  const sel=document.getElementById("studentClass");
+  sel.disabled=false;
+  sel.innerHTML=`<option value="">— Select class —</option>`+deptClasses[dept].map(c=>`<option value="${c}">${c}</option>`).join("");
+  checkReady();
+}
+function pickMeal(i) {
+  document.querySelectorAll(".meal-card").forEach(c=>c.classList.remove("selected"));
+  document.getElementById("mc"+i).classList.add("selected");
+  selectedMeal=i; checkReady();
+}
+function checkReady() {
+  const n=document.getElementById("studentName").value.trim();
+  const c=document.getElementById("studentClass").value;
+  document.getElementById("submitBtn").disabled=!(n&&selectedDept&&c&&selectedMeal!==null);
+}
+document.getElementById("studentName").addEventListener("input",checkReady);
+document.getElementById("studentClass").addEventListener("change",checkReady);
+
+async function submitOrder() {
+  const name=document.getElementById("studentName").value.trim();
+  const dept=DEPT_LABELS[selectedDept];
+  const cls=document.getElementById("studentClass").value;
+  const meal=meals[selectedMeal].name;
+  const time=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
+  const btn=document.getElementById("submitBtn");
+  btn.textContent="Sending..."; btn.disabled=true;
+  document.getElementById("errBanner").style.display="none";
+  try {
+    await fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,dept,cls,meal})});
+    orders.push({name,dept,cls,meal,time});
+    document.getElementById("successTitle").textContent="Great choice, "+name+"!";
+    document.getElementById("successSub").textContent="Your lunch order has been recorded for today.";
+    document.getElementById("successDetail").innerHTML=`<div class="srow"><span>Name</span><span>${name}</span></div><div class="srow"><span>Department</span><span>${dept}</span></div><div class="srow"><span>Class</span><span>${cls}</span></div><div class="srow"><span>Meal</span><span>${meal}</span></div><div class="srow"><span>Time</span><span>${time}</span></div>`;
+    document.getElementById("formCard").style.display="none";
+    document.getElementById("successCard").style.display="block";
+    renderLog();
+  } catch(e) {
+    document.getElementById("errBanner").style.display="block";
+    btn.textContent="Submit My Order"; btn.disabled=false;
+  }
+}
+function resetForm() {
+  selectedMeal=null; selectedDept=null;
+  document.getElementById("studentName").value="";
+  document.getElementById("studentClass").value=""; document.getElementById("studentClass").disabled=true;
+  document.querySelectorAll(".dept-card").forEach(c=>c.classList.remove("selected"));
+  document.getElementById("successCard").style.display="none";
+  document.getElementById("formCard").style.display="block";
+  renderMeals(); checkReady();
+}
+function renderLog() {
+  const w=document.getElementById("logWrap"),l=document.getElementById("logList");
+  if(!orders.length){w.style.display="none";return;}
+  w.style.display="block";
+  l.innerHTML=orders.slice().reverse().map(o=>`<div class="log-row"><span class="lname">${o.name}</span><span class="ldept">${o.dept}</span><span class="lcls">${o.cls}</span><span class="lmeal">${o.meal}</span><span class="ltime">${o.time}</span></div>`).join("");
+}
+function clearLog(){orders=[];renderLog();}
+init();
+</script>
+</body>
+</html>
