@@ -390,13 +390,17 @@ function resetToDefaults() {
   if(!confirm("Reset all meals and classes to defaults? This cannot be undone.")) return;
   meals = JSON.parse(JSON.stringify(DEFAULT_MEALS));
   deptClasses = JSON.parse(JSON.stringify(DEFAULT_CLASSES));
-  fetch(SCRIPT_URL, {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({ type:"menu", token: sessionToken, config:{ meals, deptClasses } })
-  }).catch(()=>{});
+  const sp = new URLSearchParams();
+  sp.append("type", "menu");
+  sp.append("token", sessionToken);
+  sp.append("config", JSON.stringify({ meals: meals, deptClasses: deptClasses }));
+  fetch(SCRIPT_URL, { method:"POST", body: sp })
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    if(d.result === "unauthorized") { alert("Session expired. Please log in again."); sessionToken=null; }
+    else showSaveBanner();
+  }).catch(function(){ showSaveBanner(); });
   renderAdminAll(); renderMeals();
-  showSaveBanner();
 }
 
 function showLoader(visible) {
@@ -504,16 +508,15 @@ async function emailSummary() {
   const btn = document.getElementById("emailSummaryBtn");
   btn.textContent = "Sending..."; btn.disabled = true;
   try {
-    const res = await fetch(SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: "summary", token: sessionToken })
-    });
+    const sp = new URLSearchParams();
+    sp.append("type", "summary");
+    sp.append("token", sessionToken);
+    const res = await fetch(SCRIPT_URL, { method: "POST", body: sp });
     const data = await res.json();
     if (data.result === "success") {
-      btn.textContent = "✓ Sent!";
+      btn.textContent = "Sent!";
       btn.style.background = "#0D7A55";
-      setTimeout(() => { btn.textContent = "✉ Email Summary"; btn.style.background = "#1A3A6B"; btn.disabled = false; }, 3000);
+      setTimeout(function(){ btn.textContent = "Email Summary"; btn.style.background = "#1A3A6B"; btn.disabled = false; }, 3000);
     } else {
       btn.textContent = "Failed"; btn.disabled = false;
     }
@@ -555,11 +558,11 @@ async function doLogin() {
   btn.textContent = "Checking..."; btn.disabled = true;
   document.getElementById("loginErr").style.display = "none";
   try {
-    const res = await fetch(SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: "login", username, password })
-    });
+    const params = new URLSearchParams();
+    params.append("type", "login");
+    params.append("username", username);
+    params.append("password", password);
+    const res = await fetch(SCRIPT_URL, { method: "POST", body: params });
     const data = await res.json();
     if (data.result === "success" && data.token) {
       sessionToken = data.token;
@@ -567,6 +570,7 @@ async function doLogin() {
       document.getElementById("adminPanel").style.display = "block";
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
+      document.getElementById("loginErr").textContent = "Incorrect username or password.";
       document.getElementById("loginErr").style.display = "block";
     }
   } catch(e) {
@@ -602,12 +606,13 @@ function saveAdmin() {
   // Save menu config to Google Sheets
   fetch(SCRIPT_URL, {
     method:"POST",
-    headers:{"Content-Type":"application/json"},
+    redirect:"follow",
+    headers:{"Content-Type":"text/plain"},
     body: JSON.stringify({ type:"menu", token: sessionToken, config:{ meals, deptClasses } })
-  }).then(r=>r.json()).then(d=>{
+  }).then(r=>r.json()).then(function(d){
     if(d.result === "unauthorized") { alert("Session expired. Please log in again."); sessionToken=null; }
     else showSaveBanner();
-  }).catch(()=>{ showSaveBanner(); });
+  }).catch(function(){ showSaveBanner(); });
   renderMeals(); document.getElementById("adminPanel").style.display="none";
   selectedMeal=null; selectedDept=null; checkReady();
 }
