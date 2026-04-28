@@ -146,12 +146,33 @@
 
     .site-footer { text-align:center; padding:20px; font-size:11px; color:var(--muted); border-top:1px solid var(--border); margin-top:8px; }
 
-    @media(max-width:520px) {
-      .header-inner { padding:14px 16px; gap:12px; }
-      .school-logo { width:52px; height:52px; }
-      .dept-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:20px; }
+    @media(max-width:600px) {
+      /* Header: wrap into two rows so admin button always shows */
+      .header-inner { flex-wrap:wrap; padding:12px 14px; gap:8px; }
+      .school-logo { width:44px; height:44px; flex-shrink:0; }
+      .school-info { flex:1; min-width:0; }
+      .school-info h1 { font-size:13px; letter-spacing:0.02em; }
+      .school-info p { font-size:9px; }
+      .header-right { width:100%; order:3; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.15); padding-top:8px; margin-top:2px; }
+      .day-pill { flex:1; text-align:center; font-size:11px; padding:5px 10px; }
+      .admin-btn { white-space:nowrap; font-size:12px; padding:6px 16px; }
+      /* Department & meal cards */
+      .dept-card { width:calc(50% - 5px); }
+      .meal-card { width:calc(50% - 6px); }
+      /* Form */
+      .form-body { padding:16px; }
+      .main { padding:14px 10px 40px; }
+      /* Log */
       .log-cols, .log-row { grid-template-columns:1fr 1fr; }
       .log-cols span:nth-child(n+3), .log-row .lcls, .log-row .lmeal, .log-row .ltime { display:none; }
+      /* Admin panel tabs */
+      .ap-tab { font-size:11px; padding:5px 10px; }
+      /* Success card */
+      .success-card { padding:28px 16px; }
+      /* Modal */
+      .modal { padding:24px 18px; }
+      /* Summary cards */
+      .sum-table { font-size:12px; }
     }
   </style>
 </head>
@@ -341,7 +362,7 @@
   </div>
 </div>
 
-<div class="site-footer">&copy; 2026 Shield International School &middot; Lunch Portal &middot; Ver. 1.2 &middot; Powered by SilverTech Services</div>
+<div class="site-footer">&copy; 2026 Shield International School &middot; Lunch Portal &middot; Powered by Google Sheets</div>
 
 <script>
 const CUTOFF_HOUR = 10; // 10:00 AM
