@@ -188,9 +188,6 @@
     <div class="modal-field"><label>Password</label><input type="password" id="loginPass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
     <button class="login-btn" onclick="doLogin()">Sign In</button>
     <div class="login-err" id="loginErr">Incorrect username or password.</div>
-    <div style="margin-top:12px;text-align:center;">
-      <a id="testLink" href="#" onclick="testScript(); return false;" style="font-size:11px;color:#6B7280;text-decoration:underline;">Test script connection</a>
-    </div>
   </div>
 </div>
 
@@ -373,6 +370,34 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySSugpXUnw7QH9PdSBA
 const ICONS = ["\u{1F372}","\u{1F35B}","\u{1F957}","\u{1F371}","\u{1F35D}","\u{1F959}","\u{1F35C}","\u{1F32E}","\u{1F958}","\u{1F35A}"];
 const DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const sessionToken = null; // auth token granted by server
+
+// JSONP helper — bypasses CORS completely
+function jsonpRequest(url) {
+  return new Promise(function(resolve, reject) {
+    var cbName = "_gs_cb_" + Date.now();
+    var script = document.createElement("script");
+    var timer = setTimeout(function() {
+      cleanup();
+      reject(new Error("Request timed out"));
+    }, 15000);
+    function cleanup() {
+      clearTimeout(timer);
+      delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+    window[cbName] = function(data) {
+      cleanup();
+      resolve(data);
+    };
+    script.onerror = function() {
+      cleanup();
+      reject(new Error("Script load error"));
+    };
+    script.src = url + "&callback=" + cbName;
+    document.head.appendChild(script);
+  });
+}
+
 const DEPT_LABELS = { early:"Early Years", junior:"Junior School", middle:"Middle School", upper:"Upper Secondary", staff:"Staff" };
 
 const DEFAULT_MEALS = [{name:"Jollof rice & chicken"},{name:"Fried rice & fish"},{name:"Vegetable soup & fufu"}];
@@ -394,12 +419,10 @@ function resetToDefaults() {
   meals = JSON.parse(JSON.stringify(DEFAULT_MEALS));
   deptClasses = JSON.parse(JSON.stringify(DEFAULT_CLASSES));
   const saveUrl = SCRIPT_URL + "?action=menu&token=" + encodeURIComponent(sessionToken) + "&config=" + encodeURIComponent(JSON.stringify({ meals: meals, deptClasses: deptClasses }));
-  fetch(saveUrl)
-  .then(function(r){ return r.json(); })
-  .then(function(d){
-    if(d.result === "unauthorized") { alert("Session expired. Please log in again."); sessionToken=null; }
+  jsonpRequest(saveUrl).then(function(d) {
+    if (d.result === "unauthorized") { alert("Session expired. Please log in again."); sessionToken = null; }
     else showSaveBanner();
-  }).catch(function(){ showSaveBanner(); });
+  }).catch(function() { showSaveBanner(); });
   renderAdminAll(); renderMeals();
 }
 
@@ -417,8 +440,7 @@ function showLoader(visible) {
 
 async function fetchMenu() {
   try {
-    const res = await fetch(SCRIPT_URL + "?t=" + Date.now());
-    const data = await res.json();
+    const data = await jsonpRequest(SCRIPT_URL + "?t=" + Date.now());
     if (data.meals && data.meals.length) meals = data.meals;
     if (data.deptClasses) deptClasses = data.deptClasses;
   } catch(e) {
@@ -509,23 +531,17 @@ async function emailSummary() {
   btn.textContent = "Sending..."; btn.disabled = true;
   try {
     const url = SCRIPT_URL + "?action=summary&token=" + encodeURIComponent(sessionToken);
-    const res = await fetch(url);
-    const data = await res.json();
+    const data = await jsonpRequest(url);
     if (data.result === "success") {
       btn.textContent = "Sent!";
       btn.style.background = "#0D7A55";
-      setTimeout(function(){ btn.textContent = "Email Summary"; btn.style.background = "#1A3A6B"; btn.disabled = false; }, 3000);
+      setTimeout(function() { btn.textContent = "Email Summary"; btn.style.background = "#1A3A6B"; btn.disabled = false; }, 3000);
     } else {
       btn.textContent = "Failed"; btn.disabled = false;
     }
   } catch(e) {
     btn.textContent = "Error"; btn.disabled = false;
   }
-}
-
-function testScript() {
-  const url = SCRIPT_URL + "?action=login&username=admin&password=Silver11.";
-  window.open(url, "_blank");
 }
 
 async function init() {
@@ -562,17 +578,7 @@ async function doLogin() {
   document.getElementById("loginErr").style.display = "none";
   try {
     const url = SCRIPT_URL + "?action=login&username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password);
-    const res = await fetch(url, { redirect: "follow" });
-    const rawText = await res.text();
-    console.log("Login response:", rawText);
-    let data;
-    try { data = JSON.parse(rawText); } catch(pe) {
-      document.getElementById("loginErr").textContent = "Script error - please redeploy as NEW deployment.";
-      document.getElementById("loginErr").style.display = "block";
-      console.error("Response was not JSON:", rawText.substring(0, 200));
-      btn.textContent = "Sign In"; btn.disabled = false;
-      return;
-    }
+    const data = await jsonpRequest(url);
     if (data.result === "success" && data.token) {
       sessionToken = data.token;
       closeModal();
@@ -583,8 +589,7 @@ async function doLogin() {
       document.getElementById("loginErr").style.display = "block";
     }
   } catch(e) {
-    console.error("Login fetch error:", e);
-    document.getElementById("loginErr").textContent = "Connection error: " + e.message;
+    document.getElementById("loginErr").textContent = "Connection error. Please try again.";
     document.getElementById("loginErr").style.display = "block";
   }
   btn.textContent = "Sign In"; btn.disabled = false;
