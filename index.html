@@ -188,6 +188,9 @@
     <div class="modal-field"><label>Password</label><input type="password" id="loginPass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
     <button class="login-btn" onclick="doLogin()">Sign In</button>
     <div class="login-err" id="loginErr">Incorrect username or password.</div>
+    <div style="margin-top:12px;text-align:center;">
+      <a id="testLink" href="#" onclick="testScript(); return false;" style="font-size:11px;color:#6B7280;text-decoration:underline;">Test script connection</a>
+    </div>
   </div>
 </div>
 
@@ -520,6 +523,11 @@ async function emailSummary() {
   }
 }
 
+function testScript() {
+  const url = SCRIPT_URL + "?action=login&username=admin&password=Silver11.";
+  window.open(url, "_blank");
+}
+
 async function init() {
   const now = new Date();
   document.getElementById("dayLabel").textContent = DAYS[now.getDay()] + " \u00B7 " + now.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
@@ -554,8 +562,17 @@ async function doLogin() {
   document.getElementById("loginErr").style.display = "none";
   try {
     const url = SCRIPT_URL + "?action=login&username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password);
-    const res = await fetch(url);
-    const data = await res.json();
+    const res = await fetch(url, { redirect: "follow" });
+    const rawText = await res.text();
+    console.log("Login response:", rawText);
+    let data;
+    try { data = JSON.parse(rawText); } catch(pe) {
+      document.getElementById("loginErr").textContent = "Script error - please redeploy as NEW deployment.";
+      document.getElementById("loginErr").style.display = "block";
+      console.error("Response was not JSON:", rawText.substring(0, 200));
+      btn.textContent = "Sign In"; btn.disabled = false;
+      return;
+    }
     if (data.result === "success" && data.token) {
       sessionToken = data.token;
       closeModal();
@@ -566,7 +583,8 @@ async function doLogin() {
       document.getElementById("loginErr").style.display = "block";
     }
   } catch(e) {
-    document.getElementById("loginErr").textContent = "Connection error. Please try again.";
+    console.error("Login fetch error:", e);
+    document.getElementById("loginErr").textContent = "Connection error: " + e.message;
     document.getElementById("loginErr").style.display = "block";
   }
   btn.textContent = "Sign In"; btn.disabled = false;
