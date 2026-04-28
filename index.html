@@ -390,11 +390,8 @@ function resetToDefaults() {
   if(!confirm("Reset all meals and classes to defaults? This cannot be undone.")) return;
   meals = JSON.parse(JSON.stringify(DEFAULT_MEALS));
   deptClasses = JSON.parse(JSON.stringify(DEFAULT_CLASSES));
-  const sp = new URLSearchParams();
-  sp.append("type", "menu");
-  sp.append("token", sessionToken);
-  sp.append("config", JSON.stringify({ meals: meals, deptClasses: deptClasses }));
-  fetch(SCRIPT_URL, { method:"POST", body: sp })
+  const saveUrl = SCRIPT_URL + "?action=menu&token=" + encodeURIComponent(sessionToken) + "&config=" + encodeURIComponent(JSON.stringify({ meals: meals, deptClasses: deptClasses }));
+  fetch(saveUrl)
   .then(function(r){ return r.json(); })
   .then(function(d){
     if(d.result === "unauthorized") { alert("Session expired. Please log in again."); sessionToken=null; }
@@ -508,10 +505,8 @@ async function emailSummary() {
   const btn = document.getElementById("emailSummaryBtn");
   btn.textContent = "Sending..."; btn.disabled = true;
   try {
-    const sp = new URLSearchParams();
-    sp.append("type", "summary");
-    sp.append("token", sessionToken);
-    const res = await fetch(SCRIPT_URL, { method: "POST", body: sp });
+    const url = SCRIPT_URL + "?action=summary&token=" + encodeURIComponent(sessionToken);
+    const res = await fetch(url);
     const data = await res.json();
     if (data.result === "success") {
       btn.textContent = "Sent!";
@@ -558,11 +553,8 @@ async function doLogin() {
   btn.textContent = "Checking..."; btn.disabled = true;
   document.getElementById("loginErr").style.display = "none";
   try {
-    const params = new URLSearchParams();
-    params.append("type", "login");
-    params.append("username", username);
-    params.append("password", password);
-    const res = await fetch(SCRIPT_URL, { method: "POST", body: params });
+    const url = SCRIPT_URL + "?action=login&username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password);
+    const res = await fetch(url);
     const data = await res.json();
     if (data.result === "success" && data.token) {
       sessionToken = data.token;
