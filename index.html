@@ -281,12 +281,12 @@
   <div id="cutoffBanner" style="display:none;background:#fff;border-radius:20px;box-shadow:0 4px 24px rgba(26,58,107,0.10);overflow:hidden;margin-bottom:16px;">
     <div style="background:linear-gradient(135deg,#8B0000,#C0202E);padding:18px 24px;">
       <h2 style="color:#fff;font-family:'Playfair Display',serif;font-size:18px;">&#x23F0; Orders Closed for Today</h2>
-      <p style="color:rgba(255,255,255,0.85);font-size:12px;margin-top:3px;">The daily cutoff time of 10:00 AM has passed</p>
+      <p style="color:rgba(255,255,255,0.85);font-size:12px;margin-top:3px;">Orders are closed between 10:00 AM and 1:00 PM</p>
     </div>
     <div style="padding:28px 24px;text-align:center;">
       <div style="font-size:48px;margin-bottom:12px;">&#x1F512;</div>
       <p style="font-size:15px;font-weight:600;color:#1A3A6B;margin-bottom:6px;">Lunch ordering is now closed</p>
-      <p style="font-size:13px;color:#6B7280;">Orders open again tomorrow morning. Please see your teacher if you need assistance.</p>
+      <p style="font-size:13px;color:#6B7280;">Orders open again tomorrow morning. Ordering will reopen at 1:00 PM. Please see your teacher if you need assistance.</p>
     </div>
   </div>
 
@@ -297,9 +297,17 @@
       <p>Select your department and class, then choose your meal</p>
     </div>
     <div class="form-body">
-      <div class="field">
-        <label>Your Full Name</label>
-        <input type="text" id="studentName" placeholder="e.g. Ama Owusu"/>
+      <div class="field" id="nameField" style="display:none;">
+        <label>Select Your Name</label>
+        <select id="studentName">
+          <option value="">— Select your name —</option>
+        </select>
+      </div>
+      <div id="nameLoader" style="display:none;padding:10px 0;font-size:13px;color:var(--muted);text-align:center;">
+        &#x23F3; Loading names...
+      </div>
+      <div id="nameEmpty" style="display:none;background:#FFF8E1;border:1.5px solid #FFD54F;border-radius:10px;padding:10px 14px;font-size:13px;color:#5D4037;margin-bottom:16px;">
+        &#x26A0; No names found for this class. Please contact the admin to add names to the list.
       </div>
       <div class="section-label">Select Your Department</div>
       <div class="dept-grid">
@@ -365,11 +373,12 @@
 <div class="site-footer">&copy; 2026 Shield International School &middot; Lunch Portal &middot; Powered by Google Sheets</div>
 
 <script>
-const CUTOFF_HOUR = 10; // 10:00 AM
+const CUTOFF_HOUR = 10;  // Orders close at 10:00 AM
+const REOPEN_HOUR = 13;  // Orders reopen at 1:00 PM
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySSugpXUnw7QH9PdSBAWgxUXWw3eulfhF0dgsUKoPhsoUJyPi8ZfPfWSOCfEKMeINsmQ/exec";
 const ICONS = ["\u{1F372}","\u{1F35B}","\u{1F957}","\u{1F371}","\u{1F35D}","\u{1F959}","\u{1F35C}","\u{1F32E}","\u{1F958}","\u{1F35A}"];
 const DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-let sessionToken = null; // auth token granted by server
+const sessionToken = null; // auth token granted by server
 
 // JSONP helper — bypasses CORS completely
 function jsonpRequest(url) {
@@ -449,8 +458,8 @@ async function fetchMenu() {
 }
 
 function isPastCutoff() {
-  const now = new Date();
-  return now.getHours() >= CUTOFF_HOUR;
+  const h = new Date().getHours();
+  return h >= CUTOFF_HOUR && h < REOPEN_HOUR;
 }
 
 function checkCutoff() {
@@ -657,6 +666,10 @@ function pickDept(dept) {
   const sel=document.getElementById("studentClass");
   sel.disabled=false;
   sel.innerHTML=`<option value="">— Select class —</option>`+deptClasses[dept].map(c=>`<option value="${c}">${c}</option>`).join("");
+  // Reset name field
+  document.getElementById("nameField").style.display="none";
+  document.getElementById("nameEmpty").style.display="none";
+  document.getElementById("studentName").innerHTML="<option value=''>— Select your name —</option>";
   checkReady();
 }
 function pickMeal(i) {
@@ -665,12 +678,40 @@ function pickMeal(i) {
   selectedMeal=i; checkReady();
 }
 function checkReady() {
-  const n=document.getElementById("studentName").value.trim();
+  const n=document.getElementById("studentName").value;
   const c=document.getElementById("studentClass").value;
   document.getElementById("submitBtn").disabled=!(n&&selectedDept&&c&&selectedMeal!==null);
 }
-document.getElementById("studentName").addEventListener("input",checkReady);
-document.getElementById("studentClass").addEventListener("change",checkReady);
+// name is now a select — no input listener needed
+document.getElementById("studentClass").addEventListener("change", async function() {
+  const dept = DEPT_LABELS[selectedDept];
+  const cls  = this.value;
+  // Reset name
+  document.getElementById("nameField").style.display="none";
+  document.getElementById("nameEmpty").style.display="none";
+  document.getElementById("studentName").innerHTML="<option value=''>— Select your name —</option>";
+  checkReady();
+  if (!dept || !cls) return;
+  // Fetch names
+  document.getElementById("nameLoader").style.display="block";
+  try {
+    const url = SCRIPT_URL + "?action=names&dept=" + encodeURIComponent(dept) + "&cls=" + encodeURIComponent(cls);
+    const data = await jsonpRequest(url);
+    document.getElementById("nameLoader").style.display="none";
+    if (data.names && data.names.length > 0) {
+      const sel = document.getElementById("studentName");
+      sel.innerHTML = "<option value=''>— Select your name —</option>" +
+        data.names.map(n=>`<option value="${n}">${n}</option>`).join("");
+      document.getElementById("nameField").style.display="block";
+    } else {
+      document.getElementById("nameEmpty").style.display="block";
+    }
+  } catch(err) {
+    document.getElementById("nameLoader").style.display="none";
+    document.getElementById("nameEmpty").style.display="block";
+  }
+  checkReady();
+});
 
 async function submitOrder() {
   const name=document.getElementById("studentName").value.trim();
@@ -697,7 +738,9 @@ async function submitOrder() {
 }
 function resetForm() {
   selectedMeal=null; selectedDept=null;
-  document.getElementById("studentName").value="";
+  document.getElementById("studentName").innerHTML="<option value=''>— Select your name —</option>";
+  document.getElementById("nameField").style.display="none";
+  document.getElementById("nameEmpty").style.display="none";
   document.getElementById("studentClass").value=""; document.getElementById("studentClass").disabled=true;
   document.querySelectorAll(".dept-card").forEach(c=>c.classList.remove("selected"));
   document.getElementById("successCard").style.display="none";
