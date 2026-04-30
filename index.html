@@ -380,7 +380,7 @@ const REOPEN_HOUR = 13;  // Orders reopen at 1:00 PM
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySSugpXUnw7QH9PdSBAWgxUXWw3eulfhF0dgsUKoPhsoUJyPi8ZfPfWSOCfEKMeINsmQ/exec";
 const ICONS = ["\u{1F372}","\u{1F35B}","\u{1F957}","\u{1F371}","\u{1F35D}","\u{1F959}","\u{1F35C}","\u{1F32E}","\u{1F958}","\u{1F35A}"];
 const DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-const sessionToken = null; // auth token granted by server
+let sessionToken = null; // auth token granted by server
 
 // JSONP helper — bypasses CORS completely
 function jsonpRequest(url) {
