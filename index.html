@@ -299,18 +299,6 @@
       <p>Select your department and class, then choose your meal</p>
     </div>
     <div class="form-body">
-      <div class="field" id="nameField">
-        <label>Select Your Name</label>
-        <select id="studentName">
-          <option value="">— Select your name —</option>
-        </select>
-      </div>
-      <div id="nameLoader" style="padding:10px 0;font-size:13px;color:var(--muted);text-align:center;">
-        &#x23F3; Loading names...
-      </div>
-      <div id="nameEmpty" style="background:#FFF8E1;border:1.5px solid #FFD54F;border-radius:10px;padding:10px 14px;font-size:13px;color:#5D4037;margin-bottom:16px;">
-        &#x26A0; No names found for this class. Please contact the admin to add names to the list.
-      </div>
       <div class="section-label">Select Your Department</div>
       <div class="dept-grid">
         <div class="dept-card" id="dept-early" onclick="pickDept('early')">
@@ -344,6 +332,18 @@
         <select id="studentClass" disabled>
           <option value="">— Select department first —</option>
         </select>
+      </div>
+      <div class="field" id="nameField">
+        <label>Select Your Name</label>
+        <select id="studentName">
+          <option value="">— Select your name —</option>
+        </select>
+      </div>
+      <div id="nameLoader" style="padding:10px 0;font-size:13px;color:var(--muted);text-align:center;">
+        &#x23F3; Loading names...
+      </div>
+      <div id="nameEmpty" style="background:#FFF8E1;border:1.5px solid #FFD54F;border-radius:10px;padding:10px 14px;font-size:13px;color:#5D4037;margin-bottom:16px;">
+        &#x26A0; No names found for this class. Please contact the admin to add names to the list.
       </div>
       <div class="section-label">Choose Your Lunch</div>
       <div class="meal-grid" id="mealGrid"></div>
