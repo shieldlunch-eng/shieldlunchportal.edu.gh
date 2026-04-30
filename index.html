@@ -288,7 +288,7 @@
     <div style="padding:28px 24px;text-align:center;">
       <div style="font-size:48px;margin-bottom:12px;">&#x1F512;</div>
       <p style="font-size:15px;font-weight:600;color:#1A3A6B;margin-bottom:6px;">Lunch ordering is now closed</p>
-      <p style="font-size:13px;color:#6B7280;">Ordering will reopen at 1:00 PM. Please see your teacher if you need assistance.</p>
+      <p style="font-size:13px;color:#6B7280;">Orders open again tomorrow morning. Ordering will reopen at 1:00 PM. Please see your teacher if you need assistance.</p>
     </div>
   </div>
 
@@ -376,11 +376,11 @@
 
 <script>
 const CUTOFF_HOUR = 10;  // Orders close at 10:00 AM
-const REOPEN_HOUR = 11;  // Orders reopen at 11:00 AM
+const REOPEN_HOUR = 13;  // Orders reopen at 1:00 PM
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySSugpXUnw7QH9PdSBAWgxUXWw3eulfhF0dgsUKoPhsoUJyPi8ZfPfWSOCfEKMeINsmQ/exec";
 const ICONS = ["\u{1F372}","\u{1F35B}","\u{1F957}","\u{1F371}","\u{1F35D}","\u{1F959}","\u{1F35C}","\u{1F32E}","\u{1F958}","\u{1F35A}"];
 const DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-let sessionToken = null; // auth token granted by server
+const sessionToken = null; // auth token granted by server
 
 // JSONP helper — bypasses CORS completely
 function jsonpRequest(url) {
@@ -390,7 +390,7 @@ function jsonpRequest(url) {
     var timer = setTimeout(function() {
       cleanup();
       reject(new Error("Request timed out"));
-    }, 15000);
+    }, 30000);
     function cleanup() {
       clearTimeout(timer);
       delete window[cbName];
@@ -686,6 +686,7 @@ function checkReady() {
 }
 // name is now a select — no input listener needed
 document.getElementById("studentClass").addEventListener("change", async function() {
+  document.getElementById("nameEmpty").innerHTML = "&#x26A0; No names found for this class. Please contact the admin to add names to the list.";
   const dept = DEPT_LABELS[selectedDept];
   const cls  = this.value;
   // Reset name
@@ -710,7 +711,9 @@ document.getElementById("studentClass").addEventListener("change", async functio
     }
   } catch(err) {
     document.getElementById('nameLoader').classList.remove('show');
-    document.getElementById('nameEmpty').classList.add('show');
+    var ne = document.getElementById('nameEmpty');
+    ne.innerHTML = "&#x26A0; Could not load names. Check your connection and try selecting the class again.";
+    ne.classList.add('show');
   }
   checkReady();
 });
