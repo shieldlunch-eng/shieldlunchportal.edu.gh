@@ -146,6 +146,8 @@
 
     .site-footer { text-align:center; padding:20px; font-size:11px; color:var(--muted); border-top:1px solid var(--border); margin-top:8px; }
 
+    #nameEmpty, #nameLoader, #nameField { display: none; }
+    #nameEmpty.show, #nameLoader.show, #nameField.show { display: block; }
     @media(max-width:600px) {
       /* Header: wrap into two rows so admin button always shows */
       .header-inner { flex-wrap:wrap; padding:12px 14px; gap:8px; }
@@ -297,16 +299,16 @@
       <p>Select your department and class, then choose your meal</p>
     </div>
     <div class="form-body">
-      <div class="field" id="nameField" style="display:none;">
+      <div class="field" id="nameField">
         <label>Select Your Name</label>
         <select id="studentName">
           <option value="">— Select your name —</option>
         </select>
       </div>
-      <div id="nameLoader" style="display:none;padding:10px 0;font-size:13px;color:var(--muted);text-align:center;">
+      <div id="nameLoader" style="padding:10px 0;font-size:13px;color:var(--muted);text-align:center;">
         &#x23F3; Loading names...
       </div>
-      <div id="nameEmpty" style="display:none;background:#FFF8E1;border:1.5px solid #FFD54F;border-radius:10px;padding:10px 14px;font-size:13px;color:#5D4037;margin-bottom:16px;">
+      <div id="nameEmpty" style="background:#FFF8E1;border:1.5px solid #FFD54F;border-radius:10px;padding:10px 14px;font-size:13px;color:#5D4037;margin-bottom:16px;">
         &#x26A0; No names found for this class. Please contact the admin to add names to the list.
       </div>
       <div class="section-label">Select Your Department</div>
@@ -667,8 +669,8 @@ function pickDept(dept) {
   sel.disabled=false;
   sel.innerHTML=`<option value="">— Select class —</option>`+deptClasses[dept].map(c=>`<option value="${c}">${c}</option>`).join("");
   // Reset name field
-  document.getElementById("nameField").style.display="none";
-  document.getElementById("nameEmpty").style.display="none";
+  document.getElementById('nameField').classList.remove('show');
+  document.getElementById('nameEmpty').classList.remove('show');
   document.getElementById("studentName").innerHTML="<option value=''>— Select your name —</option>";
   checkReady();
 }
@@ -687,28 +689,28 @@ document.getElementById("studentClass").addEventListener("change", async functio
   const dept = DEPT_LABELS[selectedDept];
   const cls  = this.value;
   // Reset name
-  document.getElementById("nameField").style.display="none";
-  document.getElementById("nameEmpty").style.display="none";
+  document.getElementById('nameField').classList.remove('show');
+  document.getElementById('nameEmpty').classList.remove('show');
   document.getElementById("studentName").innerHTML="<option value=''>— Select your name —</option>";
   checkReady();
   if (!dept || !cls) return;
   // Fetch names
-  document.getElementById("nameLoader").style.display="block";
+  document.getElementById('nameLoader').classList.add('show');
   try {
     const url = SCRIPT_URL + "?action=names&dept=" + encodeURIComponent(dept) + "&cls=" + encodeURIComponent(cls);
     const data = await jsonpRequest(url);
-    document.getElementById("nameLoader").style.display="none";
+    document.getElementById('nameLoader').classList.remove('show');
     if (data.names && data.names.length > 0) {
       const sel = document.getElementById("studentName");
       sel.innerHTML = "<option value=''>— Select your name —</option>" +
         data.names.map(n=>`<option value="${n}">${n}</option>`).join("");
-      document.getElementById("nameField").style.display="block";
+      document.getElementById('nameField').classList.add('show');
     } else {
-      document.getElementById("nameEmpty").style.display="block";
+      document.getElementById('nameEmpty').classList.add('show');
     }
   } catch(err) {
-    document.getElementById("nameLoader").style.display="none";
-    document.getElementById("nameEmpty").style.display="block";
+    document.getElementById('nameLoader').classList.remove('show');
+    document.getElementById('nameEmpty').classList.add('show');
   }
   checkReady();
 });
@@ -739,8 +741,8 @@ async function submitOrder() {
 function resetForm() {
   selectedMeal=null; selectedDept=null;
   document.getElementById("studentName").innerHTML="<option value=''>— Select your name —</option>";
-  document.getElementById("nameField").style.display="none";
-  document.getElementById("nameEmpty").style.display="none";
+  document.getElementById('nameField').classList.remove('show');
+  document.getElementById('nameEmpty').classList.remove('show');
   document.getElementById("studentClass").value=""; document.getElementById("studentClass").disabled=true;
   document.querySelectorAll(".dept-card").forEach(c=>c.classList.remove("selected"));
   document.getElementById("successCard").style.display="none";
