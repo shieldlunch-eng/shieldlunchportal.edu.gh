@@ -539,7 +539,7 @@ function buildSummaryUI() {
 
 async function emailSummary() {
   const btn = document.getElementById("emailSummaryBtn");
-  btn.textContent = "Sending..."; btn.disabled = true;
+  btn.textContent = "Submit"; btn.disabled = true;
   try {
     const url = SCRIPT_URL + "?action=summary&token=" + encodeURIComponent(sessionToken);
     const data = await jsonpRequest(url);
