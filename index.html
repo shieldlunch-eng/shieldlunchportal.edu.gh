@@ -539,7 +539,7 @@ function buildSummaryUI() {
 
 async function emailSummary() {
   const btn = document.getElementById("emailSummaryBtn");
-  btn.textContent = "Submit"; btn.disabled = true;
+  btn.textContent = "Sending..."; btn.disabled = true;
   try {
     const url = SCRIPT_URL + "?action=summary&token=" + encodeURIComponent(sessionToken);
     const data = await jsonpRequest(url);
@@ -695,25 +695,24 @@ document.getElementById("studentClass").addEventListener("change", async functio
   document.getElementById("studentName").innerHTML="<option value=''>— Select your name —</option>";
   checkReady();
   if (!dept || !cls) return;
-  // Fetch names
+  // Fetch names — fetch() first (Chrome compatible), JSONP fallback (Firefox)
+  const namesUrl = SCRIPT_URL + "?action=names&dept=" + encodeURIComponent(dept) + "&cls=" + encodeURIComponent(cls);
   document.getElementById('nameLoader').classList.add('show');
+  var namesData = null;
   try {
-    const url = SCRIPT_URL + "?action=names&dept=" + encodeURIComponent(dept) + "&cls=" + encodeURIComponent(cls);
-    const data = await jsonpRequest(url);
-    document.getElementById('nameLoader').classList.remove('show');
-    if (data.names && data.names.length > 0) {
-      const sel = document.getElementById("studentName");
-      sel.innerHTML = "<option value=''>— Select your name —</option>" +
-        data.names.map(n=>`<option value="${n}">${n}</option>`).join("");
-      document.getElementById('nameField').classList.add('show');
-    } else {
-      document.getElementById('nameEmpty').classList.add('show');
-    }
-  } catch(err) {
-    document.getElementById('nameLoader').classList.remove('show');
-    var ne = document.getElementById('nameEmpty');
-    ne.innerHTML = "&#x26A0; Could not load names. Check your connection and try selecting the class again.";
-    ne.classList.add('show');
+    const res = await fetch(namesUrl, { redirect: "follow" });
+    namesData = await res.json();
+  } catch(fetchErr) {
+    try { namesData = await jsonpRequest(namesUrl); } catch(jsonpErr) { namesData = null; }
+  }
+  document.getElementById('nameLoader').classList.remove('show');
+  if (namesData && namesData.names && namesData.names.length > 0) {
+    const sel = document.getElementById("studentName");
+    sel.innerHTML = "<option value=''>— Select your name —</option>" +
+      namesData.names.map(function(n){ return '<option value="' + n + '">' + n + '</option>'; }).join("");
+    document.getElementById('nameField').classList.add('show');
+  } else {
+    document.getElementById('nameEmpty').classList.add('show');
   }
   checkReady();
 });
@@ -725,7 +724,7 @@ async function submitOrder() {
   const meal=meals[selectedMeal].name;
   const time=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
   const btn=document.getElementById("submitBtn");
-  btn.textContent="Submit"; btn.disabled=true;
+  btn.textContent="Sending..."; btn.disabled=true;
   document.getElementById("errBanner").style.display="none";
   try {
     await fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,dept,cls,meal})});
