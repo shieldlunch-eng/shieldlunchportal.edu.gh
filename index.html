@@ -539,7 +539,7 @@ function buildSummaryUI() {
 
 async function emailSummary() {
   const btn = document.getElementById("emailSummaryBtn");
-  btn.textContent = "Submit"; btn.disabled = true;
+  btn.textContent = "Submit My Order"; btn.disabled = true;
   try {
     const url = SCRIPT_URL + "?action=summary&token=" + encodeURIComponent(sessionToken);
     const data = await jsonpRequest(url);
@@ -724,7 +724,7 @@ async function submitOrder() {
   const meal=meals[selectedMeal].name;
   const time=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
   const btn=document.getElementById("submitBtn");
-  btn.textContent="Sending..."; btn.disabled=true;
+  btn.textContent="Submit My Order"; btn.disabled=true;
   document.getElementById("errBanner").style.display="none";
   try {
     await fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,dept,cls,meal})});
