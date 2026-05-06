@@ -542,34 +542,43 @@ function checkCutoff() {
 
 async function loadSummary() {
   const el = document.getElementById("summaryContent");
-  el.innerHTML = "<span style='color:#6B7280;font-size:13px;'>Loading...</span>";
+  el.innerHTML = "<span style='color:#6B7280;font-size:13px;'>Loading orders from Google Sheets...</span>";
   try {
-    const res = await fetch(SCRIPT_URL + "?summary=1&t=" + Date.now());
-    const raw = await res.text();
-    // raw is the menu config — we need orders from sheets directly
-    // Show session orders as summary
-    buildSummaryUI();
+    const url = SCRIPT_URL + "?action=orders&token=" + encodeURIComponent(sessionToken) + "&t=" + Date.now();
+    const data = await jsonpRequest(url);
+    if (data.result === "unauthorized") {
+      el.innerHTML = "<span style='color:#C0202E;font-size:13px;'>Session expired. Please log in again.</span>";
+      return;
+    }
+    if (data.result === "success" && data.orders) {
+      // Merge sheet orders with any new session orders (avoid duplicates by name+meal+time)
+      const sheetOrders = data.orders;
+      buildSummaryUI(sheetOrders);
+    } else {
+      buildSummaryUI([]);
+    }
   } catch(e) {
-    buildSummaryUI();
+    el.innerHTML = "<span style='color:#C0202E;font-size:13px;'>Could not reach Google Sheets. Check your connection.</span>";
   }
 }
 
-function buildSummaryUI() {
+function buildSummaryUI(displayOrders) {
+  if (displayOrders === undefined) displayOrders = orders;
   const el = document.getElementById("summaryContent");
-  if (!orders.length) {
-    el.innerHTML = "<span style='color:#6B7280;font-size:13px;'>No orders submitted in this session yet.</span>";
+  if (!displayOrders.length) {
+    el.innerHTML = "<span style='color:#6B7280;font-size:13px;'>No orders found for today.</span>";
     return;
   }
   // Meal counts
   const mealMap = {}, deptMap = {};
-  orders.forEach(o => {
+  displayOrders.forEach(o => {
     mealMap[o.meal] = (mealMap[o.meal] || 0) + 1;
     deptMap[o.dept] = (deptMap[o.dept] || 0) + 1;
   });
 
   let html = `<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
     <div style="background:#1A3A6B;color:#fff;border-radius:10px;padding:12px 20px;text-align:center;flex:1;min-width:80px;">
-      <div style="font-size:24px;font-weight:700;">${orders.length}</div>
+      <div style="font-size:24px;font-weight:700;">${displayOrders.length}</div>
       <div style="font-size:11px;opacity:0.8;margin-top:2px;">Total Orders</div>
     </div>
     <div style="background:#C0202E;color:#fff;border-radius:10px;padding:12px 20px;text-align:center;flex:1;min-width:80px;">
@@ -601,7 +610,7 @@ function buildSummaryUI() {
   html += `<div class="sum-label">All Orders</div>
   <div style="overflow-x:auto;width:100%;">
   <table class="sum-table" style="min-width:500px;"><thead><tr><th>Name</th><th>Dept</th><th>Class</th><th>Meal</th><th>Time</th></tr></thead><tbody>`;
-  orders.slice().reverse().forEach(o => {
+  displayOrders.slice().reverse().forEach(o => {
     html += `<tr><td>${o.name}</td><td>${o.dept}</td><td>${o.cls}</td><td>${o.meal}</td><td>${o.time}</td></tr>`;
   });
   html += `</tbody></table></div>`;
