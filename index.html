@@ -323,13 +323,12 @@
             <button onclick="emailSummary()" id="emailSummaryBtn" style="padding:6px 14px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">&#x2709; Email Summary</button>
           </div>
         </div>
-        <div id="summaryContent" style="background:#f8f9fc;border-radius:12px;padding:16px;min-height:80px;display:flex;align-items:center;justify-content:center;">
+        <div id="summaryContent" style="background:#f8f9fc;border-radius:12px;padding:16px;min-height:80px;overflow-x:auto;width:100%;">
           <span style="color:var(--muted);font-size:13px;">Click Refresh to load today's orders</span>
         </div>
       </div>
-      <div style="display:flex;gap:10px;margin-top:14px;">
-        <button class="save-btn" style="flex:1;" onclick="saveAdmin()">&#x1F4BE; Save Changes</button>
-        <button onclick="resetToDefaults()" style="padding:11px 16px;background:none;border:1.5px solid var(--border);border-radius:10px;font-size:13px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;">Reset defaults</button>
+      <div style="margin-top:14px;">
+        <button class="save-btn" onclick="saveAdmin()">&#x1F4BE; Save Changes</button>
       </div>
     </div>
   </div>
@@ -568,41 +567,44 @@ function buildSummaryUI() {
     deptMap[o.dept] = (deptMap[o.dept] || 0) + 1;
   });
 
-  let html = `<div style="display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
-    <div style="background:#1A3A6B;color:#fff;border-radius:10px;padding:12px 20px;text-align:center;flex:1;min-width:100px;">
+  let html = `<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+    <div style="background:#1A3A6B;color:#fff;border-radius:10px;padding:12px 20px;text-align:center;flex:1;min-width:80px;">
       <div style="font-size:24px;font-weight:700;">${orders.length}</div>
       <div style="font-size:11px;opacity:0.8;margin-top:2px;">Total Orders</div>
     </div>
-    <div style="background:#C0202E;color:#fff;border-radius:10px;padding:12px 20px;text-align:center;flex:1;min-width:100px;">
+    <div style="background:#C0202E;color:#fff;border-radius:10px;padding:12px 20px;text-align:center;flex:1;min-width:80px;">
       <div style="font-size:24px;font-weight:700;">${Object.keys(deptMap).length}</div>
       <div style="font-size:11px;opacity:0.8;margin-top:2px;">Departments</div>
     </div>
-    <div style="background:#0D7A55;color:#fff;border-radius:10px;padding:12px 20px;text-align:center;flex:1;min-width:100px;">
+    <div style="background:#0D7A55;color:#fff;border-radius:10px;padding:12px 20px;text-align:center;flex:1;min-width:80px;">
       <div style="font-size:24px;font-weight:700;">${Object.keys(mealMap).length}</div>
       <div style="font-size:11px;opacity:0.8;margin-top:2px;">Meal Options</div>
     </div>
   </div>`;
 
   html += `<div class="sum-label">By Meal</div>
-  <table class="sum-table"><thead><tr><th>Meal</th><th>Count</th></tr></thead><tbody>`;
+  <div style="overflow-x:auto;width:100%;margin-bottom:12px;">
+  <table class="sum-table" style="min-width:100%;"><thead><tr><th>Meal</th><th>Count</th></tr></thead><tbody>`;
   Object.entries(mealMap).forEach(([m,c]) => {
     html += `<tr><td>${m}</td><td><strong style="color:#1A3A6B;">${c}</strong></td></tr>`;
   });
-  html += `</tbody></table>`;
+  html += `</tbody></table></div>`;
 
   html += `<div class="sum-label">By Department</div>
-  <table class="sum-table"><thead><tr><th>Department</th><th>Count</th></tr></thead><tbody>`;
+  <div style="overflow-x:auto;width:100%;margin-bottom:12px;">
+  <table class="sum-table" style="min-width:100%;"><thead><tr><th>Department</th><th>Count</th></tr></thead><tbody>`;
   Object.entries(deptMap).forEach(([d,c]) => {
     html += `<tr><td>${d}</td><td><strong style="color:#C0202E;">${c}</strong></td></tr>`;
   });
-  html += `</tbody></table>`;
+  html += `</tbody></table></div>`;
 
   html += `<div class="sum-label">All Orders</div>
-  <table class="sum-table"><thead><tr><th>Name</th><th>Dept</th><th>Class</th><th>Meal</th><th>Time</th></tr></thead><tbody>`;
+  <div style="overflow-x:auto;width:100%;">
+  <table class="sum-table" style="min-width:500px;"><thead><tr><th>Name</th><th>Dept</th><th>Class</th><th>Meal</th><th>Time</th></tr></thead><tbody>`;
   orders.slice().reverse().forEach(o => {
     html += `<tr><td>${o.name}</td><td>${o.dept}</td><td>${o.cls}</td><td>${o.meal}</td><td>${o.time}</td></tr>`;
   });
-  html += `</tbody></table>`;
+  html += `</tbody></table></div>`;
 
   el.innerHTML = html;
 }
