@@ -262,6 +262,13 @@
     .admin-btn { background:var(--red); border:none; border-radius:50px; padding:7px 16px; font-size:12px; font-weight:600; color:#fff; cursor:pointer; font-family:"DM Sans",sans-serif; transition:opacity .2s; }
     .admin-btn:hover { opacity:.88; }
 
+    /* ── QUANTITY STEPPER ── */
+    .qty-stepper { display:flex; align-items:center; gap:8px; background:var(--blue-light); border:1.5px solid var(--blue-mid); border-radius:50px; padding:4px 6px; }
+    .qty-btn { width:28px; height:28px; border-radius:50%; border:none; background:var(--blue); color:#fff; font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; transition:all .15s; flex-shrink:0; }
+    .qty-btn:disabled { background:var(--border); color:var(--muted); cursor:not-allowed; }
+    .qty-btn:not(:disabled):hover { background:var(--blue-dark,#0f2a5e); }
+    .qty-val { font-size:12px; font-weight:700; color:var(--blue); min-width:52px; text-align:center; white-space:nowrap; }
+
     /* ── ABSENT BUTTON ── */
     .absent-btn {
       min-width:52px; height:34px; border-radius:50px;
@@ -450,11 +457,11 @@
           <p style="font-weight:700;color:var(--blue);margin-bottom:8px;">📋 Setup Instructions</p>
           <ol style="padding-left:18px;color:var(--text);">
             <li>Open <strong>Google Sheets</strong> and create a new spreadsheet named <em>Shield Lunch Orders</em>.</li>
-            <li>Create two sheets inside it: one named <strong>Students</strong> and one named <strong>Orders</strong> (they'll be created automatically if missing, but pre-creating lets you add students first).</li>
-            <li>Fill in your <strong>Students</strong> sheet — see the format guide below.</li>
+            <li>Create three sheets inside it: <strong>Menus</strong>, <strong>Students</strong>, and <strong>Orders</strong>.</li>
             <li>Go to <strong>Extensions → Apps Script</strong>, replace all code with the script below, then click <strong>Deploy → New deployment</strong> → <em>Web App</em> → set <em>Execute as: Me</em> and <em>Who has access: Anyone</em>.</li>
             <li>Copy the Web App URL and paste it into the <code>APPS_SCRIPT_URL</code> constant at the top of this file.</li>
-            <li>Reload the portal — class lists will load automatically from your Students sheet on startup.</li>
+            <li>Open <strong>Admin → 🍽 Meals</strong>, set your menus and click <strong>Save Changes</strong> — this writes them to the <strong>Menus</strong> sheet.</li>
+            <li>Fill in the <strong>Students</strong> sheet with Division, Class, Student Name (one per row). Reload and everything syncs automatically.</li>
           </ol>
         </div>
         <p style="font-weight:700;color:var(--blue);font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Apps Script Code</p>
@@ -487,20 +494,49 @@
   try {
     var data = JSON.parse(e.postData.contents);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var date = data.date || new Date().toISOString().split('T')[0];
-    var time = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'HH:mm');
 
-    var sheet = ss.getSheetByName('Orders') || ss.insertSheet('Orders');
-    if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['Date','Time','Role','Division','Class','Name','Department','Meal']);
+    // ── Save menus ────────────────────────────────────────────
+    if (data.type === 'menus') {
+      var ms = ss.getSheetByName('Menus') || ss.insertSheet('Menus');
+      ms.clearContents();
+      ms.appendRow(['ID', 'Emoji', 'Name']);
+      (data.menus || []).forEach(function(m) {
+        ms.appendRow([m.id, m.emoji, m.name]);
+      });
+      return ContentService.createTextOutput('ok');
     }
 
+    // ── Save students ─────────────────────────────────────────
+    if (data.type === 'students') {
+      var ss2 = SpreadsheetApp.getActiveSpreadsheet();
+      var st = ss2.getSheetByName('Students') || ss2.insertSheet('Students');
+      st.clearContents();
+      st.appendRow(['Division', 'Class', 'Student Name']);
+      var students = data.students || {};
+      Object.keys(students).forEach(function(div) {
+        var classes = students[div];
+        Object.keys(classes).forEach(function(cls) {
+          (classes[cls] || []).forEach(function(name) {
+            st.appendRow([div, cls, name]);
+          });
+        });
+      });
+      return ContentService.createTextOutput('ok');
+    }
+
+    // ── Log order ─────────────────────────────────────────────
+    var date = data.date || new Date().toISOString().split('T')[0];
+    var time = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'HH:mm');
+    var sheet = ss.getSheetByName('Orders') || ss.insertSheet('Orders');
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(['Date','Time','Role','Division','Class','Name','Department','Meal','Quantity']);
+    }
     if (data.role === 'teacher') {
       (data.orders || []).forEach(function(o) {
-        sheet.appendRow([date, time, 'Teacher/Rep', data.division, data.cls || '', o.studentName, '', o.menuName]);
+        sheet.appendRow([date, time, 'Teacher/Rep', data.division, data.cls || '', o.studentName, '', o.menuName, 1]);
       });
     } else {
-      sheet.appendRow([date, time, 'Staff', '', '', data.staffName, data.staffDept, data.menuName]);
+      sheet.appendRow([date, time, 'Staff', '', '', data.staffName, data.staffDept, data.menuName, data.quantity || 1]);
     }
     return ContentService.createTextOutput('ok');
   } catch(err) {
@@ -513,13 +549,26 @@ function doGet(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var cb = e.parameter.callback || 'cb';
 
-  // ── Load class lists from the Students sheet ──────────────
+  // ── Load menus from the Menus sheet ──────────────────────────
+  if (action === 'menus') {
+    var sheet = ss.getSheetByName('Menus');
+    if (!sheet || sheet.getLastRow() < 2) {
+      return ContentService.createTextOutput(cb + '({"menus":[]})').setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+    var rows = sheet.getDataRange().getValues().slice(1);
+    var menus = rows.filter(function(r){ return r[2]; }).map(function(r, i) {
+      return { id: Number(r[0]) || (i+1), emoji: r[1] || '🍽', name: r[2].toString().trim() };
+    });
+    return ContentService.createTextOutput(cb + '(' + JSON.stringify({menus: menus}) + ')').setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+
+  // ── Load students from the Students sheet ─────────────────────
   if (action === 'students') {
     var sheet = ss.getSheetByName('Students');
     if (!sheet || sheet.getLastRow() < 2) {
       return ContentService.createTextOutput(cb + '({"students":{}})').setMimeType(ContentService.MimeType.JAVASCRIPT);
     }
-    var rows = sheet.getDataRange().getValues().slice(1); // skip header
+    var rows = sheet.getDataRange().getValues().slice(1);
     var result = {};
     rows.forEach(function(r) {
       var division = (r[0] || '').toString().trim();
@@ -533,7 +582,7 @@ function doGet(e) {
     return ContentService.createTextOutput(cb + '(' + JSON.stringify({students: result}) + ')').setMimeType(ContentService.MimeType.JAVASCRIPT);
   }
 
-  // ── Today's orders ────────────────────────────────────────
+  // ── Today's orders ────────────────────────────────────────────
   if (action === 'orders') {
     var sheet = ss.getSheetByName('Orders');
     if (!sheet || sheet.getLastRow() < 2) {
@@ -542,12 +591,12 @@ function doGet(e) {
     var today = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd');
     var rows = sheet.getDataRange().getValues();
     var orders = rows.slice(1).filter(function(r){ return r[0] == today; }).map(function(r){
-      return { date:r[0], time:r[1], role:r[2], division:r[3], cls:r[4], name:r[5], dept:r[6], meal:r[7] };
+      return { date:r[0], time:r[1], role:r[2], division:r[3], cls:r[4], name:r[5], dept:r[6], meal:r[7], qty:r[8] };
     });
     return ContentService.createTextOutput(cb + '(' + JSON.stringify({orders:orders}) + ')').setMimeType(ContentService.MimeType.JAVASCRIPT);
   }
 
-  // ── Email summary ─────────────────────────────────────────
+  // ── Email summary ─────────────────────────────────────────────
   if (action === 'summary') {
     var recipient = 'admin@shieldschool.edu.gh'; // ← change this
     var sheet = ss.getSheetByName('Orders');
@@ -555,7 +604,7 @@ function doGet(e) {
     var rows = sheet ? sheet.getDataRange().getValues() : [];
     var todayRows = rows.slice(1).filter(function(r){ return r[0] == today; });
     var body = 'Lunch orders for ' + today + ':\n\n';
-    todayRows.forEach(function(r){ body += r[2]+' | '+r[3]+' '+r[4]+' | '+r[5]+' | '+r[7]+'\n'; });
+    todayRows.forEach(function(r){ body += r[2]+' | '+r[3]+' '+r[4]+' | '+r[5]+' | '+r[7]+(r[8]>1?' x'+r[8]:'')+'\n'; });
     MailApp.sendEmail(recipient, 'Shield Lunch Orders – ' + today, body);
     return ContentService.createTextOutput(cb + '({"ok":true})').setMimeType(ContentService.MimeType.JAVASCRIPT);
   }
@@ -563,7 +612,7 @@ function doGet(e) {
   return ContentService.createTextOutput(cb + '({})').setMimeType(ContentService.MimeType.JAVASCRIPT);
 }</div>
         <button onclick="copyAppsScript()" style="margin-top:10px;padding:7px 18px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">📋 Copy Apps Script</button>
-        <p style="font-size:11px;color:var(--muted);margin-top:10px;">The <strong>Students</strong> sheet is the source of truth — edit it in Google Sheets any time and the portal will pick up the changes on the next page load. The <strong>Orders</strong> sheet logs: Date, Time, Role, Division, Class, Name, Department, Meal.</p>
+        <p style="font-size:11px;color:var(--muted);margin-top:10px;">Three sheets power the portal: <strong>Menus</strong> (ID, Emoji, Name), <strong>Students</strong> (Division, Class, Student Name), and <strong>Orders</strong> (auto-logged). Edit Menus and Students directly in Sheets or via the Admin panel — both sync on every page load.</p>
       </div>
 
       <!-- Password change tab -->
@@ -639,10 +688,10 @@ function doGet(e) {
    CONFIGURATION — edit these to customise the portal
    ═══════════════════════════════════════════════════════════ */
 
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzau61sDkctfkUoKl0S7oeu6ZlTzGHQbtsNasL2sQ1QTLiXWKhbtgeXEkzDvYVshqY52w/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzX-BXAGFviK5PQw1h9v58Na3A6zdlS39_eSibl5CUk-TkGVt4n5v4QWIDl1sZtSPTjeQ/exec";
 
 const CUTOFF_HOUR = 10;   // orders close at 10:00 AM
-const REOPEN_HOUR = 14;   // orders reopen at 2:00 PM
+const REOPEN_HOUR = 13;   // orders reopen at 1:00 PM
 
 const MENUS = [
   { id:1, name:"Jollof rice & chicken",       emoji:"🍲" },
@@ -768,7 +817,7 @@ function getClasses(division) {
    ═══════════════════════════════════════════════════════════ */
 const S = {
   step:1, role:null, division:null, cls:null,
-  studentMenus:{}, absentees:new Set(), staffMenu:null, staffName:"", staffDept:"",
+  studentMenus:{}, absentees:new Set(), staffMenu:null, staffQty:1, staffName:"", staffDept:"",
   submitting:false
 };
 
@@ -799,8 +848,9 @@ function canGo() {
 function next() { const st=steps(),i=stepIdx(); if(i<st.length-1){S.step=st[i+1];render();} }
 function back() { const st=steps(),i=stepIdx(); if(i>0){S.step=st[i-1];render();} }
 function pick(k,v) {
+  if(k==="staffMenu" && v !== S.staffMenu) S.staffQty=1; // reset qty when switching meals
   S[k]=v;
-  if(k==="role"){S.division=null;S.cls=null;S.studentMenus={};S.absentees=new Set();S.staffMenu=null;}
+  if(k==="role"){S.division=null;S.cls=null;S.studentMenus={};S.absentees=new Set();S.staffMenu=null;S.staffQty=1;}
   if(k==="division"){S.cls=null;S.studentMenus={};S.absentees=new Set();}
   if(k==="cls"){S.studentMenus={};S.absentees=new Set();}
   render();
@@ -1026,19 +1076,35 @@ function renderStep4(){
   return`
     <div class="sec-label">Choose Your Lunch</div>
     <div class="meal-grid">
-      ${MENUS.map((m,i)=>`
-        <div class="meal-card ${S.staffMenu===m.id?"selected":""}" id="mc${i}">
+      ${MENUS.map((m,i)=>{
+        const sel = S.staffMenu===m.id;
+        return`
+        <div class="meal-card ${sel?"selected":""}" id="mc${i}" ${!sel?`onclick="pick('staffMenu',${m.id})"`:""}>
           <div class="meal-art"><div class="meal-emoji">${m.emoji}</div></div>
           <div class="meal-ribbon">chosen</div>
           <div class="meal-info">
             <div class="meal-name">${m.name}</div>
             <div class="meal-footer">
-              <span class="meal-choose-btn">Select</span>
-              <span class="meal-selected-pill">✓ Selected</span>
+              ${sel
+                ? `<div class="qty-stepper">
+                    <button class="qty-btn" onclick="event.stopPropagation();changeQty(-1)" ${S.staffQty<=1?"disabled":""}>−</button>
+                    <span class="qty-val">${S.staffQty} plate${S.staffQty>1?"s":""}</span>
+                    <button class="qty-btn" onclick="event.stopPropagation();changeQty(1)" ${S.staffQty>=5?"disabled":""}>+</button>
+                  </div>
+                  <span class="meal-selected-pill">✓ Selected</span>`
+                : `<span class="meal-choose-btn">Select</span>`
+              }
             </div>
           </div>
-        </div>`).join("")}
-    </div>`;
+        </div>`;
+      }).join("")}
+    </div>
+    ${S.staffMenu?`<p style="text-align:center;font-size:12px;color:var(--muted);margin-top:4px;">Tap another meal to switch · Max 5 plates</p>`:""}`;
+}
+
+function changeQty(delta){
+  S.staffQty = Math.min(5, Math.max(1, (S.staffQty||1) + delta));
+  render();
 }
 
 function renderStep5(){
@@ -1065,12 +1131,14 @@ function renderStep5(){
       </table>`;
   } else {
     const m=MENUS.find(x=>x.id===S.staffMenu);
+    const qty=S.staffQty||1;
     detail=`
       <div class="summary-info">
         <div class="srow"><span>Role</span><span>Staff</span></div>
         <div class="srow"><span>Name</span><span>${S.staffName}</span></div>
         <div class="srow"><span>Department</span><span>${S.staffDept}</span></div>
         <div class="srow"><span>Meal</span><span>${m?m.emoji+" "+m.name:""}</span></div>
+        <div class="srow"><span>Plates</span><span>${qty} plate${qty>1?"s":""}</span></div>
       </div>`;
   }
   return`<div id="summaryContent">${detail}</div>`;
@@ -1107,7 +1175,8 @@ async function submitOrder(){
   }:{
     role:"staff", date:new Date().toISOString().split("T")[0],
     staffName:S.staffName, staffDept:S.staffDept,
-    menuId:S.staffMenu, menuName:(MENUS.find(m=>m.id===S.staffMenu)||{}).name
+    menuId:S.staffMenu, menuName:(MENUS.find(m=>m.id===S.staffMenu)||{}).name,
+    quantity: S.staffQty||1
   };
   try {
     if(APPS_SCRIPT_URL!=="YOUR_WEB_APP_URL_HERE"){
@@ -1142,7 +1211,7 @@ function showSuccess(payload){
 }
 
 function resetPortal(){
-  Object.assign(S,{step:1,role:null,division:null,cls:null,studentMenus:{},absentees:new Set(),staffMenu:null,staffName:"",staffDept:"",submitting:false});
+  Object.assign(S,{step:1,role:null,division:null,cls:null,studentMenus:{},absentees:new Set(),staffMenu:null,staffQty:1,staffName:"",staffDept:"",submitting:false});
   document.getElementById("successCard").style.display="none";
   document.getElementById("formCard").style.display="block";
   document.getElementById("errBanner").style.display="none";
@@ -1352,12 +1421,16 @@ function saveAdmin(){
 
   // Save to Google Sheets if URL is set
   if(APPS_SCRIPT_URL!=="YOUR_WEB_APP_URL_HERE"){
-    const payload={type:"config",menus:MENUS,students:STUDENTS};
-    fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(payload)}).catch(()=>{});
+    // POST menus (persists to Menus sheet)
+    fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},
+      body:JSON.stringify({type:"menus",menus:MENUS})}).catch(()=>{});
+    // POST students (persists to Students sheet)
+    fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},
+      body:JSON.stringify({type:"students",students:STUDENTS})}).catch(()=>{});
   }
 
   // Fully reset order state so new menus/students take effect cleanly
-  Object.assign(S,{step:1,role:null,division:null,cls:null,studentMenus:{},absentees:new Set(),staffMenu:null,staffName:"",staffDept:"",submitting:false});
+  Object.assign(S,{step:1,role:null,division:null,cls:null,studentMenus:{},absentees:new Set(),staffMenu:null,staffQty:1,staffName:"",staffDept:"",submitting:false});
   document.getElementById("adminPanel").style.display="none";
   document.getElementById("successCard").style.display="none";
   document.getElementById("formCard").style.display="block";
@@ -1456,21 +1529,34 @@ async function init(){
   // Render immediately so there's no blocking spinner
   render();
 
-  // Silently fetch student lists from Sheets in the background (no spinner shown)
+  // Fetch menus + students from Sheets in parallel, silently
   if(APPS_SCRIPT_URL !== "YOUR_WEB_APP_URL_HERE"){
     try{
-      const data=await Promise.race([
-        jsonpRequest(APPS_SCRIPT_URL+"?action=students&t="+Date.now()),
-        new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),8000))
+      const [menuData, stuData] = await Promise.all([
+        Promise.race([
+          jsonpRequest(APPS_SCRIPT_URL+"?action=menus&t="+Date.now()),
+          new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),8000))
+        ]).catch(()=>null),
+        Promise.race([
+          jsonpRequest(APPS_SCRIPT_URL+"?action=students&t="+Date.now()),
+          new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),8000))
+        ]).catch(()=>null)
       ]);
-      if(data && data.students){
-        Object.entries(data.students).forEach(([div,classes])=>{ STUDENTS[div]=classes; });
-        // Only re-render if user hasn't started filling in an order yet
-        if(S.step===1) render();
-        showSaveBanner("✓ Class lists synced from Google Sheets");
+
+      let updated = false;
+      if(menuData && menuData.menus && menuData.menus.length){
+        MENUS.length=0;
+        menuData.menus.forEach(m=>MENUS.push(m));
+        updated = true;
       }
+      if(stuData && stuData.students){
+        Object.entries(stuData.students).forEach(([div,classes])=>{ STUDENTS[div]=classes; });
+        updated = true;
+      }
+      if(updated && S.step===1) render();
+      if(updated) showSaveBanner("✓ Menu & class lists synced from Google Sheets");
     }catch(e){
-      console.warn("Could not load students from Sheets — using built-in data:", e.message);
+      console.warn("Could not sync from Sheets — using built-in data:", e.message);
     }
   }
 }
