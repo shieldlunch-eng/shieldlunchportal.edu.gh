@@ -302,7 +302,9 @@
       .main { padding:14px 10px 40px; }
       .greeting-inner { flex-direction:column; align-items:flex-start; gap:6px; }
       .nav-row { flex-direction:column; }
-      .btn-back { min-width:100%; }
+      .btn-back, .btn-next { width:100%; flex:none; }
+      .btn-back { order:2; }
+      .btn-next { order:1; }
       .step-pill span.pill-label { display:none; }
     }
   </style>
@@ -688,7 +690,7 @@ function doGet(e) {
    CONFIGURATION — edit these to customise the portal
    ═══════════════════════════════════════════════════════════ */
 
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCHi1sqCjpVDBSbopxQoYyWKfwlzNbB6kf64ZpyCOuxBJcOaWXrnUp_bLNtJG_8WNykQ/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPl5MELzbxuEOeNFK7PLII3_HYnlwJD-0SNQm_jpBEFMZoekC_wxpwKkzM98EVhmqRVQ/exec";
 
 const CUTOFF_HOUR = 10;   // orders close at 10:00 AM
 const REOPEN_HOUR = 13;   // orders reopen at 1:00 PM
