@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Shield International School &ndash; Lunch Portal</title>
+  <title>Shield International School – Lunch Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -20,15 +20,14 @@
 
     /* ── HEADER ── */
     .hdr { background:var(--blue); position:sticky; top:0; z-index:50; box-shadow:0 2px 16px rgba(0,0,0,0.25); }
-    .hdr-inner { display:flex; align-items:center; gap:14px; padding:10px 20px; max-width:760px; margin:0 auto; }
+    .hdr-inner { display:flex; align-items:center; gap:14px; padding:10px 20px; max-width:800px; margin:0 auto; }
     .hdr-logo { width:48px; height:48px; object-fit:contain; flex-shrink:0; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.4)); }
+    .hdr-logo-placeholder { width:48px; height:48px; border-radius:10px; background:rgba(255,255,255,.15); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
     .hdr-title { flex:1; }
     .hdr-title h1 { font-family:"Playfair Display",serif; font-size:clamp(13px,3vw,19px); font-weight:900; color:#fff; letter-spacing:0.03em; line-height:1.2; }
     .hdr-title p { font-size:10px; color:rgba(255,255,255,0.65); letter-spacing:0.1em; text-transform:uppercase; margin-top:1px; }
     .hdr-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
     .day-chip { background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:50px; padding:5px 12px; font-size:11px; color:#fff; white-space:nowrap; }
-    .admin-btn { background:var(--red); border:none; border-radius:50px; padding:7px 16px; font-size:12px; font-weight:600; color:#fff; cursor:pointer; font-family:"DM Sans",sans-serif; transition:opacity .2s; }
-    .admin-btn:hover { opacity:.88; }
     .hdr-stripe { height:4px; background:linear-gradient(90deg,var(--red) 0%,var(--red-dark) 40%,var(--blue-mid) 100%); }
 
     /* ── CAROUSEL ── */
@@ -39,7 +38,7 @@
     .car-caption { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 24px; }
     .car-caption h2 { font-family:"Playfair Display",serif; font-size:clamp(18px,5vw,30px); font-weight:900; color:#fff; text-shadow:0 2px 16px rgba(0,0,0,.7); line-height:1.2; }
     .car-caption p { font-size:13px; color:rgba(255,255,255,.88); margin-top:6px; text-shadow:0 1px 8px rgba(0,0,0,.6); }
-    .car-caption .cap-badge { display:inline-block; background:var(--red); color:#fff; border-radius:50px; padding:4px 14px; font-size:11px; font-weight:700; margin-bottom:10px; letter-spacing:.06em; text-transform:uppercase; }
+    .cap-badge { display:inline-block; background:var(--red); color:#fff; border-radius:50px; padding:4px 14px; font-size:11px; font-weight:700; margin-bottom:10px; letter-spacing:.06em; text-transform:uppercase; }
     .car-arrow { position:absolute; top:50%; transform:translateY(-50%); z-index:5; background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.25); color:#fff; width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:background .2s; }
     .car-arrow:hover { background:rgba(0,0,0,.6); }
     .car-arrow.left { left:12px; } .car-arrow.right { right:12px; }
@@ -49,16 +48,171 @@
 
     /* ── GREETING BAND ── */
     .greeting { background:linear-gradient(135deg,var(--red-dark) 0%,var(--red) 100%); padding:14px 20px; }
-    .greeting-inner { max-width:760px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .greeting-inner { max-width:800px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
     .greeting h2 { font-family:"Playfair Display",serif; font-size:clamp(16px,4vw,22px); color:#fff; font-weight:700; }
     .greeting p { font-size:12px; color:rgba(255,255,255,.8); margin-top:2px; }
-    .cutoff-chip { background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.3); border-radius:50px; padding:5px 14px; font-size:11px; color:#fff; white-space:nowrap; text-align:center; }
+    .cutoff-chip { background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.3); border-radius:50px; padding:5px 14px; font-size:11px; color:#fff; white-space:nowrap; }
 
     /* ── MAIN ── */
-    .main { max-width:760px; margin:0 auto; padding:20px 16px 48px; }
+    .main { max-width:800px; margin:0 auto; padding:20px 16px 48px; }
+
+    /* ── FORM CARD ── */
+    .form-card { background:#fff; border-radius:22px; box-shadow:var(--sh); overflow:hidden; }
+    .form-hdr { background:var(--blue); padding:20px 24px; }
+    .form-hdr h2 { color:#fff; font-family:"Playfair Display",serif; font-size:20px; font-weight:700; }
+    .form-hdr p { color:rgba(255,255,255,.75); font-size:12px; margin-top:3px; }
+    .form-body { padding:24px; }
+
+    /* ── STEP INDICATOR ── */
+    .step-bar { display:flex; align-items:center; gap:0; margin-bottom:24px; }
+    .step-pill { display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:50px; font-size:12px; font-weight:600; border:1.5px solid var(--border); color:var(--muted); background:#fff; flex-shrink:0; }
+    .step-pill.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+    .step-pill.done { background:var(--green-light); color:var(--green); border-color:var(--green); }
+    .step-line { flex:1; height:2px; background:var(--border); margin:0 4px; }
+    .step-line.done { background:var(--green); }
+
+    /* ── SECTION LABEL ── */
+    .sec-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--blue); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+    .sec-label::after { content:""; flex:1; height:1px; background:var(--border); }
+
+    /* ── DEPT / ROLE CARDS ── */
+    .dept-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:24px; }
+    .dept-card { width:calc(50% - 6px); max-width:220px; border:2px solid var(--border); border-radius:16px; padding:16px 10px; cursor:pointer; transition:all .22s; text-align:center; background:#fafbff; position:relative; overflow:hidden; }
+    .dept-card::before { content:""; position:absolute; inset:0; background:linear-gradient(135deg,var(--blue) 0%,var(--blue-mid) 100%); opacity:0; transition:opacity .22s; }
+    .dept-card:hover { border-color:var(--blue-mid); transform:translateY(-3px); box-shadow:0 6px 20px rgba(26,58,107,.13); }
+    .dept-card:active { transform:translateY(-1px); }
+    .dept-card.selected { border-color:var(--blue); transform:translateY(-3px); box-shadow:0 6px 20px rgba(26,58,107,.18); }
+    .dept-card.selected::before { opacity:.07; }
+    .dept-card.selected .dept-name { color:var(--blue); }
+    .dept-icon { font-size:28px; margin-bottom:7px; position:relative; }
+    .dept-name { font-size:13px; font-weight:700; color:var(--text); line-height:1.3; position:relative; }
+    .dept-range { font-size:10px; color:var(--muted); margin-top:3px; position:relative; }
+
+    /* ── STUDENT ROSTER ── */
+    .student-list { margin-bottom:20px; border:1.5px solid var(--border); border-radius:14px; overflow:hidden; }
+    .student-list-hdr { display:flex; align-items:center; padding:10px 16px; background:var(--blue-light); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--blue); border-bottom:1px solid var(--border); }
+    .meal-legend { display:flex; flex-wrap:wrap; gap:6px; padding:10px 16px 12px; background:#f8f9fc; border-bottom:1px solid var(--border); }
+    .meal-legend-item { display:flex; align-items:center; gap:5px; font-size:11px; font-weight:600; color:var(--text); background:#fff; border:1.5px solid var(--border); border-radius:50px; padding:4px 10px 4px 6px; white-space:nowrap; }
+    .meal-legend-badge { width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:#fff; flex-shrink:0; }
+    .stu-row { display:flex; align-items:center; gap:10px; padding:11px 16px; border-bottom:1px solid #f0f2f8; }
+    .stu-row:last-child { border-bottom:none; }
+    .stu-name { flex:1; font-size:13px; font-weight:600; color:var(--text); line-height:1.4; }
+    .meal-btns { display:flex; gap:6px; flex-shrink:0; }
+    .meal-btn {
+      min-width:34px; height:34px; width:34px; border-radius:50%;
+      border:2px solid var(--border);
+      font-size:11px; font-weight:800;
+      cursor:pointer; background:#fff; color:var(--muted);
+      transition:all .18s; display:flex; align-items:center; justify-content:center;
+      padding:0; flex-shrink:0;
+    }
+    .meal-btn:hover { border-color:var(--mc,var(--blue-mid)); color:var(--mc,var(--blue-mid)); background:var(--mcs,var(--blue-light)); }
+    .meal-btn.selected { background:var(--mc,var(--blue)); border-color:var(--mc,var(--blue)); color:#fff; box-shadow:0 2px 8px color-mix(in srgb,var(--mc,var(--blue)) 35%,transparent); }
+
+    /* ── MEAL CARDS (Staff) ── */
+    .meal-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));
+      gap:14px;
+      margin-bottom:24px;
+    }
+    .meal-card:nth-child(1){--mc:#C0202E;--mc2:#E85A6B;--mcs:#fff0f1;}
+    .meal-card:nth-child(2){--mc:#1A3A6B;--mc2:#2255A0;--mcs:#eef2ff;}
+    .meal-card:nth-child(3){--mc:#0D7A55;--mc2:#2DC48D;--mcs:#f0fdf8;}
+    .meal-card:nth-child(4){--mc:#B45309;--mc2:#F59E0B;--mcs:#fffbeb;}
+    .meal-card:nth-child(5){--mc:#5B21B6;--mc2:#9B59E8;--mcs:#f5f0ff;}
+    .meal-card:nth-child(6){--mc:#065F46;--mc2:#34D399;--mcs:#ecfdf5;}
+    .meal-card {
+      position:relative; background:#fff; border-radius:20px; overflow:hidden;
+      cursor:pointer; border:2.5px solid transparent;
+      box-shadow:0 2px 14px rgba(0,0,0,.06);
+      transition:transform .3s cubic-bezier(.34,1.4,.64,1), box-shadow .3s, border-color .2s;
+      animation:mealIn .4s both;
+    }
+    .meal-card:nth-child(1){animation-delay:.05s}
+    .meal-card:nth-child(2){animation-delay:.10s}
+    .meal-card:nth-child(3){animation-delay:.15s}
+    .meal-card:nth-child(4){animation-delay:.20s}
+    .meal-card:nth-child(5){animation-delay:.25s}
+    .meal-card:nth-child(6){animation-delay:.30s}
+    @keyframes mealIn { from{opacity:0;transform:translateY(16px) scale(.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+    .meal-card:hover { transform:translateY(-5px) scale(1.015); box-shadow:0 14px 36px rgba(0,0,0,.12); border-color:var(--mc); }
+    .meal-card.selected { transform:translateY(-5px) scale(1.015); border-color:var(--mc); box-shadow:0 14px 36px rgba(0,0,0,.14), 0 0 0 4px color-mix(in srgb,var(--mc) 15%,transparent); }
+    .meal-art { height:120px; position:relative; overflow:hidden; background:var(--mcs); display:flex; align-items:center; justify-content:center; }
+    .meal-art::before { content:""; position:absolute; width:110px; height:110px; border-radius:50%; background:radial-gradient(circle,color-mix(in srgb,var(--mc2) 30%,transparent),transparent 70%); top:50%; left:50%; transform:translate(-50%,-50%); }
+    .meal-art::after { content:""; position:absolute; inset:0; background-image:radial-gradient(circle,color-mix(in srgb,var(--mc) 12%,transparent) 1px,transparent 1px); background-size:18px 18px; opacity:.6; }
+    .meal-emoji { font-size:56px; line-height:1; position:relative; z-index:2; filter:drop-shadow(0 4px 10px rgba(0,0,0,.15)); transition:transform .3s cubic-bezier(.34,1.4,.64,1); }
+    .meal-card:hover .meal-emoji, .meal-card.selected .meal-emoji { transform:scale(1.12) rotate(-4deg); }
+    .meal-ribbon { position:absolute; top:12px; right:-28px; width:90px; padding:3px 0; background:var(--mc); color:#fff; font-size:9px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; text-align:center; transform:rotate(45deg); opacity:0; transition:opacity .2s; z-index:3; }
+    .meal-card.selected .meal-ribbon { opacity:1; }
+    .meal-info { padding:12px 14px 14px; background:#fff; position:relative; }
+    .meal-info::before { content:""; position:absolute; top:0; left:14px; right:14px; height:2px; background:linear-gradient(90deg,var(--mc),var(--mc2)); border-radius:2px; opacity:0; transition:opacity .2s; }
+    .meal-card:hover .meal-info::before, .meal-card.selected .meal-info::before { opacity:1; }
+    .meal-name { font-size:13px; font-weight:700; color:var(--text); text-align:center; margin-bottom:8px; line-height:1.3; }
+    .meal-footer { display:flex; align-items:center; justify-content:center; }
+    .meal-choose-btn { font-size:10px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; padding:5px 14px; border-radius:50px; background:var(--mcs); color:var(--mc); border:1.5px solid color-mix(in srgb,var(--mc) 25%,transparent); transition:all .2s; }
+    .meal-card:hover .meal-choose-btn { background:var(--mc); color:#fff; border-color:var(--mc); }
+    .meal-selected-pill { display:none; font-size:10px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; padding:5px 14px; border-radius:50px; background:var(--mc); color:#fff; gap:5px; align-items:center; }
+    .meal-card.selected .meal-choose-btn { display:none; }
+    .meal-card.selected .meal-selected-pill { display:flex; }
+
+    /* ── FIELDS ── */
+    .field { margin-bottom:18px; }
+    .field label { display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--blue); margin-bottom:7px; }
+    .field input, .field select { width:100%; padding:12px 16px; border:2px solid var(--border); border-radius:12px; font-size:14px; font-family:"DM Sans",sans-serif; outline:none; background:#fff; transition:border-color .2s, box-shadow .2s; }
+    .field input:focus, .field select:focus { border-color:var(--blue-mid); box-shadow:0 0 0 3px rgba(34,85,160,.1); }
+
+    /* ── WARN BOX ── */
+    .warn-box { background:#FFF8E1; border:1.5px solid #FFD54F; border-radius:12px; padding:12px 16px; font-size:13px; color:#5D4037; margin-bottom:18px; }
+
+    /* ── NAVIGATION BUTTONS ── */
+    .nav-row { display:flex; gap:10px; margin-top:6px; }
+    .btn-back { flex:0 0 auto; min-width:90px; background:#fff; border:2px solid var(--border); border-radius:12px; height:50px; font-size:14px; font-weight:600; cursor:pointer; color:var(--muted); font-family:"DM Sans",sans-serif; display:flex; align-items:center; justify-content:center; gap:6px; transition:all .18s; }
+    .btn-back:hover { border-color:var(--blue); color:var(--blue); }
+    .btn-next { flex:1; background:linear-gradient(135deg,var(--blue),var(--blue-mid)); border:none; border-radius:12px; height:50px; font-size:14px; font-weight:700; cursor:pointer; color:#fff; font-family:"DM Sans",sans-serif; display:flex; align-items:center; justify-content:center; gap:8px; transition:opacity .18s; }
+    .btn-next:hover:not(:disabled) { opacity:.88; }
+    .btn-next:disabled { background:linear-gradient(135deg,#ccc,#bbb); cursor:not-allowed; }
+
+    /* ── SUBMIT BUTTON ── */
+    .submit-btn { width:100%; padding:16px; background:linear-gradient(135deg,var(--red-dark),var(--red)); color:#fff; border:none; border-radius:14px; font-size:16px; font-weight:700; cursor:pointer; font-family:"DM Sans",sans-serif; letter-spacing:.03em; transition:all .2s; box-shadow:0 4px 20px rgba(192,32,46,.35); margin-top:4px; }
+    .submit-btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 28px rgba(192,32,46,.4); }
+    .submit-btn:disabled { background:linear-gradient(135deg,#ccc,#bbb); box-shadow:none; cursor:not-allowed; }
+
+    /* ── SUMMARY CARD (step 5) ── */
+    .summary-info { background:var(--blue-light); border-radius:12px; padding:14px 18px; margin-bottom:18px; }
+    .srow { display:flex; justify-content:space-between; font-size:13px; padding:4px 0; }
+    .srow span:first-child { color:var(--muted); }
+    .srow span:last-child { font-weight:700; color:var(--blue); }
+    .sum-table { width:100%; border-collapse:collapse; font-size:13px; margin-bottom:4px; }
+    .sum-table th { background:var(--blue); color:#fff; padding:8px 12px; text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:.05em; }
+    .sum-table tr:last-child td { border-bottom:none; }
+    .sum-table td { padding:8px 12px; border-bottom:1px solid #eee; }
+
+    /* ── SUCCESS CARD ── */
+    .success-card { display:none; background:#fff; border-radius:22px; box-shadow:var(--sh); overflow:hidden; }
+    .success-hdr { background:linear-gradient(135deg,var(--green),#1aab72); padding:22px 24px; text-align:center; }
+    .s-icon { font-size:44px; margin-bottom:6px; }
+    .success-hdr h3 { font-family:"Playfair Display",serif; font-size:22px; color:#fff; }
+    .success-hdr p { font-size:12px; color:rgba(255,255,255,.85); margin-top:4px; }
+    .success-body { padding:24px; }
+    .sheets-badge { display:inline-flex; align-items:center; gap:6px; background:var(--green-light); color:var(--green); border-radius:50px; padding:5px 14px; font-size:12px; font-weight:600; margin-bottom:16px; }
+    .new-order-btn { width:100%; padding:13px; background:var(--blue); color:#fff; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; font-family:"DM Sans",sans-serif; }
+
+    /* ── ERR BANNER ── */
+    .err-banner { display:none; background:#FFF0F0; border:1.5px solid #F5C0C3; border-radius:12px; padding:11px 16px; font-size:13px; color:var(--red-dark); margin-bottom:14px; }
+
+    /* ── CLOSED CARD ── */
+    .closed-card { display:none; background:#fff; border-radius:22px; box-shadow:var(--sh); overflow:hidden; }
+    .closed-hdr { background:linear-gradient(135deg,var(--red-dark),var(--red)); padding:20px 24px; }
+    .closed-hdr h2 { color:#fff; font-family:"Playfair Display",serif; font-size:18px; }
+    .closed-hdr p { color:rgba(255,255,255,.8); font-size:12px; margin-top:3px; }
+    .closed-body { padding:32px 24px; text-align:center; }
+    .closed-icon { font-size:56px; margin-bottom:14px; }
+    .closed-body h3 { font-family:"Playfair Display",serif; font-size:20px; color:var(--blue); margin-bottom:8px; }
+    .closed-body p { font-size:14px; color:var(--muted); max-width:300px; margin:0 auto; }
 
     /* ── MODAL ── */
-    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(10,20,50,.7); z-index:100; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(10,20,50,.72); z-index:200; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
     .modal-overlay.open { display:flex; }
     .modal { background:#fff; border-radius:22px; padding:32px 28px; width:90%; max-width:360px; box-shadow:var(--sh-lg); position:relative; animation:slideUp .3s ease; }
     @keyframes slideUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
@@ -66,7 +220,7 @@
     .modal > p { font-size:13px; color:var(--muted); margin-bottom:20px; }
     .modal-field { margin-bottom:14px; }
     .modal-field label { display:block; font-size:11px; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
-    .modal-field input { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; font-family:"DM Sans",sans-serif; outline:none; }
+    .modal-field input { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; font-family:"DM Sans",sans-serif; outline:none; transition:border-color .2s; }
     .modal-field input:focus { border-color:var(--blue-mid); }
     .login-btn { width:100%; padding:12px; background:linear-gradient(135deg,var(--blue),var(--blue-mid)); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; font-family:"DM Sans",sans-serif; }
     .modal-close { position:absolute; top:14px; right:16px; background:none; border:none; font-size:22px; cursor:pointer; color:var(--muted); }
@@ -79,322 +233,73 @@
     .ap-close { background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.3); color:#fff; border-radius:50px; padding:4px 14px; font-size:12px; cursor:pointer; font-family:"DM Sans",sans-serif; }
     .ap-body { padding:20px; }
     .ap-tabs { display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap; background:var(--off); border-radius:14px; padding:6px; }
-    .ap-tab { display:flex; align-items:center; gap:6px; padding:8px 14px; border-radius:10px; border:none; background:transparent; font-size:12px; font-weight:600; cursor:pointer; font-family:"DM Sans",sans-serif; color:var(--muted); transition:all .22s; white-space:nowrap; }
+    .ap-tab { display:flex; align-items:center; gap:5px; padding:7px 13px; border-radius:10px; border:none; background:transparent; font-size:12px; font-weight:600; cursor:pointer; font-family:"DM Sans",sans-serif; color:var(--muted); transition:all .22s; white-space:nowrap; }
     .ap-tab:hover { background:#fff; color:var(--blue); box-shadow:0 2px 8px rgba(26,58,107,.08); }
-    .ap-tab .tab-icon { font-size:15px; line-height:1; }
-    .ap-tab.active { background:linear-gradient(135deg,var(--blue),var(--blue-mid)); color:#fff; box-shadow:0 4px 14px rgba(26,58,107,.3); transform:translateY(-1px); }
-    .ap-tab.active:hover { background:linear-gradient(135deg,var(--blue),var(--blue-mid)); color:#fff; }
+    .ap-tab.active { background:linear-gradient(135deg,var(--blue),var(--blue-mid)); color:#fff; box-shadow:0 4px 14px rgba(26,58,107,.3); }
     .ap-section { display:none; } .ap-section.active { display:block; }
     .admin-row { display:flex; gap:8px; align-items:center; margin-bottom:8px; }
-    .admin-row input { flex:1; padding:8px 12px; border:1.5px solid var(--border); border-radius:8px; font-size:13px; font-family:"DM Sans",sans-serif; }
+    .admin-row input { flex:1; padding:8px 12px; border:1.5px solid var(--border); border-radius:8px; font-size:13px; font-family:"DM Sans",sans-serif; outline:none; transition:border-color .2s; }
+    .admin-row input:focus { border-color:var(--blue-mid); }
+    .admin-row .emoji-inp { width:54px; flex:0 0 54px; text-align:center; font-size:18px; }
     .rm-btn { background:none; border:none; color:#ccc; font-size:20px; cursor:pointer; padding:0 4px; line-height:1; }
     .rm-btn:hover { color:var(--red); }
-    .add-row-btn { width:100%; padding:7px; border:1.5px dashed var(--border); border-radius:8px; background:none; font-size:12px; color:var(--muted); cursor:pointer; font-family:"DM Sans",sans-serif; margin-top:4px; }
+    .add-row-btn { width:100%; padding:8px; border:1.5px dashed var(--border); border-radius:8px; background:none; font-size:12px; color:var(--muted); cursor:pointer; font-family:"DM Sans",sans-serif; margin-top:4px; }
     .add-row-btn:hover { border-color:var(--blue-mid); color:var(--blue-mid); }
-    .save-btn { margin-top:12px; width:100%; padding:11px; background:linear-gradient(135deg,var(--blue),var(--blue-mid)); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; font-family:"DM Sans",sans-serif; }
-    .sum-table { width:100%; border-collapse:collapse; margin-bottom:16px; font-size:13px; }
-    .sum-table th { background:var(--blue); color:#fff; padding:8px 12px; text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.05em; }
-    .sum-table td { padding:8px 12px; border-bottom:1px solid #eee; }
-    .sum-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--blue); margin:14px 0 6px; }
+    .save-btn { margin-top:14px; width:100%; padding:11px; background:linear-gradient(135deg,var(--blue),var(--blue-mid)); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; font-family:"DM Sans",sans-serif; }
+    .ap-hint { font-size:11px; color:var(--muted); margin-bottom:12px; }
+    /* Summary tab */
+    .sum-stat-row { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+    .sum-stat { flex:1; min-width:70px; border-radius:10px; padding:12px; text-align:center; }
+    .sum-stat .ss-num { font-size:24px; font-weight:700; }
+    .sum-stat .ss-lbl { font-size:10px; opacity:.8; margin-top:2px; }
+    .sum-table { width:100%; border-collapse:collapse; font-size:12px; margin-bottom:12px; }
+    .sum-table th { background:var(--blue); color:#fff; padding:7px 10px; text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:.05em; }
+    .sum-table td { padding:7px 10px; border-bottom:1px solid #eee; }
+    .sum-table tr:last-child td { border-bottom:none; }
+    .admin-btn { background:var(--red); border:none; border-radius:50px; padding:7px 16px; font-size:12px; font-weight:600; color:#fff; cursor:pointer; font-family:"DM Sans",sans-serif; transition:opacity .2s; }
+    .admin-btn:hover { opacity:.88; }
 
-    /* ── FORM CARD ── */
-    .form-card { background:#fff; border-radius:22px; box-shadow:var(--sh); overflow:hidden; }
-    .form-hdr { background:var(--blue); padding:20px 24px; }
-    .form-hdr h2 { color:#fff; font-family:"Playfair Display",serif; font-size:20px; font-weight:700; }
-    .form-hdr p { color:rgba(255,255,255,.75); font-size:12px; margin-top:3px; }
-    .form-body { padding:24px; }
+    /* ── ABSENT BUTTON ── */
+    .absent-btn {
+      min-width:52px; height:34px; border-radius:50px;
+      border:1.5px solid var(--border);
+      font-size:10px; font-weight:700;
+      cursor:pointer; background:#fff; color:var(--muted);
+      transition:all .18s; padding:0 8px; white-space:nowrap;
+    }
+    .absent-btn:hover { border-color:#F59E0B; color:#B45309; background:#FFFBEB; }
+    .absent-btn.absent-active { background:#FEF3C7; border-color:#F59E0B; color:#92400E; }
+    .absent-tag { font-size:10px; font-weight:700; color:#92400E; background:#FEF3C7; border:1.5px solid #F59E0B; border-radius:50px; padding:0 10px; height:34px; display:flex; align-items:center; }
+    .stu-row.stu-absent { background:#FFFDF5; opacity:.75; }
+    .stu-row.stu-absent .stu-name { text-decoration:line-through; color:var(--muted); }
 
-    /* ── SECTION LABEL ── */
-    .sec-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--blue); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
-    .sec-label::after { content:""; flex:1; height:1px; background:var(--border); }
-
-    /* ── DEPT GRID ── */
-    .dept-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:20px; }
-    .dept-card { width:calc(50% - 5px); max-width:200px; border:2px solid var(--border); border-radius:16px; padding:16px 10px; cursor:pointer; transition:all .22s; text-align:center; background:#fafbff; position:relative; overflow:hidden; }
-    .dept-card::before { content:""; position:absolute; inset:0; background:linear-gradient(135deg,var(--blue) 0%,var(--blue-mid) 100%); opacity:0; transition:opacity .22s; }
-    .dept-card:hover { border-color:var(--blue-mid); transform:translateY(-3px); box-shadow:0 6px 20px rgba(26,58,107,.13); }
-    .dept-card.selected { border-color:var(--blue); transform:translateY(-3px); box-shadow:0 6px 20px rgba(26,58,107,.18); }
-    .dept-card.selected::before { opacity:.07; }
-    .dept-card.selected .dept-name { color:var(--blue); }
-    .dept-icon { font-size:28px; margin-bottom:7px; position:relative; }
-    .dept-name { font-size:13px; font-weight:700; color:var(--text); line-height:1.3; position:relative; }
-    .dept-range { font-size:10px; color:var(--muted); margin-top:3px; position:relative; }
-
-    /* ── CLASS / NAME FIELDS ── */
-    .field { margin-bottom:18px; }
-    .field label { display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--blue); margin-bottom:7px; }
-    .field input, .field select { width:100%; padding:12px 16px; border:2px solid var(--border); border-radius:12px; font-size:14px; font-family:"DM Sans",sans-serif; outline:none; background:#fff; transition:border-color .2s, box-shadow .2s; }
-    .field input:focus, .field select:focus { border-color:var(--blue-mid); box-shadow:0 0 0 3px rgba(34,85,160,.1); }
-    .field select:disabled { opacity:.45; cursor:not-allowed; background:#f5f6fa; }
-    #nameEmpty, #nameLoader, #nameField { display:none; }
-    #nameEmpty.show, #nameLoader.show, #nameField.show { display:block; }
-    .name-empty-box { background:#FFF8E1; border:1.5px solid #FFD54F; border-radius:12px; padding:12px 16px; font-size:13px; color:#5D4037; margin-bottom:18px; }
-
-    /* ── MEAL GRID ── */
-    .meal-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-
-    /* Colour palette per card slot */
-    .meal-card:nth-child(1) { --mc:#E8400A; --mc2:#FF7043; --mcs:#fff3f0; }
-    .meal-card:nth-child(2) { --mc:#0A7A5A; --mc2:#2DC48D; --mcs:#f0fdf8; }
-    .meal-card:nth-child(3) { --mc:#5B21B6; --mc2:#9B59E8; --mcs:#f5f0ff; }
-    .meal-card:nth-child(4) { --mc:#B45309; --mc2:#F59E0B; --mcs:#fffbeb; }
-    .meal-card:nth-child(5) { --mc:#1D4ED8; --mc2:#60A5FA; --mcs:#eff6ff; }
-    .meal-card:nth-child(6) { --mc:#065F46; --mc2:#34D399; --mcs:#ecfdf5; }
-    .meal-card:nth-child(7) { --mc:#BE185D; --mc2:#F472B6; --mcs:#fdf2f8; }
-    .meal-card:nth-child(8) { --mc:#92400E; --mc2:#FBBF24; --mcs:#fffbeb; }
-    .meal-card:nth-child(9) { --mc:#1E3A8A; --mc2:#818CF8; --mcs:#eef2ff; }
-    .meal-card:nth-child(10) { --mc:#E8400A; --mc2:#FF7043; --mcs:#fff3f0; }
-
-    .meal-card {
-      position: relative;
-      background: #fff;
-      border-radius: 24px;
-      overflow: hidden;
-      cursor: pointer;
-      border: 2.5px solid transparent;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
-      transition: transform .3s cubic-bezier(.34,1.4,.64,1),
-                  box-shadow .3s ease,
-                  border-color .2s ease;
-      animation: mealIn .4s both;
-    }
-    .meal-card:nth-child(1){animation-delay:.05s}
-    .meal-card:nth-child(2){animation-delay:.10s}
-    .meal-card:nth-child(3){animation-delay:.15s}
-    .meal-card:nth-child(4){animation-delay:.20s}
-    .meal-card:nth-child(5){animation-delay:.25s}
-    .meal-card:nth-child(6){animation-delay:.30s}
-    @keyframes mealIn {
-      from { opacity:0; transform:translateY(18px) scale(.96); }
-      to   { opacity:1; transform:translateY(0)    scale(1); }
-    }
-
-    .meal-card:hover {
-      transform: translateY(-5px) scale(1.015);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
-      border-color: var(--mc);
-    }
-    .meal-card.selected {
-      transform: translateY(-5px) scale(1.015);
-      border-color: var(--mc);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.14), 0 0 0 4px color-mix(in srgb, var(--mc) 15%, transparent);
-    }
-
-    /* ── Art area ── */
-    .meal-art {
-      height: 130px;
-      position: relative;
-      overflow: hidden;
-      background: var(--mcs);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    /* Decorative blob behind emoji */
-    .meal-art::before {
-      content: "";
-      position: absolute;
-      width: 120px; height: 120px;
-      border-radius: 50%;
-      background: radial-gradient(circle, color-mix(in srgb, var(--mc2) 30%, transparent), transparent 70%);
-      top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
-    }
-    /* Subtle dot-grid texture */
-    .meal-art::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle, color-mix(in srgb, var(--mc) 12%, transparent) 1px, transparent 1px);
-      background-size: 18px 18px;
-      opacity: .6;
-    }
-    .meal-emoji {
-      font-size: 62px;
-      line-height: 1;
-      position: relative;
-      z-index: 2;
-      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
-      transition: transform .3s cubic-bezier(.34,1.4,.64,1);
-    }
-    .meal-card:hover .meal-emoji,
-    .meal-card.selected .meal-emoji { transform: scale(1.12) rotate(-4deg); }
-
-    /* ── Selected ribbon ── */
-    .meal-ribbon {
-      position: absolute;
-      top: 12px; right: -30px;
-      width: 100px; padding: 4px 0;
-      background: var(--mc);
-      color: #fff;
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      text-align: center;
-      transform: rotate(45deg);
-      transform-origin: center;
-      opacity: 0;
-      transition: opacity .2s;
-      z-index: 3;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-    .meal-card.selected .meal-ribbon { opacity: 1; }
-
-    /* ── Info area ── */
-    .meal-info {
-      padding: 14px 16px 16px;
-      background: #fff;
-      position: relative;
-    }
-    /* Coloured top-border accent */
-    .meal-info::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 16px; right: 16px;
-      height: 2px;
-      background: linear-gradient(90deg, var(--mc), var(--mc2));
-      border-radius: 2px;
-      opacity: 0;
-      transition: opacity .2s;
-    }
-    .meal-card:hover .meal-info::before,
-    .meal-card.selected .meal-info::before { opacity: 1; }
-
-    .meal-name {
-      font-size: 13.5px;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.4;
-      text-align: center;
-      margin-bottom: 8px;
-    }
-    .meal-footer {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .meal-choose-btn {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      padding: 5px 14px;
-      border-radius: 50px;
-      background: var(--mcs);
-      color: var(--mc);
-      border: 1.5px solid color-mix(in srgb, var(--mc) 25%, transparent);
-      transition: all .2s;
-    }
-    .meal-card:hover .meal-choose-btn {
-      background: var(--mc);
-      color: #fff;
-      border-color: var(--mc);
-    }
-    .meal-selected-pill {
-      display: none;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      padding: 5px 14px;
-      border-radius: 50px;
-      background: var(--mc);
-      color: #fff;
-      gap: 5px;
-      align-items: center;
-    }
-    .meal-card.selected .meal-choose-btn { display: none; }
-    .meal-card.selected .meal-selected-pill { display: flex; }
-
-    /* ── SUBMIT ── */
-    .submit-btn { width:100%; padding:16px; background:linear-gradient(135deg,var(--red-dark),var(--red)); color:#fff; border:none; border-radius:14px; font-size:16px; font-weight:700; cursor:pointer; font-family:"DM Sans",sans-serif; letter-spacing:.03em; transition:all .2s; box-shadow:0 4px 20px rgba(192,32,46,.35); }
-    .submit-btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 28px rgba(192,32,46,.4); }
-    .submit-btn:disabled { background:linear-gradient(135deg,#ccc,#bbb); box-shadow:none; cursor:not-allowed; }
-
-    /* ── CUTOFF CLOSED ── */
-    .closed-card { display:none; background:#fff; border-radius:22px; box-shadow:var(--sh); overflow:hidden; }
-    .closed-hdr { background:linear-gradient(135deg,var(--red-dark),var(--red)); padding:20px 24px; }
-    .closed-hdr h2 { color:#fff; font-family:"Playfair Display",serif; font-size:18px; }
-    .closed-hdr p { color:rgba(255,255,255,.8); font-size:12px; margin-top:3px; }
-    .closed-body { padding:32px 24px; text-align:center; }
-    .closed-icon { font-size:56px; margin-bottom:14px; }
-    .closed-body h3 { font-family:"Playfair Display",serif; font-size:20px; color:var(--blue); margin-bottom:8px; }
-    .closed-body p { font-size:14px; color:var(--muted); max-width:300px; margin:0 auto; }
-
-    /* ── SUCCESS ── */
-    .success-card { display:none; background:#fff; border-radius:22px; box-shadow:var(--sh); overflow:hidden; }
-    .success-hdr { background:linear-gradient(135deg,var(--green),#1aab72); padding:20px 24px; text-align:center; }
-    .success-hdr .s-icon { font-size:44px; margin-bottom:6px; }
-    .success-hdr h3 { font-family:"Playfair Display",serif; font-size:20px; color:#fff; }
-    .success-hdr p { font-size:12px; color:rgba(255,255,255,.85); margin-top:3px; }
-    .success-body { padding:24px; }
-    .success-detail { background:var(--blue-light); border-radius:12px; padding:14px 18px; margin-bottom:16px; }
-    .srow { display:flex; justify-content:space-between; font-size:13px; padding:4px 0; }
-    .srow span:first-child { color:var(--muted); }
-    .srow span:last-child { font-weight:700; color:var(--blue); }
-    .sheets-badge { display:inline-flex; align-items:center; gap:6px; background:var(--green-light); color:var(--green); border-radius:50px; padding:5px 14px; font-size:12px; font-weight:600; margin-bottom:14px; }
-    .new-order-btn { width:100%; padding:13px; background:var(--blue); color:#fff; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; font-family:"DM Sans",sans-serif; }
-
-    /* ── ERROR BANNER ── */
-    .err-banner { display:none; background:#FFF0F0; border:1.5px solid #F5C0C3; border-radius:12px; padding:11px 16px; font-size:13px; color:var(--red-dark); margin-bottom:14px; }
-
-    /* ── LOG ── */
-    .log-wrap { margin-top:20px; background:#fff; border-radius:20px; box-shadow:var(--sh); overflow:hidden; }
-    .log-hbar { background:linear-gradient(135deg,var(--blue),var(--blue-mid)); padding:14px 20px; display:flex; justify-content:space-between; align-items:center; }
-    .log-hbar span { color:#fff; font-size:14px; font-weight:600; }
-    .log-clear { background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.3); color:#fff; border-radius:50px; padding:3px 12px; font-size:11px; cursor:pointer; font-family:"DM Sans",sans-serif; }
-    .log-cols { display:grid; grid-template-columns:1.1fr .8fr .9fr 1.2fr 52px; gap:6px; padding:8px 18px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); border-bottom:1px solid var(--border); }
-    .log-row { display:grid; grid-template-columns:1.1fr .8fr .9fr 1.2fr 52px; gap:6px; padding:9px 18px; font-size:12px; border-bottom:1px solid #f3f4f6; align-items:center; }
-    .log-row:last-child { border-bottom:none; }
-    .lname { font-weight:600; } .ldept { color:var(--blue); font-size:11px; font-weight:600; } .lcls, .lmeal { color:var(--muted); } .ltime { color:var(--muted); font-size:10px; text-align:right; }
+    /* ── SPINNER ── */
+    .spin-ring { width:36px; height:36px; border:3px solid var(--border); border-top-color:var(--blue); border-radius:50%; animation:spin .7s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
 
     /* ── FOOTER ── */
     .site-footer { text-align:center; padding:20px; font-size:11px; color:var(--muted); border-top:1px solid var(--border); margin-top:10px; }
 
-    #nameEmpty, #nameLoader, #nameField { display: none; }
-    #nameEmpty.show, #nameLoader.show, #nameField.show { display: block; }
     /* ── MOBILE ── */
     @media(max-width:600px) {
       .hdr-inner { padding:10px 12px; gap:10px; flex-wrap:wrap; }
-      .hdr-logo { width:38px; height:38px; }
-      .hdr-title h1 { font-size:12px; }
       .hdr-right { width:100%; order:3; justify-content:space-between; border-top:1px solid rgba(255,255,255,.15); padding-top:8px; margin-top:2px; }
-      .day-chip { flex:1; text-align:center; font-size:11px; }
+      .day-chip { flex:1; text-align:center; }
       .car-wrap { height:180px; }
       .dept-card { width:calc(50% - 5px); }
-      .meal-card { width:calc(50% - 7px); }
-      .meal-img-wrap { height:80px; }
+      .meal-grid { grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); gap:10px; }
       .form-body { padding:16px; }
       .main { padding:14px 10px 40px; }
-      .ap-tab { font-size:10px; padding:5px 9px; }
-      .log-cols, .log-row { grid-template-columns:1fr 1fr; }
-      .log-cols span:nth-child(n+3), .log-row .lcls, .log-row .lmeal, .log-row .ltime { display:none; }
       .greeting-inner { flex-direction:column; align-items:flex-start; gap:6px; }
+      .nav-row { flex-direction:column; }
+      .btn-back { min-width:100%; }
+      .step-pill span.pill-label { display:none; }
     }
   </style>
 </head>
 <body>
 
-<!-- ADMIN LOGIN MODAL -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">&#x2715;</button>
-    <h3>&#x1F6E1; Admin Access</h3>
-    <p>Enter your credentials to manage the lunch menu.</p>
-    <div class="modal-field"><label>Username</label><input type="text" id="loginUser" placeholder="Username"/></div>
-    <div class="modal-field"><label>Password</label><input type="password" id="loginPass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-    <button class="login-btn" onclick="doLogin()">Sign In</button>
-    <div class="login-err" id="loginErr">Incorrect username or password.</div>
-  </div>
-</div>
-
-<!-- HEADER -->
+<!-- ═══════════════════════ HEADER ═══════════════════════ -->
 <div class="hdr">
   <div class="hdr-inner">
     <img class="hdr-logo" src="images/favicon.webp" alt="Shield International School"/>
@@ -404,45 +309,58 @@
     </div>
     <div class="hdr-right">
       <div class="day-chip" id="dayLabel"></div>
-      <button class="admin-btn" onclick="openModal()">&#x2699; Admin</button>
+      <button class="admin-btn" onclick="openModal()">⚙ Admin</button>
     </div>
   </div>
   <div class="hdr-stripe"></div>
 </div>
 
-<!-- CAROUSEL -->
+<!-- ═══════════════════════ LOGIN MODAL ═══════════════════════ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    <h3>🛡 Admin Access</h3>
+    <p>Enter your credentials to manage the lunch menu.</p>
+    <div class="modal-field"><label>Username</label><input type="text" id="loginUser" placeholder="Username" autocomplete="off"/></div>
+    <div class="modal-field"><label>Password</label><input type="password" id="loginPass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">Sign In</button>
+    <div class="login-err" id="loginErr">Incorrect username or password.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ CAROUSEL ═══════════════════════ -->
 <div class="car-wrap">
   <div class="car-track" id="carTrack">
     <div class="car-slide">
-      <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&auto=format&fit=crop&q=80" alt="Delicious food"/>
+      <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&auto=format&fit=crop&q=80" alt="Food"/>
       <div class="car-caption">
         <div class="cap-badge">Today's Lunch</div>
         <h2>Fresh, Wholesome Meals Daily</h2>
-        <p>Select your department, class and meal below</p>
+        <p>Teachers & reps, select meals for your entire class below</p>
       </div>
     </div>
     <div class="car-slide">
-      <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=800&auto=format&fit=crop&q=80" alt="School lunch"/>
+      <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=800&auto=format&fit=crop&q=80" alt="Food"/>
       <div class="car-caption">
-        <div class="cap-badge">Eat Well</div>
-        <h2>Fuel Your Mind, Fuel Your Day</h2>
-        <p>A nutritious lunch powers brilliant learning</p>
+        <div class="cap-badge">Quick & Easy</div>
+        <h2>One Teacher, Every Student Served</h2>
+        <p>Class reps submit orders for all students in seconds</p>
       </div>
     </div>
     <div class="car-slide">
-      <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=800&auto=format&fit=crop&q=80" alt="Jollof rice"/>
+      <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=800&auto=format&fit=crop&q=80" alt="Food"/>
       <div class="car-caption">
         <div class="cap-badge">Our Kitchen</div>
         <h2>Prepared with Care Every Day</h2>
-        <p>Our team cooks fresh, balanced meals for every student</p>
+        <p>Fresh, balanced meals cooked for every student</p>
       </div>
     </div>
     <div class="car-slide">
-      <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&auto=format&fit=crop&q=80" alt="School food"/>
+      <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&auto=format&fit=crop&q=80" alt="Food"/>
       <div class="car-caption">
         <div class="cap-badge">Shield School</div>
         <h2>Excellence in Every Meal</h2>
-        <p>Order before 10:00 AM &mdash; reopens at 1:00 PM</p>
+        <p>Order before 10:00 AM — reopens at 1:00 PM</p>
       </div>
     </div>
   </div>
@@ -451,161 +369,262 @@
   <div class="car-dots" id="carDots"></div>
 </div>
 
-<!-- GREETING BAND -->
+<!-- ═══════════════════════ GREETING ═══════════════════════ -->
 <div class="greeting">
   <div class="greeting-inner">
     <div>
       <h2 id="greetingText">Good morning!</h2>
       <p>Welcome to the Shield International School Lunch Portal</p>
     </div>
-    <div class="cutoff-chip" id="statusChip">&#x23F0; Orders open. It closes at 10am</div>
+    <div class="cutoff-chip" id="statusChip">⏰ Orders open</div>
   </div>
 </div>
 
-<!-- MAIN -->
+<!-- ═══════════════════════ MAIN ═══════════════════════ -->
 <div class="main">
 
-  <!-- ADMIN PANEL -->
+  <!-- Admin panel -->
   <div class="admin-panel" id="adminPanel">
     <div class="ap-hdr">
-      <h3>&#x1F6E1; Admin Panel &mdash; Manage Menu</h3>
-      <button class="ap-close" onclick="closeAdminPanel()">Close</button>
+      <h3>🛡 Admin Panel — Manage Menu</h3>
+      <button class="ap-close" onclick="closeAdmin()">Close</button>
     </div>
     <div class="ap-body">
       <div class="ap-tabs">
-        <button class="ap-tab active" onclick="switchTab('meals')"><span class="tab-icon">🍽️</span> Meals</button>
-        <button class="ap-tab" onclick="switchTab('early')"><span class="tab-icon">🌱</span> Early Years</button>
-        <button class="ap-tab" onclick="switchTab('junior')"><span class="tab-icon">📖</span> Junior School</button>
-        <button class="ap-tab" onclick="switchTab('middle')"><span class="tab-icon">📚</span> Middle School</button>
-        <button class="ap-tab" onclick="switchTab('upper')"><span class="tab-icon">🎓</span> Upper Secondary</button>
-        <button class="ap-tab" onclick="switchTab('staff')"><span class="tab-icon">👔</span> Staff</button>
-        <button class="ap-tab" onclick="switchTab('summary')"><span class="tab-icon">📊</span> Summary</button>
+        <button class="ap-tab active" onclick="switchTab('meals')">🍽 Meals</button>
+        <button class="ap-tab" onclick="switchTab('early')">🌱 Early Years</button>
+        <button class="ap-tab" onclick="switchTab('junior')">📖 Junior School</button>
+        <button class="ap-tab" onclick="switchTab('middle')">📚 Middle School</button>
+        <button class="ap-tab" onclick="switchTab('upper')">🎓 Upper Secondary</button>
+        <button class="ap-tab" onclick="switchTab('summary')">📊 Summary</button>
+        <button class="ap-tab" onclick="switchTab('sheets')">🔗 Google Sheets</button>
+        <button class="ap-tab" onclick="switchTab('password')">🔑 Password</button>
       </div>
-      <div class="ap-section active" id="tab-meals"><div id="mealList"></div><button class="add-row-btn" onclick="addMeal()">+ Add meal</button></div>
-      <div class="ap-section" id="tab-early"><div id="cl-early"></div><button class="add-row-btn" onclick="addCls('early')">+ Add class</button></div>
-      <div class="ap-section" id="tab-junior"><div id="cl-junior"></div><button class="add-row-btn" onclick="addCls('junior')">+ Add class</button></div>
-      <div class="ap-section" id="tab-middle"><div id="cl-middle"></div><button class="add-row-btn" onclick="addCls('middle')">+ Add class</button></div>
-      <div class="ap-section" id="tab-upper"><div id="cl-upper"></div><button class="add-row-btn" onclick="addCls('upper')">+ Add class</button></div>
-      <div class="ap-section" id="tab-staff"><div id="cl-staff"></div><button class="add-row-btn" onclick="addCls('staff')">+ Add group</button></div>
+
+      <!-- Meals -->
+      <div class="ap-section active" id="tab-meals">
+        <p class="ap-hint">Edit meal names and emojis. Changes apply immediately after saving.</p>
+        <div id="mealAdminList"></div>
+        <button class="add-row-btn" onclick="addMeal()">+ Add meal</button>
+      </div>
+
+      <!-- Students per division -->
+      <div class="ap-section" id="tab-early">
+        <p class="ap-hint">One student name per row, organised by class.</p>
+        <div id="stu-early"></div>
+      </div>
+      <div class="ap-section" id="tab-junior">
+        <p class="ap-hint">One student name per row, organised by class.</p>
+        <div id="stu-junior"></div>
+      </div>
+      <div class="ap-section" id="tab-middle">
+        <p class="ap-hint">One student name per row, organised by class.</p>
+        <div id="stu-middle"></div>
+      </div>
+      <div class="ap-section" id="tab-upper">
+        <p class="ap-hint">One student name per row, organised by class.</p>
+        <div id="stu-upper"></div>
+      </div>
+
+      <!-- Summary -->
       <div class="ap-section" id="tab-summary">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
           <span style="font-size:13px;font-weight:600;color:var(--blue);">Today's Order Summary</span>
           <div style="display:flex;gap:8px;">
-            <button onclick="loadSummary()" style="padding:6px 14px;background:var(--blue-light);color:var(--blue);border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">&#x21BB; Refresh</button>
-            <button onclick="emailSummary()" id="emailSummaryBtn" style="padding:6px 14px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">&#x2709; Email Summary</button>
+            <button onclick="loadSummary()" style="padding:6px 14px;background:var(--blue-light);color:var(--blue);border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">↻ Refresh</button>
+            <button onclick="emailSummary()" id="emailBtn" style="padding:6px 14px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">✉ Email Summary</button>
           </div>
         </div>
-        <div id="summaryContent" style="background:#f8f9fc;border-radius:12px;padding:16px;min-height:80px;overflow-x:auto;width:100%;">
-          <span style="color:var(--muted);font-size:13px;">Click Refresh to load today's orders</span>
+        <div id="summaryPanel" style="background:#f8f9fc;border-radius:12px;padding:16px;min-height:80px;">
+          <span style="color:var(--muted);font-size:13px;">Click Refresh to load today's orders.</span>
         </div>
       </div>
-      <div style="margin-top:14px;">
-        <button class="save-btn" onclick="saveAdmin()">&#x1F4BE; Save Changes</button>
+
+      <!-- Google Sheets Setup -->
+      <div class="ap-section" id="tab-sheets">
+        <p class="ap-hint">Connect this portal to Google Sheets to log all orders automatically.</p>
+        <div style="background:#f3f4f8;border-radius:12px;padding:16px;font-size:12px;line-height:1.8;margin-bottom:14px;">
+          <p style="font-weight:700;color:var(--blue);margin-bottom:8px;">📋 Setup Instructions</p>
+          <ol style="padding-left:18px;color:var(--text);">
+            <li>Open <strong>Google Sheets</strong> and create a new spreadsheet named <em>Shield Lunch Orders</em>.</li>
+            <li>Create two sheets inside it: one named <strong>Students</strong> and one named <strong>Orders</strong> (they'll be created automatically if missing, but pre-creating lets you add students first).</li>
+            <li>Fill in your <strong>Students</strong> sheet — see the format guide below.</li>
+            <li>Go to <strong>Extensions → Apps Script</strong>, replace all code with the script below, then click <strong>Deploy → New deployment</strong> → <em>Web App</em> → set <em>Execute as: Me</em> and <em>Who has access: Anyone</em>.</li>
+            <li>Copy the Web App URL and paste it into the <code>APPS_SCRIPT_URL</code> constant at the top of this file.</li>
+            <li>Reload the portal — class lists will load automatically from your Students sheet on startup.</li>
+          </ol>
+        </div>
+        <p style="font-weight:700;color:var(--blue);font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Apps Script Code</p>
+
+        <!-- Students sheet format guide -->
+        <div style="background:#E8EEF8;border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:12px;color:var(--text);">
+          <p style="font-weight:700;color:var(--blue);margin-bottom:6px;">📄 Students Sheet Format</p>
+          <p style="margin-bottom:6px;">Create a sheet named <strong>Students</strong> with these three columns (row 1 = header):</p>
+          <div style="background:#fff;border-radius:8px;padding:8px 12px;font-family:monospace;font-size:11px;border:1px solid var(--border);">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;font-weight:700;color:var(--blue);border-bottom:1px solid var(--border);padding-bottom:4px;margin-bottom:4px;">
+              <span>A — Division</span><span>B — Class</span><span>C — Student Name</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;color:var(--muted);">
+              <span>Early Years</span><span>Nursery</span><span>Asher Arhin</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;color:var(--muted);">
+              <span>Early Years</span><span>Nursery</span><span>Chaniel Boateng</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;color:var(--muted);">
+              <span>Junior School</span><span>Year 3</span><span>Kendrick Adwini</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;color:var(--muted);">
+              <span>…</span><span>…</span><span>…</span>
+            </div>
+          </div>
+          <p style="margin-top:6px;color:var(--muted);">Each student is one row. Division and Class must match exactly. The portal loads this list automatically on startup.</p>
+        </div>
+
+        <div style="background:#1A1A2E;border-radius:10px;padding:14px;font-family:monospace;font-size:10.5px;color:#e2e8f0;word-break:break-all;white-space:pre-wrap;max-height:360px;overflow-y:auto;line-height:1.7;" id="appsScriptCode">function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var date = data.date || new Date().toISOString().split('T')[0];
+    var time = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'HH:mm');
+
+    var sheet = ss.getSheetByName('Orders') || ss.insertSheet('Orders');
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(['Date','Time','Role','Division','Class','Name','Department','Meal']);
+    }
+
+    if (data.role === 'teacher') {
+      (data.orders || []).forEach(function(o) {
+        sheet.appendRow([date, time, 'Teacher/Rep', data.division, data.cls || '', o.studentName, '', o.menuName]);
+      });
+    } else {
+      sheet.appendRow([date, time, 'Staff', '', '', data.staffName, data.staffDept, data.menuName]);
+    }
+    return ContentService.createTextOutput('ok');
+  } catch(err) {
+    return ContentService.createTextOutput('error: ' + err.message);
+  }
+}
+
+function doGet(e) {
+  var action = e.parameter.action;
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var cb = e.parameter.callback || 'cb';
+
+  // ── Load class lists from the Students sheet ──────────────
+  if (action === 'students') {
+    var sheet = ss.getSheetByName('Students');
+    if (!sheet || sheet.getLastRow() < 2) {
+      return ContentService.createTextOutput(cb + '({"students":{}})').setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+    var rows = sheet.getDataRange().getValues().slice(1); // skip header
+    var result = {};
+    rows.forEach(function(r) {
+      var division = (r[0] || '').toString().trim();
+      var cls      = (r[1] || '').toString().trim();
+      var name     = (r[2] || '').toString().trim();
+      if (!division || !cls || !name) return;
+      if (!result[division]) result[division] = {};
+      if (!result[division][cls]) result[division][cls] = [];
+      result[division][cls].push(name);
+    });
+    return ContentService.createTextOutput(cb + '(' + JSON.stringify({students: result}) + ')').setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+
+  // ── Today's orders ────────────────────────────────────────
+  if (action === 'orders') {
+    var sheet = ss.getSheetByName('Orders');
+    if (!sheet || sheet.getLastRow() < 2) {
+      return ContentService.createTextOutput(cb + '({"orders":[]})').setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+    var today = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd');
+    var rows = sheet.getDataRange().getValues();
+    var orders = rows.slice(1).filter(function(r){ return r[0] == today; }).map(function(r){
+      return { date:r[0], time:r[1], role:r[2], division:r[3], cls:r[4], name:r[5], dept:r[6], meal:r[7] };
+    });
+    return ContentService.createTextOutput(cb + '(' + JSON.stringify({orders:orders}) + ')').setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+
+  // ── Email summary ─────────────────────────────────────────
+  if (action === 'summary') {
+    var recipient = 'admin@shieldschool.edu.gh'; // ← change this
+    var sheet = ss.getSheetByName('Orders');
+    var today = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd');
+    var rows = sheet ? sheet.getDataRange().getValues() : [];
+    var todayRows = rows.slice(1).filter(function(r){ return r[0] == today; });
+    var body = 'Lunch orders for ' + today + ':\n\n';
+    todayRows.forEach(function(r){ body += r[2]+' | '+r[3]+' '+r[4]+' | '+r[5]+' | '+r[7]+'\n'; });
+    MailApp.sendEmail(recipient, 'Shield Lunch Orders – ' + today, body);
+    return ContentService.createTextOutput(cb + '({"ok":true})').setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+
+  return ContentService.createTextOutput(cb + '({})').setMimeType(ContentService.MimeType.JAVASCRIPT);
+}</div>
+        <button onclick="copyAppsScript()" style="margin-top:10px;padding:7px 18px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">📋 Copy Apps Script</button>
+        <p style="font-size:11px;color:var(--muted);margin-top:10px;">The <strong>Students</strong> sheet is the source of truth — edit it in Google Sheets any time and the portal will pick up the changes on the next page load. The <strong>Orders</strong> sheet logs: Date, Time, Role, Division, Class, Name, Department, Meal.</p>
       </div>
+
+      <!-- Password change tab -->
+      <div class="ap-section" id="tab-password">
+        <p class="ap-hint">Enter a new username and password below. Click <strong>Generate Hash</strong> to create a secure fingerprint, then copy it into the two lines shown and save the file.</p>
+        <div class="admin-row"><input type="text" id="newUser" placeholder="New username" autocomplete="off"/></div>
+        <div class="admin-row"><input type="password" id="newPass" placeholder="New password" autocomplete="new-password"/></div>
+        <div class="admin-row"><input type="password" id="newPass2" placeholder="Confirm password" autocomplete="new-password"/></div>
+        <button class="add-row-btn" style="border-style:solid;background:var(--blue-light);color:var(--blue);border-color:var(--blue-mid);margin-bottom:14px;" onclick="generateHash()">🔐 Generate Hash</button>
+        <div id="hashOutput" style="display:none;background:#f3f4f8;border:1.5px solid var(--border);border-radius:10px;padding:14px;font-size:12px;line-height:1.8;">
+          <p style="font-weight:700;color:var(--blue);margin-bottom:8px;">Copy these two lines into your LunchPortal.html (replace the existing ADMIN_USER_HASH and ADMIN_PASS_HASH lines):</p>
+          <div style="background:#1A1A2E;border-radius:8px;padding:10px 14px;font-family:monospace;font-size:11px;color:#e2e8f0;word-break:break-all;">
+            <div>const ADMIN_USER_HASH = "<span id="outUserHash" style="color:#86efac;"></span>";</div>
+            <div>const ADMIN_PASS_HASH = "<span id="outPassHash" style="color:#86efac;"></span>";</div>
+          </div>
+          <button onclick="copyHashes()" style="margin-top:10px;padding:6px 16px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">📋 Copy to clipboard</button>
+          <p style="margin-top:10px;font-size:11px;color:var(--muted);">After updating the file, reload the page and log in with your new credentials.</p>
+        </div>
+      </div>
+
+      <button class="save-btn" onclick="saveAdmin()">💾 Save Changes</button>
     </div>
   </div>
 
-  <!-- ERROR -->
-  <div class="err-banner" id="errBanner">&#x26A0;&#xFE0F; Could not reach Google Sheets. Please check your connection and try again.</div>
+  <!-- Error banner -->
 
-  <!-- CUTOFF CLOSED -->
+  <div class="err-banner" id="errBanner">⚠️ Could not reach Google Sheets. Please check your connection and try again.</div>
+
+  <!-- Closed card -->
   <div class="closed-card" id="closedCard">
     <div class="closed-hdr">
-      <h2>&#x23F0; Orders Closed</h2>
+      <h2>⏰ Orders Closed</h2>
       <p>The portal is temporarily closed between 10:00 AM and 1:00 PM</p>
     </div>
     <div class="closed-body">
-      <div class="closed-icon">&#x1F512;</div>
+      <div class="closed-icon">🔒</div>
       <h3>Ordering is Closed</h3>
-      <p>Lunch ordering reopens at <strong>1:00 PM</strong>. Please see your teacher if you need assistance.</p>
+      <p>Lunch ordering reopens at <strong>1:00 PM</strong>. Please see administration if you need assistance.</p>
     </div>
   </div>
 
-  <!-- ORDER FORM -->
+  <!-- Order Form -->
   <div class="form-card" id="formCard">
     <div class="form-hdr">
-      <h2>Place Your Lunch Order</h2>
-      <p>Select your department and class, then choose your meal</p>
+      <h2 id="formTitle">Place Your Lunch Order</h2>
+      <p id="formSubtitle">Select your role to get started</p>
     </div>
-    <div class="form-body">
-
-      <div class="sec-label">Select Your Department</div>
-      <div class="dept-grid">
-        <div class="dept-card" id="dept-early" onclick="pickDept('early')">
-          <div class="dept-icon">&#x1F331;</div>
-          <div class="dept-name">Early Years</div>
-          <div class="dept-range">Nursery &ndash; Year 2</div>
-        </div>
-        <div class="dept-card" id="dept-junior" onclick="pickDept('junior')">
-          <div class="dept-icon">&#x1F4D6;</div>
-          <div class="dept-name">Junior School</div>
-          <div class="dept-range">Year 3 &ndash; Year 6</div>
-        </div>
-        <div class="dept-card" id="dept-middle" onclick="pickDept('middle')">
-          <div class="dept-icon">&#x1F4DA;</div>
-          <div class="dept-name">Middle School</div>
-          <div class="dept-range">Year 7 &ndash; Year 9</div>
-        </div>
-        <div class="dept-card" id="dept-upper" onclick="pickDept('upper')">
-          <div class="dept-icon">&#x1F393;</div>
-          <div class="dept-name">Upper Secondary</div>
-          <div class="dept-range">Year 10 &ndash; Year 13</div>
-        </div>
-        <div class="dept-card" id="dept-staff" onclick="pickDept('staff')">
-          <div class="dept-icon">&#x1F454;</div>
-          <div class="dept-name">Staff</div>
-          <div class="dept-range">All Teaching &amp; Support Staff</div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Select Your Class</label>
-        <select id="studentClass" disabled>
-          <option value="">— Select department first —</option>
-        </select>
-      </div>
-
-      <div class="field" id="nameField">
-        <label>Select Your Name</label>
-        <select id="studentName">
-          <option value="">— Select your name —</option>
-        </select>
-      </div>
-      <div id="nameLoader" style="padding:10px 0;font-size:13px;color:var(--muted);text-align:center;">
-        &#x23F3; Loading names...
-      </div>
-      <div id="nameEmpty">
-        <div class="name-empty-box">&#x26A0; No names found for this class. Please contact the admin to add names to the list.</div>
-      </div>
-
-      <div class="sec-label">Choose Your Lunch</div>
-      <div class="meal-grid" id="mealGrid"></div>
-      <button class="submit-btn" id="submitBtn" onclick="submitOrder()" disabled>&#x1F37D; Submit My Order</button>
+    <div class="form-body" id="formBody">
+      <!-- Rendered by JS -->
     </div>
   </div>
 
-  <!-- SUCCESS -->
+  <!-- Success Card -->
   <div class="success-card" id="successCard">
     <div class="success-hdr">
-      <div class="s-icon">&#x1F389;</div>
+      <div class="s-icon">🎉</div>
       <h3 id="successTitle">Order Submitted!</h3>
-      <p id="successSub"></p>
+      <p id="successSub">Your order has been saved to Google Sheets.</p>
     </div>
     <div class="success-body">
-      <div class="sheets-badge">&#x2713; Saved to Google Sheets</div>
-      <div class="success-detail" id="successDetail"></div>
-      <button class="new-order-btn" onclick="resetForm()">Submit Another Order</button>
+      <div class="sheets-badge">✓ Saved to Google Sheets</div>
+      <div id="successDetail"></div>
+      <button class="new-order-btn" onclick="resetPortal()">Submit Another Order</button>
     </div>
-  </div>
-
-  <!-- LOG -->
-  <div class="log-wrap" id="logWrap" style="display:none;">
-    <div class="log-hbar">
-      <span>&#x1F4CB; Today's Orders</span>
-      <button class="log-clear" onclick="clearLog()">Clear all</button>
-    </div>
-    <div class="log-cols"><span>Name</span><span>Dept</span><span>Class</span><span>Meal</span><span style="text-align:right">Time</span></div>
-    <div id="logList"></div>
   </div>
 
 </div>
@@ -613,427 +632,843 @@
 <div class="site-footer">&copy; 2026 Shield International School &middot; Lunch Portal &middot; Powered by Google Sheets</div>
 
 <script>
-const CUTOFF_HOUR = 10;  // Orders close at 10:00 AM
-const REOPEN_HOUR = 13;  // Orders reopen at 1:00 PM
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySSugpXUnw7QH9PdSBAWgxUXWw3eulfhF0dgsUKoPhsoUJyPi8ZfPfWSOCfEKMeINsmQ/exec";
-const ICONS = ["\u{1F372}","\u{1F35B}","\u{1F957}","\u{1F371}","\u{1F35D}","\u{1F959}","\u{1F35C}","\u{1F32E}","\u{1F958}","\u{1F35A}"];
-const DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-let sessionToken = null; // auth token granted by server
+/* ═══════════════════════════════════════════════════════════
+   CONFIGURATION — edit these to customise the portal
+   ═══════════════════════════════════════════════════════════ */
 
-// JSONP helper — bypasses CORS completely
-function jsonpRequest(url) {
-  return new Promise(function(resolve, reject) {
-    var cbName = "_gs_cb_" + Date.now();
-    var script = document.createElement("script");
-    var timer = setTimeout(function() {
-      cleanup();
-      reject(new Error("Request timed out"));
-    }, 30000);
-    function cleanup() {
-      clearTimeout(timer);
-      delete window[cbName];
-      if (script.parentNode) script.parentNode.removeChild(script);
-    }
-    window[cbName] = function(data) {
-      cleanup();
-      resolve(data);
-    };
-    script.onerror = function() {
-      cleanup();
-      reject(new Error("Script load error"));
-    };
-    script.src = url + "&callback=" + cbName;
-    document.head.appendChild(script);
-  });
-}
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxZxj8uPCFRRNYjmIwzXN556I7CqgwFwwRWSJdIta4ugJaUtZwwHNpDGgD1LLP4ciLUiQ/exec";
 
-const DEPT_LABELS = { early:"Early Years", junior:"Junior School", middle:"Middle School", upper:"Upper Secondary", staff:"Staff" };
+const CUTOFF_HOUR = 10;   // orders close at 10:00 AM
+const REOPEN_HOUR = 13;   // orders reopen at 1:00 PM
 
-const DEFAULT_MEALS = [{name:"Jollof rice & chicken"},{name:"Fried rice & fish"},{name:"Vegetable soup & fufu"}];
-const DEFAULT_CLASSES = {
-  early:  ["Tiny Tot Peacocks ","Toddler Parrots","Foundation Pigeons","Foundation Robins","Reception Flamingo","Reception Patridge","Year 1 Marigold","Year 1 Pansy","Year 2 Daisy","Year 2 Hibiscus"],
-  junior: ["Year 3 Iris","Year 3 Lotus","Year 3 Tulip","Year 4 Begonia","Year 4 Hyacinth","Year 4 Oleander","Year 5 Dahlia","Year 5 Lily","Year 5 Zinnia","Year 6 Aster","Year 6 Cloves","Year 6 Olives"],
-  middle: ["Form 1 Onyx ","Form 1 Sage","Form 1 Sepia","Form 2 Coral","Form 2 Emerald","Form 2 Jadeite","Form 3 Ivory","Form 3 Magenta","Form 3 Maroon"],
-  upper:  ["Form 4 Chalcedony","Form 4 Hazel","Form 4 Turquoise","Form 5 Jasper","Form 5 Teal","Lower Sixth","Upper Sixth"],
-  staff:  ["Administration","Janitor","Management","Support Staff","Security","Teaching Staff"],
+const MENUS = [
+  { id:1, name:"Jollof rice & chicken",       emoji:"🍲" },
+  { id:2, name:"Fried rice & grilled fish",   emoji:"🍛" },
+  { id:3, name:"Vegetable soup & fufu",        emoji:"🥘" }
+];
+
+// Colour palette for meal buttons & legend (cycles if more meals than colours)
+const MEAL_COLORS = [
+  { mc:"#C0202E", mcs:"#FDECEA" },
+  { mc:"#1A3A6B", mcs:"#E8EEF8" },
+  { mc:"#0D7A55", mcs:"#E6F5EF" },
+  { mc:"#B45309", mcs:"#FFFBEB" },
+  { mc:"#5B21B6", mcs:"#F5F0FF" },
+  { mc:"#065F46", mcs:"#ECFDF5" },
+];
+
+// Students are now organised by Division → Class → [Names]
+const STUDENTS = {
+  "Early Years": {
+    "Nursery": [
+      "Asher Papa Apenteng Gyimah Arhin",
+      "Chaniel Odei Asamoah Boateng",
+      "Hannes Ansah Akonnor"
+    ],
+    "Year 1": [
+      "Kofi Yaw Mensah Asante",
+      "Ama Serwaa Frimpong",
+      "Nana Esi Boateng"
+    ],
+    "Year 2": [
+      "Kwame Boateng Asare",
+      "Efua Sarpong Mensah",
+      "Abena Kusi Frimpong"
+    ]
+  },
+  "Junior School": {
+    "Year 3": [
+      "Kendrick Nana Yaw Adwini",
+      "Melchior Nii Ablade Kumah",
+      "Miguel Jojo Asare"
+    ],
+    "Year 4": [
+      "Abena Acheampong Mensah",
+      "Efua Nyarko Amoah",
+      "Yaw Asante Boateng"
+    ],
+    "Year 5": [
+      "Kojo Mensah Frimpong",
+      "Akosua Sarkodie Owusu",
+      "Nana Yaw Kumah"
+    ],
+    "Year 6": [
+      "Ama Asare Boateng",
+      "Kwesi Amoah Mensah",
+      "Adwoa Frimpong Asante"
+    ]
+  },
+  "Middle School": {
+    "Year 7": [
+      "Kwame Otieku Barimah",
+      "Efua Nyarko Asare",
+      "Nana Akua Sarkodie"
+    ],
+    "Year 8": [
+      "Yaw Boateng Owusu",
+      "Adwoa Asante Mensah",
+      "Kojo Frimpong Amoah"
+    ],
+    "Year 9": [
+      "Akosua Mensah Boateng",
+      "Kwesi Sarkodie Asare",
+      "Maame Ama Kumah"
+    ]
+  },
+  "Upper Secondary": {
+    "Year 10": [
+      "Kojo Antwi Boateng",
+      "Akosua Frimpong Asante",
+      "Kwesi Agyeman Baffoe"
+    ],
+    "Year 11": [
+      "Maame Ama Owusu",
+      "Nana Kofi Sarkodie",
+      "Ama Boateng Mensah"
+    ],
+    "Year 12": [
+      "Yaw Asare Frimpong",
+      "Abena Kumah Owusu",
+      "Efua Antwi Boateng"
+    ],
+    "Year 13": [
+      "Kwame Sarkodie Amoah",
+      "Adwoa Mensah Asante",
+      "Kofi Frimpong Kumah"
+    ]
+  }
 };
 
-let meals = JSON.parse(JSON.stringify(DEFAULT_MEALS));
-let deptClasses = JSON.parse(JSON.stringify(DEFAULT_CLASSES));
-let selectedMeal = null, selectedDept = null, orders = [];
-let carIdx = 0, carTotal = 4, carTimer;
+const DIVISIONS = Object.keys(STUDENTS);
+const DEPT_LABELS = { early:"Early Years", junior:"Junior School", middle:"Middle School", upper:"Upper Secondary" };
 
-function resetToDefaults() {
-  if(!confirm("Reset all meals and classes to defaults? This cannot be undone.")) return;
-  meals = JSON.parse(JSON.stringify(DEFAULT_MEALS));
-  deptClasses = JSON.parse(JSON.stringify(DEFAULT_CLASSES));
-  const saveUrl = SCRIPT_URL + "?action=menu&token=" + encodeURIComponent(sessionToken) + "&config=" + encodeURIComponent(JSON.stringify({ meals: meals, deptClasses: deptClasses }));
-  jsonpRequest(saveUrl).then(function(d) {
-    if (d.result === "unauthorized") { alert("Session expired. Please log in again."); sessionToken = null; }
-    else showSaveBanner();
-  }).catch(function() { showSaveBanner(); });
-  renderAdminAll(); renderMeals();
+// Helper: get flat student list for a given division + class
+function getStudents(division, cls) {
+  if (!division) return [];
+  const divData = STUDENTS[division];
+  if (!divData) return [];
+  if (cls && Array.isArray(divData[cls])) return divData[cls];
+  if (Array.isArray(divData)) return divData;
+  return [];
 }
 
-function showLoader(visible) {
-  let el = document.getElementById("menuLoader");
-  if (!el) {
-    el = document.createElement("div");
-    el.id = "menuLoader";
-    el.style.cssText = "text-align:center;padding:32px;font-size:13px;color:var(--muted);";
-    el.innerHTML = "<div style=\"font-size:28px;margin-bottom:8px;\">&#x23F3;</div>Loading today\'s menu&hellip;";
-    document.getElementById("mealGrid").replaceWith(el);
+// Helper: get class names for a division
+function getClasses(division) {
+  if (!division) return [];
+  const divData = STUDENTS[division];
+  if (!divData || Array.isArray(divData)) return [];
+  return Object.keys(divData);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════════════ */
+const S = {
+  step:1, role:null, division:null, cls:null,
+  studentMenus:{}, absentees:new Set(), staffMenu:null, staffName:"", staffDept:"",
+  submitting:false
+};
+
+// Steps: 1=Role, 2=Division(teacher)/Details(staff), 2.5=Class(teacher only), 3=Student meals, 4=Staff meal, 5=Confirm
+// We use step 6 as the class-selection step for teachers (inserted between 2 and 3)
+function steps() { return S.role === "teacher" ? [1,2,6,3,5] : [1,2,4,5]; }
+function stepIdx() { return steps().indexOf(S.step); }
+function isLast() { const st=steps(); return st[st.length-1]===S.step; }
+
+function canGo() {
+  if (S.step===1) return !!S.role;
+  if (S.step===2) {
+    if (S.role==="teacher") return !!S.division;
+    return S.staffName.trim().length>1 && S.staffDept.trim().length>0;
   }
-  el.style.display = visible ? "block" : "none";
-}
-
-async function fetchMenu() {
-  try {
-    const data = await jsonpRequest(SCRIPT_URL + "?t=" + Date.now());
-    if (data.meals && data.meals.length) meals = data.meals;
-    if (data.deptClasses) deptClasses = data.deptClasses;
-  } catch(e) {
-    // fallback to defaults silently
+  if (S.step===6) return !!S.cls;  // class selection
+  if (S.step===3) {
+    const stu = getStudents(S.division, S.cls);
+    const present = stu.filter(n=>!S.absentees.has(n));
+    // Need at least one present student with a meal, and all present students must have a meal
+    return present.length > 0 && present.every(n=>S.studentMenus[n]);
   }
+  if (S.step===4) return !!S.staffMenu;
+  if (S.step===5) return true;
+  return false;
 }
 
-function isPastCutoff() {
-  const h = new Date().getHours();
-  return h >= CUTOFF_HOUR && h < REOPEN_HOUR;
+function next() { const st=steps(),i=stepIdx(); if(i<st.length-1){S.step=st[i+1];render();} }
+function back() { const st=steps(),i=stepIdx(); if(i>0){S.step=st[i-1];render();} }
+function pick(k,v) {
+  S[k]=v;
+  if(k==="role"){S.division=null;S.cls=null;S.studentMenus={};S.absentees=new Set();S.staffMenu=null;}
+  if(k==="division"){S.cls=null;S.studentMenus={};S.absentees=new Set();}
+  if(k==="cls"){S.studentMenus={};S.absentees=new Set();}
+  render();
+}
+function pickStudentMeal(name,id){
+  // Toggle off if same meal clicked again (deselect)
+  if(S.studentMenus[name]===id){ delete S.studentMenus[name]; }
+  else { S.studentMenus[name]=id; S.absentees.delete(name); } // picking a meal un-marks as absent
+  renderStudentRow(name); checkNextBtn();
 }
 
-function checkCutoff() {
-  if (isPastCutoff()) {
-    document.getElementById("formCard").style.display = "none";
-    document.getElementById("closedCard").style.display = "block";
+function toggleAbsent(name){
+  if(S.absentees.has(name)){
+    S.absentees.delete(name);
   } else {
-    document.getElementById("formCard").style.display = "block";
-    document.getElementById("closedCard").style.display = "none";
+    S.absentees.add(name);
+    delete S.studentMenus[name]; // clear any meal selection
   }
+  renderStudentRow(name); checkNextBtn();
 }
 
-async function loadSummary() {
-  const el = document.getElementById("summaryContent");
-  el.innerHTML = "<span style='color:#6B7280;font-size:13px;'>Loading orders from Google Sheets...</span>";
-  try {
-    const url = SCRIPT_URL + "?action=orders&token=" + encodeURIComponent(sessionToken) + "&t=" + Date.now();
-    const data = await jsonpRequest(url);
-    if (data.result === "unauthorized") {
-      el.innerHTML = "<span style='color:#C0202E;font-size:13px;'>Session expired. Please log in again.</span>";
-      return;
-    }
-    if (data.result === "success" && data.orders) {
-      // Merge sheet orders with any new session orders (avoid duplicates by name+meal+time)
-      const sheetOrders = data.orders;
-      buildSummaryUI(sheetOrders);
-    } else {
-      buildSummaryUI([]);
-    }
-  } catch(e) {
-    el.innerHTML = "<span style='color:#C0202E;font-size:13px;'>Could not reach Google Sheets. Check your connection.</span>";
-  }
+/* ═══════════════════════════════════════════════════════════
+   RENDER
+   ═══════════════════════════════════════════════════════════ */
+function render() {
+  updateHeader();
+  renderStepBar();
+  renderBody();
+  updateNextBtn();
 }
 
-function buildSummaryUI(displayOrders) {
-  if (displayOrders === undefined) displayOrders = orders;
-  const el = document.getElementById("summaryContent");
-  if (!displayOrders.length) {
-    el.innerHTML = "<span style='color:#6B7280;font-size:13px;'>No orders found for today.</span>";
-    return;
-  }
-  // Meal counts
-  const mealMap = {}, deptMap = {};
-  displayOrders.forEach(o => {
-    mealMap[o.meal] = (mealMap[o.meal] || 0) + 1;
-    deptMap[o.dept] = (deptMap[o.dept] || 0) + 1;
+function updateHeader() {
+  const titles = {
+    1:["Place Your Lunch Order","Select your role to get started"],
+    2:{teacher:["Select Your Division","Choose the division you are ordering for"], staff:["Your Details","Enter your name and department"]},
+    6:["Select Your Class","Choose the specific class you are ordering for"],
+    3:["Student Meal Selection","Assign a meal to every student in your class"],
+    4:["Choose Your Lunch","Pick your meal for today"],
+    5:["Review & Confirm","Check the order below, then submit"]
+  };
+  let t = titles[S.step];
+  if(S.step===2 && S.role) t = titles[2][S.role];
+  if(Array.isArray(t)){ document.getElementById("formTitle").textContent=t[0]; document.getElementById("formSubtitle").textContent=t[1]; }
+}
+
+function renderStepBar() {
+  const st=steps(), idx=stepIdx();
+  const labels={1:"Role",2:S.role==="teacher"?"Division":"Details",6:"Class",3:"Students",4:"My Meal",5:"Confirm"};
+  let html="";
+  st.forEach((s,i)=>{
+    const done=i<idx, active=s===S.step;
+    html+=`<div class="step-pill ${done?"done":active?"active":""}">
+      ${done?'<span>✓</span>':`<span>${i+1}</span>`}
+      <span class="pill-label">${labels[s]}</span>
+    </div>`;
+    if(i<st.length-1) html+=`<div class="step-line ${done?"done":""}"></div>`;
   });
+  // Inject step bar at top of form body
+  let bar=document.getElementById("stepBar");
+  if(!bar){bar=document.createElement("div");bar.id="stepBar";bar.className="step-bar";document.getElementById("formBody").prepend(bar);}
+  bar.innerHTML=html;
+}
 
-  let html = `<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
-    <div style="background:#1A3A6B;color:#fff;border-radius:10px;padding:12px 20px;text-align:center;flex:1;min-width:80px;">
-      <div style="font-size:24px;font-weight:700;">${displayOrders.length}</div>
-      <div style="font-size:11px;opacity:0.8;margin-top:2px;">Total Orders</div>
+function renderBody() {
+  let content="";
+  if(S.step===1) content=renderStep1();
+  else if(S.step===2) content=renderStep2();
+  else if(S.step===6) content=renderStep6();
+  else if(S.step===3) content=renderStep3();
+  else if(S.step===4) content=renderStep4();
+  else if(S.step===5) content=renderStep5();
+  // Replace everything after step bar
+  let existing=document.getElementById("stepContent");
+  if(!existing){existing=document.createElement("div");existing.id="stepContent";document.getElementById("formBody").appendChild(existing);}
+  existing.innerHTML=content;
+  renderNav();
+  // Re-bind dynamic events
+  if(S.step===2 && S.role==="staff") {
+    document.getElementById("staffNameInput").addEventListener("input",function(){S.staffName=this.value;checkNextBtn();});
+    document.getElementById("staffDeptInput").addEventListener("change",function(){S.staffDept=this.value;checkNextBtn();});
+  }
+  if(S.step===4) {
+    document.querySelectorAll(".meal-card").forEach((c,i)=>{c.onclick=()=>{pick("staffMenu",MENUS[i].id);};});
+  }
+}
+
+function renderStep1(){
+  return`
+    <div class="sec-label">Select Your Role</div>
+    <div class="dept-grid">
+      <div class="dept-card ${S.role==="teacher"?"selected":""}" onclick="pick('role','teacher')">
+        <div class="dept-icon">👩‍🏫</div>
+        <div class="dept-name">Class Teacher / Rep</div>
+        <div class="dept-range">Order for all students</div>
+      </div>
+      <div class="dept-card ${S.role==="staff"?"selected":""}" onclick="pick('role','staff')">
+        <div class="dept-icon">👔</div>
+        <div class="dept-name">Staff</div>
+        <div class="dept-range">Personal lunch order</div>
+      </div>
+    </div>`;
+}
+
+function renderStep2(){
+  if(S.role==="teacher") return`
+    <div class="sec-label">Select Your Division</div>
+    <div class="dept-grid">
+      <div class="dept-card ${S.division==="Early Years"?"selected":""}" onclick="pick('division','Early Years')"><div class="dept-icon">🌱</div><div class="dept-name">Early Years</div><div class="dept-range">Nursery – Year 2</div></div>
+      <div class="dept-card ${S.division==="Junior School"?"selected":""}" onclick="pick('division','Junior School')"><div class="dept-icon">📖</div><div class="dept-name">Junior School</div><div class="dept-range">Year 3 – Year 6</div></div>
+      <div class="dept-card ${S.division==="Middle School"?"selected":""}" onclick="pick('division','Middle School')"><div class="dept-icon">📚</div><div class="dept-name">Middle School</div><div class="dept-range">Year 7 – Year 9</div></div>
+      <div class="dept-card ${S.division==="Upper Secondary"?"selected":""}" onclick="pick('division','Upper Secondary')"><div class="dept-icon">🎓</div><div class="dept-name">Upper Secondary</div><div class="dept-range">Year 10 – Year 13</div></div>
+    </div>`;
+
+  return`
+    <div class="sec-label">Your Details</div>
+    <div class="field">
+      <label>Full Name</label>
+      <input type="text" id="staffNameInput" placeholder="e.g. Abena Owusu" value="${S.staffName}">
     </div>
-    <div style="background:#C0202E;color:#fff;border-radius:10px;padding:12px 20px;text-align:center;flex:1;min-width:80px;">
-      <div style="font-size:24px;font-weight:700;">${Object.keys(deptMap).length}</div>
-      <div style="font-size:11px;opacity:0.8;margin-top:2px;">Departments</div>
-    </div>
-    <div style="background:#0D7A55;color:#fff;border-radius:10px;padding:12px 20px;text-align:center;flex:1;min-width:80px;">
-      <div style="font-size:24px;font-weight:700;">${Object.keys(mealMap).length}</div>
-      <div style="font-size:11px;opacity:0.8;margin-top:2px;">Meal Options</div>
-    </div>
-  </div>`;
-
-  html += `<div class="sum-label">By Meal</div>
-  <div style="overflow-x:auto;width:100%;margin-bottom:12px;">
-  <table class="sum-table" style="min-width:100%;"><thead><tr><th>Meal</th><th>Count</th></tr></thead><tbody>`;
-  Object.entries(mealMap).forEach(([m,c]) => {
-    html += `<tr><td>${m}</td><td><strong style="color:#1A3A6B;">${c}</strong></td></tr>`;
-  });
-  html += `</tbody></table></div>`;
-
-  html += `<div class="sum-label">By Department</div>
-  <div style="overflow-x:auto;width:100%;margin-bottom:12px;">
-  <table class="sum-table" style="min-width:100%;"><thead><tr><th>Department</th><th>Count</th></tr></thead><tbody>`;
-  Object.entries(deptMap).forEach(([d,c]) => {
-    html += `<tr><td>${d}</td><td><strong style="color:#C0202E;">${c}</strong></td></tr>`;
-  });
-  html += `</tbody></table></div>`;
-
-  html += `<div class="sum-label">All Orders</div>
-  <div style="overflow-x:auto;width:100%;">
-  <table class="sum-table" style="min-width:500px;"><thead><tr><th>Name</th><th>Dept</th><th>Class</th><th>Meal</th><th>Time</th></tr></thead><tbody>`;
-  displayOrders.slice().reverse().forEach(o => {
-    html += `<tr><td>${o.name}</td><td>${o.dept}</td><td>${o.cls}</td><td>${o.meal}</td><td>${o.time}</td></tr>`;
-  });
-  html += `</tbody></table></div>`;
-
-  el.innerHTML = html;
+    <div class="field">
+      <label>Department</label>
+      <select id="staffDeptInput">
+        <option value="">— Select department —</option>
+        <option ${S.staffDept==="Teaching Staff"?"selected":""}>Teaching Staff</option>
+        <option ${S.staffDept==="Administration"?"selected":""}>Administration</option>
+        <option ${S.staffDept==="Management"?"selected":""}>Management</option>
+        <option ${S.staffDept==="Support Staff"?"selected":""}>Support Staff</option>
+        <option ${S.staffDept==="Security"?"selected":""}>Security</option>
+      </select>
+    </div>`;
 }
 
-async function emailSummary() {
-  const btn = document.getElementById("emailSummaryBtn");
-  btn.textContent = "Submit My Order"; btn.disabled = true;
+function renderStep6(){
+  const classes = getClasses(S.division);
+  const divIcons = {"Early Years":"🌱","Junior School":"📖","Middle School":"📚","Upper Secondary":"🎓"};
+  const icon = divIcons[S.division] || "🏫";
+  return`
+    <div class="sec-label">${icon} ${S.division} — Select Class</div>
+    <div class="dept-grid">
+      ${classes.map(cls => {
+        const count = (STUDENTS[S.division][cls]||[]).length;
+        return `<div class="dept-card ${S.cls===cls?"selected":""}" onclick="pick('cls','${cls}')">
+          <div class="dept-icon">🏫</div>
+          <div class="dept-name">${cls}</div>
+          <div class="dept-range">${count} student${count!==1?"s":""}</div>
+        </div>`;
+      }).join("")}
+    </div>`;
+}
+
+function mealBtnHTML(name, m, i){
+  const c = MEAL_COLORS[i % MEAL_COLORS.length];
+  const sel = S.studentMenus[name]===m.id;
+  return `<button class="meal-btn ${sel?"selected":""}" style="--mc:${c.mc};--mcs:${c.mcs}"
+    onclick="pickStudentMeal('${name}',${m.id})" title="${m.name}">${m.emoji||("M"+(i+1))}</button>`;
+}
+
+function renderStep3(){
+  const stu = getStudents(S.division, S.cls);
+  const present = stu.filter(n=>!S.absentees.has(n));
+  const allDone = present.length > 0 && present.every(n=>S.studentMenus[n]);
+  let rows = stu.map(name=>{
+    const isAbsent = S.absentees.has(name);
+    const safeId = name.replace(/\s+/g,'_');
+    return `
+    <div class="stu-row ${isAbsent?"stu-absent":""}" id="row-${safeId}">
+      <span class="stu-name">${name}</span>
+      <div class="meal-btns">
+        ${isAbsent
+          ? `<span class="absent-tag">Absent</span>`
+          : MENUS.map((m,i)=>mealBtnHTML(name,m,i)).join("")
+        }
+        <button class="absent-btn ${isAbsent?"absent-active":""}" onclick="toggleAbsent('${name}')" title="${isAbsent?'Mark present':'Mark absent'}">
+          ${isAbsent?"✓ Here":"Absent"}
+        </button>
+      </div>
+    </div>`;
+  }).join("");
+
+  const legendHTML = MENUS.map((m,i)=>{
+    const c = MEAL_COLORS[i % MEAL_COLORS.length];
+    return `<span class="meal-legend-item">
+      <span class="meal-legend-badge" style="background:${c.mc}">${m.emoji||("M"+(i+1))}</span>
+      ${m.name}
+    </span>`;
+  }).join("");
+
+  const absentCount = S.absentees.size;
+  return`
+    ${!allDone?`<div class="warn-box" id="warnBox">⚠ Assign a meal to every present student. ${absentCount>0?`(${absentCount} marked absent)`:"Tap <strong>Absent</strong> to skip a student."}</div>`:""}
+    <div class="sec-label">Students — ${S.cls||S.division}</div>
+    <div class="student-list">
+      <div class="meal-legend">${legendHTML}</div>
+      <div class="student-list-hdr"><span>Student Name</span><span>Meal &amp; Attendance</span></div>
+      ${rows}
+    </div>`;
+}
+
+function renderStudentRow(name) {
+  const rowId = "row-"+name.replace(/\s+/g,"_");
+  const row = document.getElementById(rowId);
+  if(!row) return;
+  const isAbsent = S.absentees.has(name);
+  row.classList.toggle("stu-absent", isAbsent);
+  // Rebuild the meal-btns area in-place
+  const btnsDiv = row.querySelector(".meal-btns");
+  if(btnsDiv){
+    btnsDiv.innerHTML = (isAbsent
+      ? `<span class="absent-tag">Absent</span>`
+      : MENUS.map((m,i)=>mealBtnHTML(name,m,i)).join("")
+    ) + `<button class="absent-btn ${isAbsent?"absent-active":""}" onclick="toggleAbsent('${name}')" title="${isAbsent?'Mark present':'Mark absent'}">${isAbsent?"✓ Here":"Absent"}</button>`;
+  }
+  checkNextBtn();
+  // Update warn box
+  const stu=getStudents(S.division, S.cls);
+  const present=stu.filter(n=>!S.absentees.has(n));
+  const allDone=present.length>0 && present.every(n=>S.studentMenus[n]);
+  const warn=document.getElementById("warnBox");
+  if(warn) warn.style.display=allDone?"none":"block";
+}
+
+function renderStep4(){
+  return`
+    <div class="sec-label">Choose Your Lunch</div>
+    <div class="meal-grid">
+      ${MENUS.map((m,i)=>`
+        <div class="meal-card ${S.staffMenu===m.id?"selected":""}" id="mc${i}">
+          <div class="meal-art"><div class="meal-emoji">${m.emoji}</div></div>
+          <div class="meal-ribbon">chosen</div>
+          <div class="meal-info">
+            <div class="meal-name">${m.name}</div>
+            <div class="meal-footer">
+              <span class="meal-choose-btn">Select</span>
+              <span class="meal-selected-pill">✓ Selected</span>
+            </div>
+          </div>
+        </div>`).join("")}
+    </div>`;
+}
+
+function renderStep5(){
+  const isT=S.role==="teacher";
+  let detail="";
+  if(isT){
+    const stu=getStudents(S.division, S.cls);
+    const present=stu.filter(n=>!S.absentees.has(n));
+    const absent=stu.filter(n=>S.absentees.has(n));
+    detail=`
+      <div class="summary-info">
+        <div class="srow"><span>Role</span><span>Class Teacher / Rep</span></div>
+        <div class="srow"><span>Division</span><span>${S.division}</span></div>
+        <div class="srow"><span>Class</span><span>${S.cls}</span></div>
+        <div class="srow"><span>Ordering for</span><span>${present.length} present${absent.length>0?`, ${absent.length} absent`:""}</span></div>
+      </div>
+      <div class="sec-label">Student Orders</div>
+      <table class="sum-table">
+        <thead><tr><th>Student</th><th>Meal</th></tr></thead>
+        <tbody>
+          ${present.map(n=>{const m=MENUS.find(x=>x.id===S.studentMenus[n]);return`<tr><td>${n}</td><td>${m?m.emoji+" "+m.name:""}</td></tr>`;}).join("")}
+          ${absent.map(n=>`<tr style="opacity:.45;"><td>${n}</td><td style="font-style:italic;color:var(--muted);">Absent</td></tr>`).join("")}
+        </tbody>
+      </table>`;
+  } else {
+    const m=MENUS.find(x=>x.id===S.staffMenu);
+    detail=`
+      <div class="summary-info">
+        <div class="srow"><span>Role</span><span>Staff</span></div>
+        <div class="srow"><span>Name</span><span>${S.staffName}</span></div>
+        <div class="srow"><span>Department</span><span>${S.staffDept}</span></div>
+        <div class="srow"><span>Meal</span><span>${m?m.emoji+" "+m.name:""}</span></div>
+      </div>`;
+  }
+  return`<div id="summaryContent">${detail}</div>`;
+}
+
+function renderNav(){
+  let existing=document.getElementById("navRow");
+  if(existing) existing.remove();
+  const nav=document.createElement("div");
+  nav.className="nav-row"; nav.id="navRow";
+  const backBtn=stepIdx()>0?`<button class="btn-back" onclick="back()">&#8592; Back</button>`:"";
+  let nextLabel,nextClick;
+  if(isLast()){ nextLabel="🍽 Submit Order"; nextClick="submitOrder()"; }
+  else { nextLabel="Continue &#8594;"; nextClick="next()"; }
+  nav.innerHTML=`${backBtn}<button class="btn-next" id="btnNext" onclick="${nextClick}" ${canGo()&&!S.submitting?"":" disabled"}>${S.submitting?"Saving…":nextLabel}</button>`;
+  document.getElementById("formBody").appendChild(nav);
+}
+
+function checkNextBtn(){ const b=document.getElementById("btnNext"); if(b) b.disabled=!canGo()||S.submitting; }
+function updateNextBtn(){ checkNextBtn(); }
+
+/* ═══════════════════════════════════════════════════════════
+   SUBMIT
+   ═══════════════════════════════════════════════════════════ */
+async function submitOrder(){
+  S.submitting=true; render();
+  document.getElementById("errBanner").style.display="none";
+  const stu=getStudents(S.division, S.cls);
+  const present=stu.filter(n=>!S.absentees.has(n));
+  const payload=S.role==="teacher"?{
+    role:"teacher", date:new Date().toISOString().split("T")[0], division:S.division, cls:S.cls,
+    orders:present.map(n=>({studentName:n,menuId:S.studentMenus[n],menuName:(MENUS.find(m=>m.id===S.studentMenus[n])||{}).name})),
+    absent:[...S.absentees]
+  }:{
+    role:"staff", date:new Date().toISOString().split("T")[0],
+    staffName:S.staffName, staffDept:S.staffDept,
+    menuId:S.staffMenu, menuName:(MENUS.find(m=>m.id===S.staffMenu)||{}).name
+  };
   try {
-    const url = SCRIPT_URL + "?action=summary&token=" + encodeURIComponent(sessionToken);
-    const data = await jsonpRequest(url);
-    if (data.result === "success") {
-      btn.textContent = "Sent!";
-      btn.style.background = "#0D7A55";
-      setTimeout(function() { btn.textContent = "Email Summary"; btn.style.background = "#1A3A6B"; btn.disabled = false; }, 3000);
-    } else {
-      btn.textContent = "Failed"; btn.disabled = false;
+    if(APPS_SCRIPT_URL!=="YOUR_WEB_APP_URL_HERE"){
+      await fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(payload)});
     }
-  } catch(e) {
-    btn.textContent = "Error"; btn.disabled = false;
+    showSuccess(payload);
+  } catch(e){
+    document.getElementById("errBanner").style.display="block";
+  }
+  S.submitting=false; render();
+}
+
+function showSuccess(payload){
+  document.getElementById("formCard").style.display="none";
+  const sc=document.getElementById("successCard");
+  sc.style.display="block";
+  if(payload.role==="teacher"){
+    document.getElementById("successTitle").textContent="Orders Submitted!";
+    document.getElementById("successSub").textContent=`Lunch selections for ${payload.cls} (${payload.division}) have been saved.`;
+    const rows=payload.orders.map(o=>`<div class="srow"><span>${o.studentName}</span><span>${o.menuName}</span></div>`).join("");
+    document.getElementById("successDetail").innerHTML=`<div class="summary-info">${rows}</div>`;
+  } else {
+    document.getElementById("successTitle").textContent="Order Submitted, "+payload.staffName+"!";
+    document.getElementById("successSub").textContent="Your lunch order has been recorded.";
+    document.getElementById("successDetail").innerHTML=`<div class="summary-info">
+      <div class="srow"><span>Name</span><span>${payload.staffName}</span></div>
+      <div class="srow"><span>Department</span><span>${payload.staffDept}</span></div>
+      <div class="srow"><span>Meal</span><span>${payload.menuName}</span></div>
+    </div>`;
+  }
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function resetPortal(){
+  Object.assign(S,{step:1,role:null,division:null,cls:null,studentMenus:{},absentees:new Set(),staffMenu:null,staffName:"",staffDept:"",submitting:false});
+  document.getElementById("successCard").style.display="none";
+  document.getElementById("formCard").style.display="block";
+  document.getElementById("errBanner").style.display="none";
+  render();
+}
+
+// Credentials are stored as SHA-256 hashes — plain text is never in the source.
+// To change: log in → Admin Panel → 🔑 Password tab → generate a new hash.
+const ADMIN_USER_HASH = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"; //
+const ADMIN_PASS_HASH = "e3a8dd831ec162a81a3eed063d37c1f9d99616a5c673f654cb9eac5ae49fc1f5"; //
+
+async function sha256(str){
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+
+/* ═══════════════════════════════════════════════════════════
+   JSONP HELPER (for reading from Google Sheets)
+   ═══════════════════════════════════════════════════════════ */
+function jsonpRequest(url){
+  return new Promise(function(resolve,reject){
+    const cb="_cb_"+Date.now();
+    const s=document.createElement("script");
+    const t=setTimeout(()=>{cleanup();reject(new Error("timeout"));},15000);
+    function cleanup(){clearTimeout(t);delete window[cb];if(s.parentNode)s.parentNode.removeChild(s);}
+    window[cb]=function(d){cleanup();resolve(d);};
+    s.onerror=function(){cleanup();reject(new Error("load error"));};
+    s.src=url+(url.includes("?")?"&":"?")+"callback="+cb;
+    document.head.appendChild(s);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ADMIN — LOGIN
+   ═══════════════════════════════════════════════════════════ */
+function openModal(){
+  document.getElementById("modalOverlay").classList.add("open");
+  setTimeout(()=>document.getElementById("loginUser").focus(),100);
+}
+function closeModal(){
+  document.getElementById("modalOverlay").classList.remove("open");
+  document.getElementById("loginErr").style.display="none";
+  document.getElementById("loginUser").value="";
+  document.getElementById("loginPass").value="";
+}
+async function doLogin(){
+  const u=document.getElementById("loginUser").value.trim();
+  const p=document.getElementById("loginPass").value;
+  const btn=document.getElementById("loginBtn");
+  btn.textContent="Checking…"; btn.disabled=true;
+  const [uh,ph]=await Promise.all([sha256(u),sha256(p)]);
+  btn.textContent="Sign In"; btn.disabled=false;
+  if(uh===ADMIN_USER_HASH && ph===ADMIN_PASS_HASH){
+    closeModal();
+    document.getElementById("adminPanel").style.display="block";
+    renderAdminMeals();
+    renderAdminStudents("Early Years","stu-early");
+    renderAdminStudents("Junior School","stu-junior");
+    renderAdminStudents("Middle School","stu-middle");
+    renderAdminStudents("Upper Secondary","stu-upper");
+    window.scrollTo({top:0,behavior:"smooth"});
+  } else {
+    document.getElementById("loginErr").style.display="block";
+    btn.textContent="Sign In"; btn.disabled=false;
   }
 }
-
-async function init() {
-  const now = new Date();
-  document.getElementById("dayLabel").textContent = DAYS[now.getDay()] + " \u00B7 " + now.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
-  const h = now.getHours();
-  const greet = h < 12 ? "Good morning!" : h < 17 ? "Good afternoon!" : "Good evening!";
-  document.getElementById("greetingText").textContent = greet;
-  const closed = h >= CUTOFF_HOUR && h < REOPEN_HOUR;
-  document.getElementById("statusChip").textContent = closed ? "\u23F0 Orders closed" : "\u2705 Orders open";
-  document.getElementById("statusChip").style.background = closed ? "rgba(192,32,46,.3)" : "rgba(13,122,85,.25)";
-  buildDots(); startAuto();
-  showLoader(true);
-  await fetchMenu();
-  showLoader(false);
-  // Rebuild mealGrid after loader swap
-  const grid = document.createElement("div");
-  grid.className = "meal-grid";
-  grid.id = "mealGrid";
-  document.getElementById("menuLoader").replaceWith(grid);
-  renderMeals(); renderAdminAll();
-  checkCutoff();
+function closeAdmin(){
+  document.getElementById("adminPanel").style.display="none";
 }
 
-function buildDots() {
-  document.getElementById("carDots").innerHTML = Array.from({length:carTotal},(_,i)=>`<button class="cdot${i===0?' active':''}" onclick="goTo(${i})"></button>`).join("");
+async function generateHash(){
+  const u=document.getElementById("newUser").value.trim();
+  const p=document.getElementById("newPass").value;
+  const p2=document.getElementById("newPass2").value;
+  if(!u||!p){ alert("Please enter a username and password."); return; }
+  if(p!==p2){ alert("Passwords do not match."); return; }
+  if(p.length<8){ alert("Password must be at least 8 characters."); return; }
+  const [uh,ph]=await Promise.all([sha256(u),sha256(p)]);
+  document.getElementById("outUserHash").textContent=uh;
+  document.getElementById("outPassHash").textContent=ph;
+  document.getElementById("hashOutput").style.display="block";
 }
-function goTo(i) { carIdx=i; document.getElementById("carTrack").style.transform=`translateX(-${i*100}%)`; document.querySelectorAll(".cdot").forEach((d,j)=>d.classList.toggle("active",j===i)); }
-function moveCarousel(dir) { goTo((carIdx+dir+carTotal)%carTotal); resetAuto(); }
-function startAuto() { carTimer=setInterval(()=>moveCarousel(1),4500); }
-function resetAuto() { clearInterval(carTimer); startAuto(); }
 
-function openModal() { document.getElementById("modalOverlay").classList.add("open"); setTimeout(()=>document.getElementById("loginUser").focus(),100); }
-function closeModal() { document.getElementById("modalOverlay").classList.remove("open"); document.getElementById("loginErr").style.display="none"; document.getElementById("loginUser").value=""; document.getElementById("loginPass").value=""; }
-async function doLogin() {
-  const username = document.getElementById("loginUser").value.trim();
-  const password = document.getElementById("loginPass").value;
-  const btn = document.querySelector(".login-btn");
-  btn.textContent = "Checking..."; btn.disabled = true;
-  document.getElementById("loginErr").style.display = "none";
-  try {
-    const url = SCRIPT_URL + "?action=login&username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password);
-    const data = await jsonpRequest(url);
-    if (data.result === "success" && data.token) {
-      sessionToken = data.token;
-      closeModal();
-      document.getElementById("adminPanel").style.display = "block";
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-      document.getElementById("loginErr").textContent = "Incorrect username or password.";
-      document.getElementById("loginErr").style.display = "block";
-    }
-  } catch(e) {
-    document.getElementById("loginErr").textContent = "Connection error. Please try again.";
-    document.getElementById("loginErr").style.display = "block";
-  }
-  btn.textContent = "Sign In"; btn.disabled = false;
+async function copyAppsScript(){
+  const code=document.getElementById("appsScriptCode").textContent;
+  await navigator.clipboard.writeText(code);
+  showSaveBanner("✓ Apps Script copied to clipboard!");
 }
-function closeAdminPanel() { document.getElementById("adminPanel").style.display="none"; sessionToken=null; }
 
-function switchTab(id) {
-  const tabs=["meals","early","junior","middle","upper"];
-  document.querySelectorAll(".ap-tab").forEach((t,i)=>t.classList.toggle("active",tabs[i]===id));
+async function copyHashes(){
+  const uh=document.getElementById("outUserHash").textContent;
+  const ph=document.getElementById("outPassHash").textContent;
+  const text=`const ADMIN_USER_HASH = "${uh}";\nconst ADMIN_PASS_HASH = "${ph}";`;
+  await navigator.clipboard.writeText(text);
+  const btn=event.target; btn.textContent="✓ Copied!";
+  setTimeout(()=>btn.textContent="📋 Copy to clipboard",2000);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ADMIN — TABS
+   ═══════════════════════════════════════════════════════════ */
+const TAB_IDS=["meals","early","junior","middle","upper","summary","sheets","password"];
+function switchTab(id){
+  document.querySelectorAll(".ap-tab").forEach((t,i)=>t.classList.toggle("active",TAB_IDS[i]===id));
   document.querySelectorAll(".ap-section").forEach(s=>s.classList.remove("active"));
   document.getElementById("tab-"+id).classList.add("active");
 }
 
-function renderAdminAll() {
-  document.getElementById("mealList").innerHTML = meals.map((m,i)=>`<div class="admin-row"><input type="text" value="${m.name}" id="mi${i}"/><button class="rm-btn" onclick="removeMeal(${i})">&#x2715;</button></div>`).join("");
-  ["early","junior","middle","upper","staff"].forEach(dept=>{
-    document.getElementById("cl-"+dept).innerHTML = deptClasses[dept].map((c,i)=>`<div class="admin-row"><input type="text" value="${c}" id="dc-${dept}-${i}"/><button class="rm-btn" onclick="removeCls('${dept}',${i})">&#x2715;</button></div>`).join("");
-  });
-}
-function addMeal() { meals.push({name:""}); renderAdminAll(); document.getElementById("mi"+(meals.length-1)).focus(); }
-function removeMeal(i) { meals.splice(i,1); renderAdminAll(); }
-function addCls(dept) { deptClasses[dept].push(""); renderAdminAll(); const inp=document.querySelectorAll(`#cl-${dept} input`); inp[inp.length-1].focus(); }
-function removeCls(dept,i) { deptClasses[dept].splice(i,1); renderAdminAll(); }
-function saveAdmin() {
-  meals = Array.from(document.querySelectorAll("#mealList input")).map(el=>({name:el.value.trim()})).filter(m=>m.name);
-  ["early","junior","middle","upper","staff"].forEach(dept=>{
-    deptClasses[dept] = Array.from(document.querySelectorAll(`#cl-${dept} input`)).map(el=>el.value.trim()).filter(Boolean);
-  });
-  // Save menu config to Google Sheets
-  fetch(SCRIPT_URL, {
-    method:"POST",
-    redirect:"follow",
-    headers:{"Content-Type":"text/plain"},
-    body: JSON.stringify({ type:"menu", token: sessionToken, config:{ meals, deptClasses } })
-  }).then(r=>r.json()).then(function(d){
-    if(d.result === "unauthorized") { alert("Session expired. Please log in again."); sessionToken=null; }
-    else showSaveBanner();
-  }).catch(function(){ showSaveBanner(); });
-  renderMeals(); document.getElementById("adminPanel").style.display="none";
-  selectedMeal=null; selectedDept=null; checkReady();
-}
-
-function showSaveBanner() {
-  let banner = document.getElementById("saveBanner");
-  if(!banner) {
-    banner = document.createElement("div");
-    banner.id = "saveBanner";
-    banner.style.cssText = "position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#0D7A55;color:#fff;padding:10px 24px;border-radius:50px;font-size:13px;font-weight:600;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,0.2);transition:opacity 0.4s;font-family:DM Sans,sans-serif;";
-    document.body.appendChild(banner);
-  }
-  banner.textContent = "✓ Menu saved — changes are now live!";
-  banner.style.opacity = "1";
-  setTimeout(()=>{ banner.style.opacity="0"; }, 3000);
-}
-
-function renderMeals() {
-  const g=document.getElementById("mealGrid");
-  if(!meals.length){g.innerHTML='<div style="text-align:center;padding:20px;color:#6B7280;font-size:13px;">No meals set. Ask admin to update the menu.</div>';return;}
-  g.innerHTML=meals.map((m,i)=>`
-    <div class="meal-card" id="mc${i}" onclick="pickMeal(${i})">
-      <div class="meal-art">
-        <div class="meal-emoji">${ICONS[i%ICONS.length]}</div>
-      </div>
-      <div class="meal-ribbon">chosen</div>
-      <div class="meal-info">
-        <div class="meal-name">${m.name}</div>
-        <div class="meal-footer">
-          <span class="meal-choose-btn">Select</span>
-          <span class="meal-selected-pill">✓ Selected</span>
-        </div>
-      </div>
+/* ═══════════════════════════════════════════════════════════
+   ADMIN — MEALS
+   ═══════════════════════════════════════════════════════════ */
+function renderAdminMeals(){
+  document.getElementById("mealAdminList").innerHTML=MENUS.map((m,i)=>`
+    <div class="admin-row">
+      <input class="emoji-inp" type="text" value="${m.emoji}" id="me${i}" placeholder="🍽">
+      <input type="text" value="${m.name}" id="mn${i}" placeholder="Meal name">
+      <button class="rm-btn" onclick="removeMeal(${i})">&#x2715;</button>
     </div>`).join("");
 }
-function pickDept(dept) {
-  selectedDept=dept; selectedMeal=null;
-  document.querySelectorAll(".dept-card").forEach(c=>c.classList.remove("selected"));
-  document.getElementById("dept-"+dept).classList.add("selected");
-  const sel=document.getElementById("studentClass");
-  sel.disabled=false;
-  sel.innerHTML=`<option value="">— Select class —</option>`+deptClasses[dept].map(c=>`<option value="${c}">${c}</option>`).join("");
-  // Reset name field
-  document.getElementById('nameField').classList.remove('show');
-  document.getElementById('nameEmpty').classList.remove('show');
-  document.getElementById("studentName").innerHTML="<option value=''>— Select your name —</option>";
-  checkReady();
+function addMeal(){
+  MENUS.push({id:MENUS.length+1,name:"",emoji:"🍽"});
+  renderAdminMeals();
+  document.getElementById("mn"+(MENUS.length-1)).focus();
 }
-function pickMeal(i) {
-  document.querySelectorAll(".meal-card").forEach(c=>c.classList.remove("selected"));
-  document.getElementById("mc"+i).classList.add("selected");
-  selectedMeal=i; checkReady();
-}
-function checkReady() {
-  const n=document.getElementById("studentName").value;
-  const c=document.getElementById("studentClass").value;
-  document.getElementById("submitBtn").disabled=!(n&&selectedDept&&c&&selectedMeal!==null);
-}
-// name is now a select — no input listener needed
-document.getElementById("studentClass").addEventListener("change", async function() {
-  document.getElementById("nameEmpty").innerHTML = "&#x26A0; No names found for this class. Please contact the admin to add names to the list.";
-  const dept = DEPT_LABELS[selectedDept];
-  const cls  = this.value;
-  // Reset name
-  document.getElementById('nameField').classList.remove('show');
-  document.getElementById('nameEmpty').classList.remove('show');
-  document.getElementById("studentName").innerHTML="<option value=''>— Select your name —</option>";
-  checkReady();
-  if (!dept || !cls) return;
-  // Fetch names — fetch() first (Chrome compatible), JSONP fallback (Firefox)
-  const namesUrl = SCRIPT_URL + "?action=names&dept=" + encodeURIComponent(dept) + "&cls=" + encodeURIComponent(cls);
-  document.getElementById('nameLoader').classList.add('show');
-  var namesData = null;
-  try {
-    const res = await fetch(namesUrl, { redirect: "follow" });
-    namesData = await res.json();
-  } catch(fetchErr) {
-    try { namesData = await jsonpRequest(namesUrl); } catch(jsonpErr) { namesData = null; }
-  }
-  document.getElementById('nameLoader').classList.remove('show');
-  if (namesData && namesData.names && namesData.names.length > 0) {
-    const sel = document.getElementById("studentName");
-    sel.innerHTML = "<option value=''>— Select your name —</option>" +
-      namesData.names.map(function(n){ return '<option value="' + n + '">' + n + '</option>'; }).join("");
-    document.getElementById('nameField').classList.add('show');
-  } else {
-    document.getElementById('nameEmpty').classList.add('show');
-  }
-  checkReady();
-});
+function removeMeal(i){ MENUS.splice(i,1); renderAdminMeals(); }
 
-async function submitOrder() {
-  const name=document.getElementById("studentName").value.trim();
-  const dept=DEPT_LABELS[selectedDept];
-  const cls=document.getElementById("studentClass").value;
-  const meal=meals[selectedMeal].name;
-  const time=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
-  const btn=document.getElementById("submitBtn");
-  btn.textContent="Submit My Order"; btn.disabled=true;
-  document.getElementById("errBanner").style.display="none";
-  try {
-    await fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,dept,cls,meal})});
-    orders.push({name,dept,cls,meal,time});
-    document.getElementById("successTitle").textContent="Great choice, "+name+"!";
-    document.getElementById("successSub").textContent="Your lunch order has been recorded.";
-    document.getElementById("successDetail").innerHTML=`<div class="srow"><span>Name</span><span>${name}</span></div><div class="srow"><span>Department</span><span>${dept}</span></div><div class="srow"><span>Class</span><span>${cls}</span></div><div class="srow"><span>Meal</span><span>${meal}</span></div><div class="srow"><span>Time</span><span>${time}</span></div>`;
-    document.getElementById("formCard").style.display="none";
-    document.getElementById("successCard").style.display="block";
-    renderLog();
-  } catch(e) {
-    document.getElementById("errBanner").style.display="block";
-    btn.textContent="Submit My Order"; btn.disabled=false;
+/* ═══════════════════════════════════════════════════════════
+   ADMIN — STUDENTS
+   ═══════════════════════════════════════════════════════════ */
+function renderAdminStudents(div,containerId){
+  const divData=STUDENTS[div];
+  let html="";
+  if(!divData) return;
+  // Nested class structure
+  if(!Array.isArray(divData)){
+    Object.entries(divData).forEach(([cls,names])=>{
+      html+=`<p style="font-size:11px;font-weight:700;color:var(--blue);margin:10px 0 6px;text-transform:uppercase;letter-spacing:.06em;">${cls}</p>`;
+      html+=names.map((n,i)=>`
+        <div class="admin-row">
+          <input type="text" value="${n}" id="st-${containerId}-${cls.replace(/\s+/g,'_')}-${i}" placeholder="Student full name">
+          <button class="rm-btn" onclick="removeStudent('${div}','${cls}',${i})">&#x2715;</button>
+        </div>`).join("");
+      html+=`<button class="add-row-btn" onclick="addStudent('${div}','${cls}')">+ Add student to ${cls}</button>`;
+    });
+  } else {
+    html=divData.map((n,i)=>`
+      <div class="admin-row">
+        <input type="text" value="${n}" id="st-${containerId}-${i}" placeholder="Student full name">
+        <button class="rm-btn" onclick="removeStudent('${div}',null,${i})">&#x2715;</button>
+      </div>`).join("");
+  }
+  document.getElementById(containerId).innerHTML=html;
+}
+function addStudent(div,cls){
+  const divData=STUDENTS[div];
+  if(cls && !Array.isArray(divData)){
+    divData[cls].push("");
+  } else if(Array.isArray(divData)){
+    divData.push("");
+  }
+  const cid="stu-"+{["Early Years"]:"early",["Junior School"]:"junior",["Middle School"]:"middle",["Upper Secondary"]:"upper"}[div];
+  renderAdminStudents(div,cid);
+  // Focus last input
+  const inputs=document.querySelectorAll(`#${cid} input`);
+  if(inputs.length) inputs[inputs.length-1].focus();
+}
+function removeStudent(div,cls,i){
+  const divData=STUDENTS[div];
+  if(cls && !Array.isArray(divData)){
+    divData[cls].splice(i,1);
+  } else if(Array.isArray(divData)){
+    divData.splice(i,1);
+  }
+  const cid="stu-"+{["Early Years"]:"early",["Junior School"]:"junior",["Middle School"]:"middle",["Upper Secondary"]:"upper"}[div];
+  renderAdminStudents(div,cid);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ADMIN — SAVE
+   ═══════════════════════════════════════════════════════════ */
+function saveAdmin(){
+  // Read meals from inputs
+  const newMenus=[];
+  document.querySelectorAll("#mealAdminList .admin-row").forEach((row,i)=>{
+    const emoji=document.getElementById("me"+i)?.value.trim()||"🍽";
+    const name=document.getElementById("mn"+i)?.value.trim();
+    if(name) newMenus.push({id:i+1,name,emoji});
+  });
+  MENUS.length=0; newMenus.forEach(m=>MENUS.push(m));
+
+  // Read students from inputs (nested class structure)
+  const divMap={early:"Early Years",junior:"Junior School",middle:"Middle School",upper:"Upper Secondary"};
+  Object.entries(divMap).forEach(([key,div])=>{
+    const cid="stu-"+key;
+    const divData=STUDENTS[div];
+    if(!Array.isArray(divData)){
+      // Nested: read each class group
+      Object.keys(divData).forEach(cls=>{
+        const clsKey=cls.replace(/\s+/g,'_');
+        STUDENTS[div][cls]=Array.from(document.querySelectorAll(`#${cid} input[id^="st-${cid}-${clsKey}-"]`)).map(el=>el.value.trim()).filter(Boolean);
+      });
+    } else {
+      STUDENTS[div]=Array.from(document.querySelectorAll(`#${cid} input`)).map(el=>el.value.trim()).filter(Boolean);
+    }
+  });
+
+  // Save to Google Sheets if URL is set
+  if(APPS_SCRIPT_URL!=="YOUR_WEB_APP_URL_HERE"){
+    const payload={type:"config",menus:MENUS,students:STUDENTS};
+    fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(payload)}).catch(()=>{});
+  }
+
+  // Re-render the portal with updated data
+  document.getElementById("adminPanel").style.display="none";
+  S.studentMenus={}; S.staffMenu=null;
+  render();
+  showSaveBanner("✓ Menu updated — changes are now live!");
+}
+
+function showSaveBanner(msg){
+  let b=document.getElementById("saveBanner");
+  if(!b){
+    b=document.createElement("div"); b.id="saveBanner";
+    b.style.cssText="position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#0D7A55;color:#fff;padding:10px 24px;border-radius:50px;font-size:13px;font-weight:600;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:opacity .4s;font-family:'DM Sans',sans-serif;white-space:nowrap;";
+    document.body.appendChild(b);
+  }
+  b.textContent=msg; b.style.opacity="1";
+  setTimeout(()=>b.style.opacity="0",3000);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ADMIN — SUMMARY
+   ═══════════════════════════════════════════════════════════ */
+async function loadSummary(){
+  const el=document.getElementById("summaryPanel");
+  el.innerHTML="<span style='color:var(--muted);font-size:13px;'>Loading orders from Google Sheets…</span>";
+  if(APPS_SCRIPT_URL==="YOUR_WEB_APP_URL_HERE"){
+    el.innerHTML="<span style='color:var(--muted);font-size:13px;'>Connect your Google Sheets URL in the config to view orders here.</span>";
+    return;
+  }
+  try{
+    const data=await jsonpRequest(APPS_SCRIPT_URL+"?action=orders&t="+Date.now());
+    if(data.orders&&data.orders.length){
+      buildSummaryUI(data.orders,el);
+    } else {
+      el.innerHTML="<span style='color:var(--muted);font-size:13px;'>No orders found for today.</span>";
+    }
+  }catch(e){
+    el.innerHTML="<span style='color:var(--red);font-size:13px;'>Could not reach Google Sheets. Check your connection.</span>";
   }
 }
-function resetForm() {
-  selectedMeal=null; selectedDept=null;
-  document.getElementById("studentName").innerHTML="<option value=''>— Select your name —</option>";
-  document.getElementById('nameField').classList.remove('show');
-  document.getElementById('nameEmpty').classList.remove('show');
-  document.getElementById("studentClass").value=""; document.getElementById("studentClass").disabled=true;
-  document.querySelectorAll(".dept-card").forEach(c=>c.classList.remove("selected"));
-  document.getElementById("successCard").style.display="none";
-  document.getElementById("formCard").style.display="block";
-  renderMeals(); checkReady();
+
+function buildSummaryUI(orders,el){
+  const mealMap={},deptMap={};
+  orders.forEach(o=>{mealMap[o.meal]=(mealMap[o.meal]||0)+1;deptMap[o.dept||o.division]=(deptMap[o.dept||o.division]||0)+1;});
+  let h=`<div class="sum-stat-row">
+    <div class="sum-stat" style="background:var(--blue);color:#fff;"><div class="ss-num">${orders.length}</div><div class="ss-lbl">Total Orders</div></div>
+    <div class="sum-stat" style="background:var(--red);color:#fff;"><div class="ss-num">${Object.keys(deptMap).length}</div><div class="ss-lbl">Divisions</div></div>
+    <div class="sum-stat" style="background:var(--green);color:#fff;"><div class="ss-num">${Object.keys(mealMap).length}</div><div class="ss-lbl">Meal Options</div></div>
+  </div>`;
+  h+=`<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:6px;">By Meal</p>
+  <table class="sum-table" style="margin-bottom:14px;"><thead><tr><th>Meal</th><th>Count</th></tr></thead><tbody>
+  ${Object.entries(mealMap).map(([m,c])=>`<tr><td>${m}</td><td><strong style="color:var(--blue);">${c}</strong></td></tr>`).join("")}
+  </tbody></table>`;
+  h+=`<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:6px;">All Orders</p>
+  <div style="overflow-x:auto;"><table class="sum-table" style="min-width:400px;"><thead><tr><th>Name</th><th>Division</th><th>Meal</th><th>Time</th></tr></thead><tbody>
+  ${orders.slice().reverse().map(o=>`<tr><td>${o.name||o.studentName||""}</td><td>${o.dept||o.division||""}</td><td>${o.meal||o.menuName||""}</td><td>${o.time||""}</td></tr>`).join("")}
+  </tbody></table></div>`;
+  el.innerHTML=h;
 }
-function renderLog() {
-  const w=document.getElementById("logWrap"),l=document.getElementById("logList");
-  if(!orders.length){w.style.display="none";return;}
-  w.style.display="block";
-  l.innerHTML=orders.slice().reverse().map(o=>`<div class="log-row"><span class="lname">${o.name}</span><span class="ldept">${o.dept}</span><span class="lcls">${o.cls}</span><span class="lmeal">${o.meal}</span><span class="ltime">${o.time}</span></div>`).join("");
+
+async function emailSummary(){
+  const btn=document.getElementById("emailBtn");
+  btn.textContent="Sending…"; btn.disabled=true;
+  if(APPS_SCRIPT_URL==="YOUR_WEB_APP_URL_HERE"){btn.textContent="✉ Email Summary";btn.disabled=false;return;}
+  try{
+    await jsonpRequest(APPS_SCRIPT_URL+"?action=summary&t="+Date.now());
+    btn.textContent="✓ Sent!"; btn.style.background=var_green||"#0D7A55";
+    setTimeout(()=>{btn.textContent="✉ Email Summary";btn.style.background="";btn.disabled=false;},3000);
+  }catch(e){btn.textContent="✉ Email Summary";btn.disabled=false;}
 }
-function clearLog(){orders=[];renderLog();}
+
+
+let carIdx=0; const carTotal=4; let carTimer;
+function buildDots(){ document.getElementById("carDots").innerHTML=Array.from({length:carTotal},(_,i)=>`<button class="cdot${i===0?" active":""}" onclick="goTo(${i})"></button>`).join(""); }
+function goTo(i){ carIdx=i; document.getElementById("carTrack").style.transform=`translateX(-${i*100}%)`; document.querySelectorAll(".cdot").forEach((d,j)=>d.classList.toggle("active",j===i)); }
+function moveCarousel(dir){ goTo((carIdx+dir+carTotal)%carTotal); resetAuto(); }
+function startAuto(){ carTimer=setInterval(()=>moveCarousel(1),4500); }
+function resetAuto(){ clearInterval(carTimer); startAuto(); }
+
+/* ═══════════════════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════════════════ */
+async function init(){
+  const now=new Date();
+  document.getElementById("dayLabel").textContent=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][now.getDay()]+" · "+now.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  const h=now.getHours();
+  document.getElementById("greetingText").textContent=h<12?"Good morning!":h<17?"Good afternoon!":"Good evening!";
+  const closed=h>=CUTOFF_HOUR&&h<REOPEN_HOUR;
+  const chip=document.getElementById("statusChip");
+  chip.textContent=closed?"⏰ Orders closed. Reopens at 1 PM":"✅ Orders open. Closes at 10 AM";
+  chip.style.background=closed?"rgba(192,32,46,.3)":"rgba(13,122,85,.25)";
+  document.getElementById("closedCard").style.display=closed?"block":"none";
+  document.getElementById("formCard").style.display=closed?"none":"block";
+  buildDots(); startAuto();
+
+  // Render immediately so there's no blocking spinner
+  render();
+
+  // Silently fetch student lists from Sheets in the background (no spinner shown)
+  if(APPS_SCRIPT_URL !== "YOUR_WEB_APP_URL_HERE"){
+    try{
+      const data=await Promise.race([
+        jsonpRequest(APPS_SCRIPT_URL+"?action=students&t="+Date.now()),
+        new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),8000))
+      ]);
+      if(data && data.students){
+        Object.entries(data.students).forEach(([div,classes])=>{ STUDENTS[div]=classes; });
+        // Only re-render if user hasn't started filling in an order yet
+        if(S.step===1) render();
+        showSaveBanner("✓ Class lists synced from Google Sheets");
+      }
+    }catch(e){
+      console.warn("Could not load students from Sheets — using built-in data:", e.message);
+    }
+  }
+}
+
 init();
 </script>
-</body>
-</html>
-
 </body>
 </html>
