@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="0"/>
   <title>Shield International School – Lunch Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -636,10 +639,10 @@ function doGet(e) {
    CONFIGURATION — edit these to customise the portal
    ═══════════════════════════════════════════════════════════ */
 
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxZxj8uPCFRRNYjmIwzXN556I7CqgwFwwRWSJdIta4ugJaUtZwwHNpDGgD1LLP4ciLUiQ/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzau61sDkctfkUoKl0S7oeu6ZlTzGHQbtsNasL2sQ1QTLiXWKhbtgeXEkzDvYVshqY52w/exec";
 
 const CUTOFF_HOUR = 10;   // orders close at 10:00 AM
-const REOPEN_HOUR = 13;   // orders reopen at 1:00 PM
+const REOPEN_HOUR = 14;   // orders reopen at 2:00 PM
 
 const MENUS = [
   { id:1, name:"Jollof rice & chicken",       emoji:"🍲" },
@@ -1254,8 +1257,10 @@ function switchTab(id){
 function renderAdminMeals(){
   document.getElementById("mealAdminList").innerHTML=MENUS.map((m,i)=>`
     <div class="admin-row">
-      <input class="emoji-inp" type="text" value="${m.emoji}" id="me${i}" placeholder="🍽">
-      <input type="text" value="${m.name}" id="mn${i}" placeholder="Meal name">
+      <input class="emoji-inp" type="text" value="${m.emoji}" id="me${i}" placeholder="🍽"
+        oninput="MENUS[${i}].emoji=this.value.trim()||'🍽'">
+      <input type="text" value="${m.name}" id="mn${i}" placeholder="Meal name"
+        oninput="MENUS[${i}].name=this.value.trim()">
       <button class="rm-btn" onclick="removeMeal(${i})">&#x2715;</button>
     </div>`).join("");
 }
@@ -1336,7 +1341,6 @@ function saveAdmin(){
     const cid="stu-"+key;
     const divData=STUDENTS[div];
     if(!Array.isArray(divData)){
-      // Nested: read each class group
       Object.keys(divData).forEach(cls=>{
         const clsKey=cls.replace(/\s+/g,'_');
         STUDENTS[div][cls]=Array.from(document.querySelectorAll(`#${cid} input[id^="st-${cid}-${clsKey}-"]`)).map(el=>el.value.trim()).filter(Boolean);
@@ -1352,9 +1356,12 @@ function saveAdmin(){
     fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(payload)}).catch(()=>{});
   }
 
-  // Re-render the portal with updated data
+  // Fully reset order state so new menus/students take effect cleanly
+  Object.assign(S,{step:1,role:null,division:null,cls:null,studentMenus:{},absentees:new Set(),staffMenu:null,staffName:"",staffDept:"",submitting:false});
   document.getElementById("adminPanel").style.display="none";
-  S.studentMenus={}; S.staffMenu=null;
+  document.getElementById("successCard").style.display="none";
+  document.getElementById("formCard").style.display="block";
+  document.getElementById("errBanner").style.display="none";
   render();
   showSaveBanner("✓ Menu updated — changes are now live!");
 }
