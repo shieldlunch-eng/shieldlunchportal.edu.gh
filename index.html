@@ -21,6 +21,25 @@
     }
     body { font-family:"DM Sans",sans-serif; background:var(--off); color:var(--text); min-height:100vh; }
 
+    /* ═══════════════════════════════════════════════
+       ANIMATION KEYFRAMES
+    ═══════════════════════════════════════════════ */
+    @keyframes fadeSlideUp   { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeSlideDown { from{opacity:0;transform:translateY(-14px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn        { from{opacity:0} to{opacity:1} }
+    @keyframes scaleIn       { from{opacity:0;transform:scale(.92)} to{opacity:1;transform:scale(1)} }
+    @keyframes successBounce { 0%{transform:scale(0) rotate(-10deg)} 60%{transform:scale(1.15) rotate(3deg)} 80%{transform:scale(.95) rotate(-1deg)} 100%{transform:scale(1) rotate(0)} }
+    @keyframes pulseRing     { 0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--mc,var(--blue)) 45%,transparent)} 70%{box-shadow:0 0 0 8px transparent} 100%{box-shadow:0 0 0 0 transparent} }
+    @keyframes shimmer       { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+    @keyframes rippleOut     { from{transform:scale(0);opacity:.5} to{transform:scale(3);opacity:0} }
+    @keyframes slideInRight  { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes slideInLeft   { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes bannerSlide   { from{opacity:0;transform:translateY(-100%)} to{opacity:1;transform:translateY(0)} }
+    @keyframes iconBounce    { 0%,100%{transform:translateY(0)} 40%{transform:translateY(-8px)} 60%{transform:translateY(-4px)} }
+    @keyframes stepDone      { 0%{transform:scale(1)} 40%{transform:scale(1.18)} 100%{transform:scale(1)} }
+    @keyframes mealIn        { from{opacity:0;transform:translateY(16px) scale(.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+    @keyframes spin          { to{transform:rotate(360deg)} }
+
     /* ── HEADER ── */
     .hdr { background:var(--blue); position:sticky; top:0; z-index:50; box-shadow:0 2px 16px rgba(0,0,0,0.25); }
     .hdr-inner { display:flex; align-items:center; gap:14px; padding:10px 20px; max-width:800px; margin:0 auto; }
@@ -61,56 +80,76 @@
 
     /* ── FORM CARD ── */
     .form-card { background:#fff; border-radius:22px; box-shadow:var(--sh); overflow:hidden; }
-    .form-hdr { background:var(--blue); padding:20px 24px; }
-    .form-hdr h2 { color:#fff; font-family:"Playfair Display",serif; font-size:20px; font-weight:700; }
-    .form-hdr p { color:rgba(255,255,255,.75); font-size:12px; margin-top:3px; }
-    .form-body { padding:24px; }
+    .form-hdr { background:var(--blue); padding:26px 28px; animation:fadeSlideDown .35s ease both; }
+    .form-hdr h2 { color:#fff; font-family:"Playfair Display",serif; font-size:26px; font-weight:700; line-height:1.25; }
+    .form-hdr p { color:rgba(255,255,255,.8); font-size:13px; margin-top:5px; font-weight:400; }
+    .form-body { padding:28px 24px; }
+    /* Step content fade-slide */
+    .step-content { animation:fadeSlideUp .3s cubic-bezier(.22,.68,0,1.2) both; }
+    .step-content.going-back { animation:slideInLeft .28s cubic-bezier(.22,.68,0,1.2) both; }
 
     /* ── STEP INDICATOR ── */
-    .step-bar { display:flex; align-items:center; gap:0; margin-bottom:24px; }
-    .step-pill { display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:50px; font-size:12px; font-weight:600; border:1.5px solid var(--border); color:var(--muted); background:#fff; flex-shrink:0; }
-    .step-pill.active { background:var(--blue); color:#fff; border-color:var(--blue); }
-    .step-pill.done { background:var(--green-light); color:var(--green); border-color:var(--green); }
-    .step-line { flex:1; height:2px; background:var(--border); margin:0 4px; }
+    .step-bar { display:flex; align-items:center; gap:0; margin-bottom:28px; }
+    .step-pill { display:flex; align-items:center; gap:6px; padding:8px 16px; border-radius:50px; font-size:12px; font-weight:700; border:2px solid var(--border); color:var(--muted); background:#fff; flex-shrink:0; letter-spacing:.02em; transition:background .3s, border-color .3s, color .3s, box-shadow .3s; }
+    .step-pill.active { background:var(--blue); color:#fff; border-color:var(--blue); box-shadow:0 4px 14px rgba(26,58,107,.28); }
+    .step-pill.done { background:var(--green-light); color:var(--green); border-color:var(--green); animation:stepDone .4s ease; }
+    .step-line { flex:1; height:2.5px; background:var(--border); margin:0 4px; border-radius:2px; transition:background .4s ease; }
     .step-line.done { background:var(--green); }
 
     /* ── SECTION LABEL ── */
-    .sec-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--blue); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
-    .sec-label::after { content:""; flex:1; height:1px; background:var(--border); }
+    .sec-label { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--blue); margin-bottom:16px; margin-top:4px; display:flex; align-items:center; gap:10px; }
+    .sec-label::after { content:""; flex:1; height:1.5px; background:var(--border); }
 
     /* ── DEPT / ROLE CARDS ── */
     .dept-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:24px; }
-    .dept-card { width:calc(50% - 6px); max-width:220px; border:2px solid var(--border); border-radius:16px; padding:16px 10px; cursor:pointer; transition:all .22s; text-align:center; background:#fafbff; position:relative; overflow:hidden; }
+    .dept-card {
+      width:calc(50% - 6px); max-width:220px; border:2px solid var(--border); border-radius:16px;
+      padding:20px 12px; cursor:pointer; text-align:center; background:#fafbff;
+      position:relative; overflow:hidden;
+      transition:transform .22s cubic-bezier(.34,1.4,.64,1), box-shadow .22s, border-color .2s;
+      animation:scaleIn .35s cubic-bezier(.22,.68,0,1.2) both;
+    }
+    .dept-card:nth-child(1){animation-delay:.04s}
+    .dept-card:nth-child(2){animation-delay:.08s}
+    .dept-card:nth-child(3){animation-delay:.12s}
+    .dept-card:nth-child(4){animation-delay:.16s}
     .dept-card::before { content:""; position:absolute; inset:0; background:linear-gradient(135deg,var(--blue) 0%,var(--blue-mid) 100%); opacity:0; transition:opacity .22s; }
-    .dept-card:hover { border-color:var(--blue-mid); transform:translateY(-3px); box-shadow:0 6px 20px rgba(26,58,107,.13); }
-    .dept-card:active { transform:translateY(-1px); }
-    .dept-card.selected { border-color:var(--blue); transform:translateY(-3px); box-shadow:0 6px 20px rgba(26,58,107,.18); }
+    /* Ripple */
+    .dept-card .ripple { position:absolute; border-radius:50%; background:rgba(26,58,107,.18); animation:rippleOut .55s ease-out forwards; pointer-events:none; }
+    .dept-card:hover { border-color:var(--blue-mid); transform:translateY(-4px) scale(1.02); box-shadow:0 10px 28px rgba(26,58,107,.16); }
+    .dept-card:active { transform:translateY(-1px) scale(.98); }
+    .dept-card.selected { border-color:var(--blue); transform:translateY(-4px) scale(1.02); box-shadow:0 10px 28px rgba(26,58,107,.2); }
     .dept-card.selected::before { opacity:.07; }
     .dept-card.selected .dept-name { color:var(--blue); }
-    .dept-icon { font-size:28px; margin-bottom:7px; position:relative; }
-    .dept-name { font-size:13px; font-weight:700; color:var(--text); line-height:1.3; position:relative; }
-    .dept-range { font-size:10px; color:var(--muted); margin-top:3px; position:relative; }
+    .dept-icon { font-size:32px; margin-bottom:9px; position:relative; transition:transform .3s cubic-bezier(.34,1.4,.64,1); }
+    .dept-card:hover .dept-icon { transform:scale(1.15) rotate(-4deg); }
+    .dept-card.selected .dept-icon { transform:scale(1.15) rotate(-4deg); animation:iconBounce .5s ease; }
+    .dept-name { font-size:14px; font-weight:700; color:var(--text); line-height:1.3; position:relative; }
+    .dept-range { font-size:11px; color:var(--muted); margin-top:4px; position:relative; }
 
     /* ── STUDENT ROSTER ── */
     .student-list { margin-bottom:20px; border:1.5px solid var(--border); border-radius:14px; overflow:hidden; }
     .student-list-hdr { display:flex; align-items:center; padding:10px 16px; background:var(--blue-light); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--blue); border-bottom:1px solid var(--border); }
     .meal-legend { display:flex; flex-wrap:wrap; gap:6px; padding:10px 16px 12px; background:#f8f9fc; border-bottom:1px solid var(--border); }
-    .meal-legend-item { display:flex; align-items:center; gap:5px; font-size:11px; font-weight:600; color:var(--text); background:#fff; border:1.5px solid var(--border); border-radius:50px; padding:4px 10px 4px 6px; white-space:nowrap; }
+    .meal-legend-item { display:flex; align-items:center; gap:5px; font-size:11px; font-weight:600; color:var(--text); background:#fff; border:1.5px solid var(--border); border-radius:50px; padding:4px 10px 4px 6px; white-space:nowrap; animation:fadeIn .3s ease both; }
     .meal-legend-badge { width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:#fff; flex-shrink:0; }
-    .stu-row { display:flex; align-items:center; gap:10px; padding:11px 16px; border-bottom:1px solid #f0f2f8; }
+    .stu-row { display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid #f0f2f8; animation:fadeSlideUp .28s ease both; transition:background .2s; }
     .stu-row:last-child { border-bottom:none; }
-    .stu-name { flex:1; font-size:13px; font-weight:600; color:var(--text); line-height:1.4; }
+    .stu-row:hover { background:#fafbff; }
+    .stu-name { flex:1; font-size:14px; font-weight:600; color:var(--text); line-height:1.4; }
     .meal-btns { display:flex; gap:6px; flex-shrink:0; }
     .meal-btn {
       min-width:34px; height:34px; width:34px; border-radius:50%;
       border:2px solid var(--border);
       font-size:11px; font-weight:800;
       cursor:pointer; background:#fff; color:var(--muted);
-      transition:all .18s; display:flex; align-items:center; justify-content:center;
-      padding:0; flex-shrink:0;
+      transition:transform .18s cubic-bezier(.34,1.4,.64,1), border-color .15s, background .15s, color .15s, box-shadow .2s;
+      display:flex; align-items:center; justify-content:center;
+      padding:0; flex-shrink:0; position:relative; overflow:hidden;
     }
-    .meal-btn:hover { border-color:var(--mc,var(--blue-mid)); color:var(--mc,var(--blue-mid)); background:var(--mcs,var(--blue-light)); }
-    .meal-btn.selected { background:var(--mc,var(--blue)); border-color:var(--mc,var(--blue)); color:#fff; box-shadow:0 2px 8px color-mix(in srgb,var(--mc,var(--blue)) 35%,transparent); }
+    .meal-btn:hover { border-color:var(--mc,var(--blue-mid)); color:var(--mc,var(--blue-mid)); background:var(--mcs,var(--blue-light)); transform:scale(1.12); }
+    .meal-btn:active { transform:scale(.9); }
+    .meal-btn.selected { background:var(--mc,var(--blue)); border-color:var(--mc,var(--blue)); color:#fff; animation:pulseRing .5s ease; transform:scale(1.08); }
 
     /* ── MEAL CARDS (Staff) ── */
     .meal-grid {
@@ -138,7 +177,6 @@
     .meal-card:nth-child(4){animation-delay:.20s}
     .meal-card:nth-child(5){animation-delay:.25s}
     .meal-card:nth-child(6){animation-delay:.30s}
-    @keyframes mealIn { from{opacity:0;transform:translateY(16px) scale(.96)} to{opacity:1;transform:translateY(0) scale(1)} }
     .meal-card:hover { transform:translateY(-5px) scale(1.015); box-shadow:0 14px 36px rgba(0,0,0,.12); border-color:var(--mc); }
     .meal-card.selected { transform:translateY(-5px) scale(1.015); border-color:var(--mc); box-shadow:0 14px 36px rgba(0,0,0,.14), 0 0 0 4px color-mix(in srgb,var(--mc) 15%,transparent); }
     .meal-art { height:120px; position:relative; overflow:hidden; background:var(--mcs); display:flex; align-items:center; justify-content:center; }
@@ -151,7 +189,7 @@
     .meal-info { padding:12px 14px 14px; background:#fff; position:relative; }
     .meal-info::before { content:""; position:absolute; top:0; left:14px; right:14px; height:2px; background:linear-gradient(90deg,var(--mc),var(--mc2)); border-radius:2px; opacity:0; transition:opacity .2s; }
     .meal-card:hover .meal-info::before, .meal-card.selected .meal-info::before { opacity:1; }
-    .meal-name { font-size:13px; font-weight:700; color:var(--text); text-align:center; margin-bottom:8px; line-height:1.3; }
+    .meal-name { font-size:14px; font-weight:700; color:var(--text); text-align:center; margin-bottom:8px; line-height:1.35; }
     .meal-footer { display:flex; align-items:center; justify-content:center; }
     .meal-choose-btn { font-size:10px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; padding:5px 14px; border-radius:50px; background:var(--mcs); color:var(--mc); border:1.5px solid color-mix(in srgb,var(--mc) 25%,transparent); transition:all .2s; }
     .meal-card:hover .meal-choose-btn { background:var(--mc); color:#fff; border-color:var(--mc); }
@@ -160,31 +198,60 @@
     .meal-card.selected .meal-selected-pill { display:flex; }
 
     /* ── FIELDS ── */
-    .field { margin-bottom:18px; }
-    .field label { display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--blue); margin-bottom:7px; }
-    .field input, .field select { width:100%; padding:12px 16px; border:2px solid var(--border); border-radius:12px; font-size:14px; font-family:"DM Sans",sans-serif; outline:none; background:#fff; transition:border-color .2s, box-shadow .2s; }
+    .field { margin-bottom:20px; }
+    .field label { display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.09em; color:var(--blue); margin-bottom:8px; }
+    .field input, .field select { width:100%; padding:14px 16px; border:2px solid var(--border); border-radius:12px; font-size:15px; font-family:"DM Sans",sans-serif; outline:none; background:#fff; transition:border-color .2s, box-shadow .2s; }
     .field input:focus, .field select:focus { border-color:var(--blue-mid); box-shadow:0 0 0 3px rgba(34,85,160,.1); }
 
     /* ── WARN BOX ── */
     .warn-box { background:#FFF8E1; border:1.5px solid #FFD54F; border-radius:12px; padding:12px 16px; font-size:13px; color:#5D4037; margin-bottom:18px; }
 
     /* ── NAVIGATION BUTTONS ── */
-    .nav-row { display:flex; gap:10px; margin-top:6px; }
-    .btn-back { flex:0 0 auto; min-width:90px; background:#fff; border:2px solid var(--border); border-radius:12px; height:50px; font-size:14px; font-weight:600; cursor:pointer; color:var(--muted); font-family:"DM Sans",sans-serif; display:flex; align-items:center; justify-content:center; gap:6px; transition:all .18s; }
-    .btn-back:hover { border-color:var(--blue); color:var(--blue); }
-    .btn-next { flex:1; background:linear-gradient(135deg,var(--blue),var(--blue-mid)); border:none; border-radius:12px; height:50px; font-size:14px; font-weight:700; cursor:pointer; color:#fff; font-family:"DM Sans",sans-serif; display:flex; align-items:center; justify-content:center; gap:8px; transition:opacity .18s; }
-    .btn-next:hover:not(:disabled) { opacity:.88; }
-    .btn-next:disabled { background:linear-gradient(135deg,#ccc,#bbb); cursor:not-allowed; }
+    .nav-row { display:flex; gap:12px; margin-top:10px; }
+    .btn-back {
+      flex:0 0 auto; min-width:100px; background:#fff; border:2px solid var(--border);
+      border-radius:14px; height:54px; font-size:14px; font-weight:600;
+      cursor:pointer; color:var(--muted); font-family:"DM Sans",sans-serif;
+      display:flex; align-items:center; justify-content:center; gap:6px;
+      transition:border-color .2s, color .2s, background .2s, transform .15s;
+      position:relative; overflow:hidden;
+    }
+    .btn-back:hover { border-color:var(--blue); color:var(--blue); background:var(--blue-light); }
+    .btn-back:active { transform:scale(.97); }
+    .btn-next {
+      flex:1; background:linear-gradient(135deg,var(--blue),var(--blue-mid));
+      border:none; border-radius:14px; height:54px; font-size:15px; font-weight:700;
+      cursor:pointer; color:#fff; font-family:"DM Sans",sans-serif;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      transition:transform .2s cubic-bezier(.34,1.4,.64,1), box-shadow .2s, opacity .15s;
+      letter-spacing:.02em; box-shadow:0 4px 18px rgba(26,58,107,.28);
+      position:relative; overflow:hidden;
+    }
+    .btn-next:hover:not(:disabled) { transform:translateY(-3px) scale(1.01); box-shadow:0 10px 30px rgba(26,58,107,.38); }
+    .btn-next:active:not(:disabled) { transform:scale(.97); box-shadow:0 2px 8px rgba(26,58,107,.2); }
+    .btn-next:disabled { background:linear-gradient(135deg,#ccc,#bbb); cursor:not-allowed; box-shadow:none; }
+    /* shared ripple for buttons */
+    .btn-next .ripple, .btn-back .ripple { position:absolute; border-radius:50%; background:rgba(255,255,255,.3); animation:rippleOut .5s ease-out forwards; pointer-events:none; }
 
     /* ── SUBMIT BUTTON ── */
-    .submit-btn { width:100%; padding:16px; background:linear-gradient(135deg,var(--red-dark),var(--red)); color:#fff; border:none; border-radius:14px; font-size:16px; font-weight:700; cursor:pointer; font-family:"DM Sans",sans-serif; letter-spacing:.03em; transition:all .2s; box-shadow:0 4px 20px rgba(192,32,46,.35); margin-top:4px; }
-    .submit-btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 28px rgba(192,32,46,.4); }
+    .submit-btn {
+      width:100%; padding:18px; background:linear-gradient(135deg,var(--red-dark),var(--red));
+      color:#fff; border:none; border-radius:14px; font-size:17px; font-weight:700;
+      cursor:pointer; font-family:"DM Sans",sans-serif; letter-spacing:.04em;
+      transition:transform .2s cubic-bezier(.34,1.4,.64,1), box-shadow .2s;
+      box-shadow:0 4px 22px rgba(192,32,46,.38); margin-top:6px;
+      position:relative; overflow:hidden;
+    }
+    .submit-btn:hover:not(:disabled) { transform:translateY(-3px) scale(1.01); box-shadow:0 12px 32px rgba(192,32,46,.48); }
+    .submit-btn:active:not(:disabled) { transform:scale(.98); }
     .submit-btn:disabled { background:linear-gradient(135deg,#ccc,#bbb); box-shadow:none; cursor:not-allowed; }
+    .submit-btn .ripple { position:absolute; border-radius:50%; background:rgba(255,255,255,.25); animation:rippleOut .55s ease-out forwards; pointer-events:none; }
 
     /* ── SUMMARY CARD (step 5) ── */
-    .summary-info { background:var(--blue-light); border-radius:12px; padding:14px 18px; margin-bottom:18px; }
-    .srow { display:flex; justify-content:space-between; font-size:13px; padding:4px 0; }
-    .srow span:first-child { color:var(--muted); }
+    .summary-info { background:var(--blue-light); border-radius:14px; padding:18px 20px; margin-bottom:20px; border:1.5px solid rgba(26,58,107,.1); }
+    .srow { display:flex; justify-content:space-between; align-items:center; font-size:14px; padding:6px 0; border-bottom:1px solid rgba(26,58,107,.07); }
+    .srow:last-child { border-bottom:none; }
+    .srow span:first-child { color:var(--muted); font-weight:500; }
     .srow span:last-child { font-weight:700; color:var(--blue); }
     .sum-table { width:100%; border-collapse:collapse; font-size:13px; margin-bottom:4px; }
     .sum-table th { background:var(--blue); color:#fff; padding:8px 12px; text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:.05em; }
@@ -192,11 +259,11 @@
     .sum-table td { padding:8px 12px; border-bottom:1px solid #eee; }
 
     /* ── SUCCESS CARD ── */
-    .success-card { display:none; background:#fff; border-radius:22px; box-shadow:var(--sh); overflow:hidden; }
+    .success-card { display:none; background:#fff; border-radius:22px; box-shadow:var(--sh); overflow:hidden; animation:scaleIn .4s cubic-bezier(.22,.68,0,1.2) both; }
     .success-hdr { background:linear-gradient(135deg,var(--green),#1aab72); padding:22px 24px; text-align:center; }
-    .s-icon { font-size:44px; margin-bottom:6px; }
-    .success-hdr h3 { font-family:"Playfair Display",serif; font-size:22px; color:#fff; }
-    .success-hdr p { font-size:12px; color:rgba(255,255,255,.85); margin-top:4px; }
+    .s-icon { font-size:48px; margin-bottom:6px; display:block; animation:successBounce .7s cubic-bezier(.22,.68,0,1.2) .1s both; }
+    .success-hdr h3 { font-family:"Playfair Display",serif; font-size:22px; color:#fff; animation:fadeSlideUp .4s ease .2s both; }
+    .success-hdr p { font-size:12px; color:rgba(255,255,255,.85); margin-top:4px; animation:fadeSlideUp .4s ease .3s both; }
     .success-body { padding:24px; }
     .sheets-badge { display:inline-flex; align-items:center; gap:6px; background:var(--green-light); color:var(--green); border-radius:50px; padding:5px 14px; font-size:12px; font-weight:600; margin-bottom:16px; }
     .new-order-btn { width:100%; padding:13px; background:var(--blue); color:#fff; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; font-family:"DM Sans",sans-serif; }
@@ -285,7 +352,6 @@
 
     /* ── SPINNER ── */
     .spin-ring { width:36px; height:36px; border:3px solid var(--border); border-top-color:var(--blue); border-radius:50%; animation:spin .7s linear infinite; }
-    @keyframes spin { to { transform:rotate(360deg); } }
 
     /* ── FOOTER ── */
     .site-footer { text-align:center; padding:20px; font-size:11px; color:var(--muted); border-top:1px solid var(--border); margin-top:10px; }
@@ -298,8 +364,10 @@
       .car-wrap { height:180px; }
       .dept-card { width:calc(50% - 5px); }
       .meal-grid { grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); gap:10px; }
-      .form-body { padding:16px; }
+      .form-body { padding:20px 16px; }
       .main { padding:14px 10px 40px; }
+      .form-hdr { padding:20px; }
+      .form-hdr h2 { font-size:22px; }
       .greeting-inner { flex-direction:column; align-items:flex-start; gap:6px; }
       .nav-row { flex-direction:column; }
       .btn-back, .btn-next { width:100%; flex:none; }
@@ -314,7 +382,7 @@
 <!-- ═══════════════════════ HEADER ═══════════════════════ -->
 <div class="hdr">
   <div class="hdr-inner">
-    <img class="hdr-logo" src="images/favicon.webp" alt="Shield International School"/>
+    <div class="hdr-logo-placeholder">🛡</div>
     <div class="hdr-title">
       <h1>SHIELD INTERNATIONAL SCHOOL</h1>
       <p>Daily Lunch Selection Portal</p>
@@ -551,6 +619,11 @@ function doGet(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var cb = e.parameter.callback || 'cb';
 
+  // ── Ping / warm-up ────────────────────────────────────────
+  if (action === 'ping') {
+    return ContentService.createTextOutput(cb + '({"ok":true})').setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+
   // ── Load menus from the Menus sheet ──────────────────────────
   if (action === 'menus') {
     var sheet = ss.getSheetByName('Menus');
@@ -690,10 +763,10 @@ function doGet(e) {
    CONFIGURATION — edit these to customise the portal
    ═══════════════════════════════════════════════════════════ */
 
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPl5MELzbxuEOeNFK7PLII3_HYnlwJD-0SNQm_jpBEFMZoekC_wxpwKkzM98EVhmqRVQ/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7bycGDN192WNpZkYEvJmwvN9aldK3bO9ukGzgYusZlCjfnXjFuf-wn2-yNOBM5Sk-Vw/exec";
 
 const CUTOFF_HOUR = 10;   // orders close at 10:00 AM
-const REOPEN_HOUR = 13;   // orders reopen at 1:00 PM
+const REOPEN_HOUR = 1;   // orders reopen at 13:00 PM
 
 const MENUS = [
   { id:1, name:"Jollof rice & chicken",       emoji:"🍲" },
@@ -847,8 +920,16 @@ function canGo() {
   return false;
 }
 
-function next() { const st=steps(),i=stepIdx(); if(i<st.length-1){S.step=st[i+1];render();} }
-function back() { const st=steps(),i=stepIdx(); if(i>0){S.step=st[i-1];render();} }
+let _lastStepIdx = 0; // track direction for slide animation
+
+function next() {
+  const st=steps(),i=stepIdx();
+  if(i<st.length-1){ _lastStepIdx=i; S.step=st[i+1]; render(); }
+}
+function back() {
+  const st=steps(),i=stepIdx();
+  if(i>0){ _lastStepIdx=i; S.step=st[i-1]; render('back'); }
+}
 function pick(k,v) {
   if(k==="staffMenu" && v !== S.staffMenu) S.staffQty=1; // reset qty when switching meals
   S[k]=v;
@@ -877,11 +958,28 @@ function toggleAbsent(name){
 /* ═══════════════════════════════════════════════════════════
    RENDER
    ═══════════════════════════════════════════════════════════ */
-function render() {
+function render(dir) {
   updateHeader();
   renderStepBar();
-  renderBody();
+  renderBody(dir);
   updateNextBtn();
+  // Wire ripple effect to all interactive buttons after render
+  setTimeout(()=>document.querySelectorAll(".btn-next,.btn-back,.submit-btn,.dept-card").forEach(addRipple),0);
+}
+
+// ── Ripple helper ──
+function addRipple(el){
+  if(el._rippleWired) return; el._rippleWired=true;
+  el.addEventListener("pointerdown", function(e){
+    const r=this.getBoundingClientRect();
+    const size=Math.max(r.width,r.height)*2;
+    const x=e.clientX-r.left-size/2, y=e.clientY-r.top-size/2;
+    const rip=document.createElement("span");
+    rip.className="ripple";
+    rip.style.cssText=`width:${size}px;height:${size}px;left:${x}px;top:${y}px;`;
+    this.appendChild(rip);
+    setTimeout(()=>rip.remove(),600);
+  });
 }
 
 function updateHeader() {
@@ -916,7 +1014,7 @@ function renderStepBar() {
   bar.innerHTML=html;
 }
 
-function renderBody() {
+function renderBody(dir) {
   let content="";
   if(S.step===1) content=renderStep1();
   else if(S.step===2) content=renderStep2();
@@ -924,9 +1022,11 @@ function renderBody() {
   else if(S.step===3) content=renderStep3();
   else if(S.step===4) content=renderStep4();
   else if(S.step===5) content=renderStep5();
-  // Replace everything after step bar
   let existing=document.getElementById("stepContent");
   if(!existing){existing=document.createElement("div");existing.id="stepContent";document.getElementById("formBody").appendChild(existing);}
+  existing.className = dir==="back" ? "step-content going-back" : "step-content";
+  // Force reflow to restart animation
+  existing.style.animation="none"; void existing.offsetWidth; existing.style.animation="";
   existing.innerHTML=content;
   renderNav();
   // Re-bind dynamic events
@@ -1014,11 +1114,12 @@ function renderStep3(){
   const stu = getStudents(S.division, S.cls);
   const present = stu.filter(n=>!S.absentees.has(n));
   const allDone = present.length > 0 && present.every(n=>S.studentMenus[n]);
-  let rows = stu.map(name=>{
+  let rows = stu.map((name, idx)=>{
     const isAbsent = S.absentees.has(name);
     const safeId = name.replace(/\s+/g,'_');
+    const delay = Math.min(idx * 0.04, 0.4);
     return `
-    <div class="stu-row ${isAbsent?"stu-absent":""}" id="row-${safeId}">
+    <div class="stu-row ${isAbsent?"stu-absent":""}" id="row-${safeId}" style="animation-delay:${delay}s">
       <span class="stu-name">${name}</span>
       <div class="meal-btns">
         ${isAbsent
@@ -1445,11 +1546,20 @@ function showSaveBanner(msg){
   let b=document.getElementById("saveBanner");
   if(!b){
     b=document.createElement("div"); b.id="saveBanner";
-    b.style.cssText="position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#0D7A55;color:#fff;padding:10px 24px;border-radius:50px;font-size:13px;font-weight:600;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:opacity .4s;font-family:'DM Sans',sans-serif;white-space:nowrap;";
+    b.style.cssText="position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#0D7A55;color:#fff;padding:11px 26px;border-radius:50px;font-size:13px;font-weight:600;z-index:999;box-shadow:0 6px 24px rgba(0,0,0,.22);font-family:'DM Sans',sans-serif;white-space:nowrap;";
     document.body.appendChild(b);
   }
-  b.textContent=msg; b.style.opacity="1";
-  setTimeout(()=>b.style.opacity="0",3000);
+  b.textContent=msg;
+  b.style.animation="none"; b.style.opacity="1";
+  // force reflow then animate in
+  void b.offsetWidth;
+  b.style.animation="fadeSlideDown .35s cubic-bezier(.22,.68,0,1.2) both";
+  clearTimeout(b._t);
+  b._t=setTimeout(()=>{
+    b.style.transition="opacity .4s, transform .4s";
+    b.style.opacity="0"; b.style.transform="translateX(-50%) translateY(-12px)";
+    setTimeout(()=>{ b.style.transform="translateX(-50%)"; b.style.transition=""; },450);
+  },3000);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1528,38 +1638,96 @@ async function init(){
   document.getElementById("formCard").style.display=closed?"none":"block";
   buildDots(); startAuto();
 
-  // Render immediately so there's no blocking spinner
+  // Render immediately with built-in data
   render();
 
-  // Fetch menus + students from Sheets in parallel, silently
+  // Sync from Google Sheets with warm-up + retry logic
   if(APPS_SCRIPT_URL !== "YOUR_WEB_APP_URL_HERE"){
-    try{
-      const [menuData, stuData] = await Promise.all([
-        Promise.race([
-          jsonpRequest(APPS_SCRIPT_URL+"?action=menus&t="+Date.now()),
-          new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),8000))
-        ]).catch(()=>null),
-        Promise.race([
-          jsonpRequest(APPS_SCRIPT_URL+"?action=students&t="+Date.now()),
-          new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),8000))
-        ]).catch(()=>null)
-      ]);
-
-      let updated = false;
-      if(menuData && menuData.menus && menuData.menus.length){
-        MENUS.length=0;
-        menuData.menus.forEach(m=>MENUS.push(m));
-        updated = true;
-      }
-      if(stuData && stuData.students){
-        Object.entries(stuData.students).forEach(([div,classes])=>{ STUDENTS[div]=classes; });
-        updated = true;
-      }
-      if(updated && S.step===1) render();
-      if(updated) showSaveBanner("✓ Menu & class lists synced from Google Sheets");
-    }catch(e){
-      console.warn("Could not sync from Sheets — using built-in data:", e.message);
+    showSyncStatus("syncing");
+    try {
+      await syncFromSheets();
+    } catch(e) {
+      console.warn("Sync failed:", e.message);
+      showSyncStatus("failed");
     }
+  }
+}
+
+// ── Sync status indicator ──────────────────────────────────
+function showSyncStatus(state){
+  let el = document.getElementById("syncStatus");
+  if(!el){
+    el = document.createElement("div");
+    el.id = "syncStatus";
+    el.style.cssText = "position:fixed;bottom:20px;right:16px;z-index:999;display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:50px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.18);transition:all .4s;white-space:nowrap;";
+    document.body.appendChild(el);
+  }
+  if(state === "syncing"){
+    el.style.background = "#1A3A6B"; el.style.color = "#fff"; el.style.opacity = "1";
+    el.innerHTML = `<span style="width:12px;height:12px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;display:inline-block;animation:spin .7s linear infinite;flex-shrink:0;"></span> Syncing from Google Sheets…`;
+  } else if(state === "done"){
+    el.style.background = "#0D7A55"; el.style.color = "#fff"; el.style.opacity = "1";
+    el.innerHTML = `✓ Synced`;
+    setTimeout(()=>{ el.style.opacity="0"; setTimeout(()=>el.remove(),500); }, 2500);
+  } else if(state === "failed"){
+    el.style.background = "#8B0000"; el.style.color = "#fff"; el.style.opacity = "1";
+    el.innerHTML = `⚠ Could not reach Google Sheets`;
+    setTimeout(()=>{ el.style.opacity="0"; setTimeout(()=>el.remove(),500); }, 4000);
+  }
+}
+
+// ── Smart sync: warm-up ping → fetch both → retry once on failure ──
+async function syncFromSheets(){
+  // Step 1: warm up the Apps Script server with a lightweight ping
+  // This starts the cold-start process so subsequent requests are fast
+  try {
+    await Promise.race([
+      jsonpRequest(APPS_SCRIPT_URL+"?action=ping&t="+Date.now()),
+      new Promise((_,rej)=>setTimeout(()=>rej(),4000))
+    ]);
+  } catch(e){ /* ping timeout is fine — server is waking up */ }
+
+  // Step 2: fetch menus and students with a generous timeout
+  const attempt = async (timeout) => {
+    const [menuData, stuData] = await Promise.all([
+      Promise.race([
+        jsonpRequest(APPS_SCRIPT_URL+"?action=menus&t="+Date.now()),
+        new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),timeout))
+      ]).catch(()=>null),
+      Promise.race([
+        jsonpRequest(APPS_SCRIPT_URL+"?action=students&t="+Date.now()),
+        new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),timeout))
+      ]).catch(()=>null)
+    ]);
+    return { menuData, stuData };
+  };
+
+  let result = await attempt(12000);
+
+  // Step 3: if both failed, wait 2s and retry once (server should be warm by now)
+  if(!result.menuData && !result.stuData){
+    await new Promise(r=>setTimeout(r,2000));
+    result = await attempt(12000);
+  }
+
+  // Step 4: apply whatever we got
+  let updated = false;
+  if(result.menuData?.menus?.length){
+    MENUS.length = 0;
+    result.menuData.menus.forEach(m=>MENUS.push(m));
+    updated = true;
+  }
+  if(result.stuData?.students){
+    Object.entries(result.stuData.students).forEach(([div,cls])=>{ STUDENTS[div]=cls; });
+    updated = true;
+  }
+
+  if(updated){
+    if(S.step===1) render();
+    showSyncStatus("done");
+  } else {
+    showSyncStatus("failed");
+    throw new Error("No data returned after retry");
   }
 }
 
